@@ -1,0 +1,39 @@
+.product {
+    @include flex(flex-start,flex-start);
+    column-gap: 2.5rem;
+    
+
+    &-filter {
+        width: 20%;
+        @include tablet {
+            width: unset;
+        }
+        &__widget {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            box-shadow: $box-shadow;
+            &__title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                text-transform: capitalize;
+                margin-bottom: 16px;
+            }
+
+            &__content {
+                color: $txt-second-color;
+
+                &__item {
+                    margin-bottom: 13px;
+                }
+            }
+        }
+    }
+
+    &-content {
+        flex-grow: 1;
+        @include tablet {
+            width: 100%;
+        }
+    }
+}

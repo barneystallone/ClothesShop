@@ -1,0 +1,198 @@
+.header {
+    background-color: $main-bg;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    height: $header-height;
+    transition: height .15s ease-in-out;
+
+    .container {
+        height: 100%;
+    }
+
+    @include tablet {
+        height: $header-tablet-height;
+        box-shadow: $box-shadow;
+
+        & .header__logo img {
+            height: calc(#{$header-tablet-height});
+        }
+    }
+
+    @include mobile {
+        height: $header-mobile-height;
+
+        & .header__logo img {
+            height: calc(#{$header-mobile-height});
+        }
+    }
+
+    &__logo {
+        @include flex(center, center);
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+
+        img {
+            height: calc(#{$header-height} - 30px);
+            transition: all .15s ease-in-out;
+        }
+
+    }
+
+    &.shrink {
+        height: $header-shrink-height;
+        box-shadow: $box-shadow;
+
+        & .header__logo img {
+            height: calc(#{$header-shrink-height});
+        }
+        @include mobile {
+            height: $header-mobile-height;
+            & .header__logo img {
+                height: calc(#{$header-mobile-height});
+            }
+        }
+    }
+
+    &__menu {
+
+        @include flex(center, space-between);
+        height: 100%;
+        font-size: 1.5rem;
+        position: relative;
+
+        &__item+&__item {
+            margin-left: 30px;
+
+            @include tablet {
+                margin-left: 20px;
+            }
+
+            @include mobile {
+                margin-left: 10px;
+            }
+        }
+
+        &__item {
+            @include flex(center, center);
+            position: relative;
+            
+            &:hover {
+                color: $main-color;
+                // font-weight: bold;
+            }
+
+            transition: all 0.2s ease-in-out;
+
+            &::after {
+                width: 0;
+                content: '';
+                position: absolute;
+                bottom: -0.2rem;
+                left: 0;
+                height: 0.15rem;
+                background-color: $main-color;
+                border-radius: 4px;
+                transition: width 0.2s ease-in-out;
+                // border-bottom: 1px solid $main-color;
+            }
+
+            &:hover::after {
+                width: 100%;
+
+            }
+        }
+
+        &__item.active {
+            color: $main-color;
+            font-weight: bold;
+
+            &::after {
+                width: 0;
+            }
+        }
+
+        &__mobile-toggle {
+            display: none;
+            transition: .2s ease-in-out;
+
+            @include tablet {
+                display: block;
+                cursor: pointer;
+                font-size: 2rem;
+
+                &:hover {
+                    color: $main-color;
+                }
+            }
+        }
+
+        &__left,
+        &__right {
+            @include flex(center, space-between);
+
+        }
+
+        &__left {
+            @include tablet {
+                // display: none;
+                position: absolute;
+                // background-color: $secondary-color;
+                padding: 1.5rem;
+                border-radius: 10px;
+                top: 6.5rem;
+                background-color: $main-bg;
+
+                &__item {
+                    margin-left: 0 !important;
+                }
+
+                left: -50%;
+                transform: translate(-50%);
+                width: 80%;
+                transition: all .2s ease-in-out;
+                z-index: 200;
+                box-shadow: $box-shadow2;
+                flex-direction: column;
+                gap: 1.5rem;
+
+                &.show {
+                    left: 50%;
+                    transition: all .4s ease-in-out;
+
+                }
+            }
+        }
+
+        &__right {
+            font-size: 1.6rem;
+
+            @include tablet {
+                font-size: 1.4rem;
+            }
+
+            @include mobile {
+                font-size: 3vw;
+            }
+        }
+
+        &__user {
+            span {
+                margin-left: 16px;
+                position: relative;
+
+                &::before {
+                    content: "|";
+                    opacity: 0.5;
+                    position: absolute;
+                    top: 0;
+                    left: -10px;
+                }
+            }
+        }
+    }
+
+}
