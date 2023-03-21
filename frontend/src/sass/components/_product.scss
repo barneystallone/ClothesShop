@@ -1,15 +1,14 @@
-
-
 // swiper
 .product__wrap {
 
     &__inner {
 
-        @include flex (flex-start,flex-start);
+        @include flex (flex-start, flex-start);
+
         &__left {
             width: 60%;
             @include flex (flex-start, flex-start);
-            
+
 
             .product__images__slider {
                 // width: 500px;
@@ -17,6 +16,7 @@
                 flex-grow: 7;
                 flex-basis: 40%;
                 margin-left: 3rem;
+
                 .swiper-slide {
                     // width: 100%;
                     padding-top: 150%;
@@ -34,56 +34,62 @@
                 .swiper-button-prev {
                     left: 40;
                     color: $txt-second-color;
-                    
+
                     &:hover {
                         color: red;
 
                     }
                 }
-                
+
                 .swiper-button-next {
                     right: 40;
                     color: $txt-second-color;
+
                     &:hover {
                         color: red;
-    
+
                     }
                 }
             }
+
             .product__images__slider__thumbs {
                 // width: 500px;
                 // flex-basis: 60%;
                 flex-grow: 3;
                 flex-basis: 10%;
-    
+
                 .swiper-slide {
                     // width: 100%;\
                     padding-top: 120%;
                     overflow: hidden;
                     position: relative;
-    
+
                     border: 1px solid #fff;
+
                     &-thumb-active {
-                        border-color: red ;
+                        border-color: red;
                     }
+
                     img {
                         position: absolute;
                         inset: 0;
                         width: 100%;
                     }
-    
-                   
+
+
                 }
-                
-                  
-                    
+
+
+
             }
         }
+
         &__right {
             width: 40%;
-            margin-left:40px;
+            margin-left: 40px;
+
             @include mobile {
-                width:unset;
+                width: unset;
             }
         }
 

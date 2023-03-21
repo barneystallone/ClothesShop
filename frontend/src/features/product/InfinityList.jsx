@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Grid from './Grid'
+import Grid from '../../components/Grid'
 import ProductCard from './ProductCard'
 
 const InfinityList = props => {
@@ -9,7 +9,7 @@ const InfinityList = props => {
     const perLoad = 8 // items each load
 
     const listRef = useRef(null)
-    
+
     const [data, setData] = useState([])
 
     const [load, setLoad] = useState(true)
@@ -29,7 +29,7 @@ const InfinityList = props => {
                     setLoad(true)
                 }
             }
-            
+
         })
     }, [listRef])
 
@@ -66,8 +66,8 @@ const InfinityList = props => {
                             title={item.title}
                             colors={item.colors}
                             price={Number(item.price)}
-                            slug= {item.slug}
-                            sale= {Number(item.sale)}
+                            slug={item.slug}
+                            sale={Number(item.sale)}
                         />
                     ))
                 }

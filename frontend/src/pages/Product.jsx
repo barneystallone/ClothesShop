@@ -1,10 +1,10 @@
 import React from 'react'
 import Helmet from '../components/Helmet'
 import Section, { SectionBody, SectionTitle } from '../components/Section'
-import ProductView from '../components/ProductView'
+import ProductView from '../features/product/ProductView'
 
 import productData from '../assets/fake-data/products'
-import ProductCard from '../components/ProductCard'
+import ProductCard from '../features/product/ProductCard'
 import Grid from '../components/Grid'
 import { useParams } from 'react-router-dom'
 const Product = (props) => {
@@ -13,14 +13,14 @@ const Product = (props) => {
   console.log(slug)
   const product = productData.getProductBySlug(slug);
   React.useEffect(() => {
-    window.scrollTo(0,0)
-}, [product])
+    window.scrollTo(0, 0)
+  }, [product])
   const relatedProducts = productData.getProducts(5)
   return (
     <Helmet title={product.title}>
       <Section>
         <SectionBody>
-          <ProductView product={product}/>
+          <ProductView product={product} />
         </SectionBody>
       </Section>
       <Section>

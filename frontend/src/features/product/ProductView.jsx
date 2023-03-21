@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Grid from './Grid'
+import Grid from '../../components/Grid'
 import ProductCard from './ProductCard'
 import ProductImagesSlider from './ProductImagesSlider'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
-import Button from './Button/Button'
+import Button from '../../components/Button'
 
 const ProductView = props => {
     const product = props.product;
     const [previewImg, setPreviewImg] = useState(product.colors[1].image01)
-    const prodImages = product.colors.map(color => color.image01) 
-   
+    const prodImages = product.colors.map(color => color.image01)
+
     return (
         <div className="product__wrap">
             <div className="product__wrap__inner">
@@ -35,12 +35,12 @@ const ProductView = props => {
                         </div>
 
                     </div> */}
-                    <ProductImagesSlider images = {prodImages}/>
+                    <ProductImagesSlider images={prodImages} />
                 </div>
                 <div className="product__wrap__inner__right">
                     <h3 className="section-name"></h3>
                     <div className="product-price-wrapper">
-                        
+
                     </div>
                     <div className="product-color-wrapper">
 

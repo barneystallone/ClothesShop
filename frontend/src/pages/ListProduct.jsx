@@ -1,51 +1,49 @@
 import React from 'react'
 import productData from '../assets/fake-data/products'
-import Grid from '../components/Grid'
 import Helmet from '../components/Helmet'
-import ProductCard from '../components/ProductCard'
 import category from '../assets/fake-data/category'
 import CheckBox from '../components/Checkbox'
 import size from '../assets/fake-data/product-size'
-import InfinityList from '../components/InfinityList'
+import InfinityList from '../features/product/InfinityList'
 const ListProduct = () => {
-  const products = productData.getAllProducts(); 
+  const products = productData.getAllProducts();
   return (
     <Helmet title='Sản phẩm'>
       <div className="product">
         <div className="product-filter">
           <div className="product-filter__widget">
             <div className="product-filter__widget__title">
-                Danh mục sản phẩm
+              Danh mục sản phẩm
             </div>
             <div className="product-filter__widget__content">
-                {
-                  category.map((item,index) => (
-                      <div key={index} className="product-filter__widget__content__item">
-                        <CheckBox 
-                          label={item.display}
-                        />
-                      </div>
-                  ))
-                }
+              {
+                category.map((item, index) => (
+                  <div key={index} className="product-filter__widget__content__item">
+                    <CheckBox
+                      label={item.display}
+                    />
+                  </div>
+                ))
+              }
             </div>
           </div>
           <div className="product-filter__widget">
             <div className="product-filter__widget__title">
-                Kích cỡ
+              Kích cỡ
             </div>
             <div className="product-filter__widget__content">
-                {
-                  size.map((item,index) => (
-                      <div key={index} className="product-filter__widget__content__item">
-                        <CheckBox 
-                          label={item.display}
-                        />
-                      </div>
-                  ))
-                }
+              {
+                size.map((item, index) => (
+                  <div key={index} className="product-filter__widget__content__item">
+                    <CheckBox
+                      label={item.display}
+                    />
+                  </div>
+                ))
+              }
             </div>
           </div>
-          
+
         </div>
         <div className="product-content">
           {/* <Grid
@@ -72,9 +70,9 @@ const ListProduct = () => {
             }
 
           </Grid> */}
-            <InfinityList
-              data={products}
-            />
+          <InfinityList
+            data={products}
+          />
         </div>
       </div>
 

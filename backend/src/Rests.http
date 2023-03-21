@@ -1,0 +1,5 @@
+@baseUrl=http://localhost:{{$dotenv PORT}}
+GET {{baseUrl}}/api/product
+
+###
+GET {{baseUrl}}/api/category
