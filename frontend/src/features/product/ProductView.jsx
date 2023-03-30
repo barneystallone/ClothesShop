@@ -16,23 +16,6 @@ const ProductView = props => {
         <div className="product__wrap">
             <div className="product__wrap__inner">
                 <div className="product__wrap__inner__left">
-                    {/* <div className="product__images">
-                        <div className="product__images__list">
-                            {
-                                product.colors.map((item, index) => (
-                                    <div key={index} className="product__images__list__item" onClick={() => setPreviewImg(item.image01)}>
-                                        <img src={item.image01} alt="" />
-                                    </div>
-
-                                ))
-                            }
-
-                        </div>
-                        <div className="product__images__main">
-                            <img src={previewImg} alt="" />
-                        </div>
-
-                    </div> */}
                     <ProductImagesSlider images={prodImages} />
                 </div>
                 <div className="product__wrap__inner__right">

@@ -27,9 +27,9 @@ app.use(morgan('dev'))
 app.use('/api', require('./api/routes'))
 
 // ============ handle error mw
-app.use((req, res, next) => {
-    next(createError(404, 'Not Found!'));
-})
+// app.use((req, res, next) => {
+//     next(createError(404, 'Not Found!'));
+// })
 
 app.use((err, req, res, next) => {
     // console.log(err.message);
