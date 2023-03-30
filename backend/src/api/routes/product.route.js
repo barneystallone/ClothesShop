@@ -1,5 +1,5 @@
 const express = require('express');
-const { pool } = require('../models/model.connectDB');
+const { pool } = require('../databases/connect.mysql');
 const routes = express.Router();
 
 routes.get('/', async (req, res, next) => {

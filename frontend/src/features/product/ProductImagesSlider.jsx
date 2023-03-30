@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import { Swiper, SwiperSlide, } from 'swiper/react';
+import React, { useRef, useState } from 'react'
+// import PropTypes from 'prop-types'
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs } from "swiper";
 const ProductImagesSlider = props => {
     const swiperRef = useRef(null);

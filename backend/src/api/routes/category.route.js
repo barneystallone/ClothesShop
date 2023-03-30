@@ -1,11 +1,12 @@
 const express = require('express');
-const { pool } = require('../models/model.connectDB');
+const { asyncHandler } = require('../middleware');
+const Category = require('../models/category.model');
+const { pool } = require('../databases/connect.mysql');
+const { getCategories } = require('../controllers/category.controller');
 const routes = express.Router();
 
-
-routes.get('/', async (req, res, next) => {
-    const records = await pool.query('select * from categories');
-    res.json(records[0])
-})
+routes.get('/', getCategories)
 
 module.exports = routes;
+
+

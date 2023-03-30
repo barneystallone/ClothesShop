@@ -1,0 +1,29 @@
+import React from 'react';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from "./pages/Home";
+import CheckOut from "./pages/CheckOut";
+import ListProduct from "./pages/ListProduct";
+import NotFound from './pages/NotFound';
+import Product from './pages/Product';
+
+const App = () => {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout />} >
+                    <Route index element={<Home />} />
+                    <Route path="/product/:slug" element={<Product />} />
+                    <Route path="/product" element={<ListProduct />} />
+                    <Route path="/checkout" element={<CheckOut />} />
+                    <Route path="*" element={<NotFound />} />
+                </Route>
+            </Routes>
+
+        </BrowserRouter>
+    );
+
+}
+export default App;
+
+
