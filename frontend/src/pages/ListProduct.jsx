@@ -1,36 +1,44 @@
 import React from 'react'
 import productData from '../assets/fake-data/products'
 import Helmet from '../components/Helmet'
-import category from '../assets/fake-data/category'
-import CheckBox from '../components/Checkbox'
 import size from '../assets/fake-data/product-size'
 import InfinityList from '../features/product/InfinityList'
+import CheckBox from '../components/Checkbox'
+
+import CategoryFilter from '../features/Catalog/CategoryFilter'
+import FilterLeft from '../features/Catalog/FilterLeft'
+import Grid from '../components/Grid'
 const ListProduct = () => {
   const products = productData.getAllProducts();
+
+
   return (
     <Helmet title='Sản phẩm'>
       <div className="product">
         <div className="product-filter">
-          <div className="product-filter__widget">
-            <div className="product-filter__widget__title">
-              Danh mục sản phẩm
-            </div>
-            <div className="product-filter__widget__content">
+          <CategoryFilter />
+          <FilterLeft title='Kích cỡ'>
+            <Grid
+              col={2}
+              mdCol={1}
+              gap={6}
+            >
               {
-                category.map((item, index) => (
-                  <div key={index} className="product-filter__widget__content__item">
+                size.map((item, index) => (
+                  <div key={index} className="filter-left__content__item">
                     <CheckBox
                       label={item.display}
                     />
                   </div>
                 ))
               }
-            </div>
-          </div>
-          <div className="product-filter__widget">
+            </Grid>
+          </FilterLeft>
+          {/* <div className="product-filter__widget">
             <div className="product-filter__widget__title">
               Kích cỡ
             </div>
+            
             <div className="product-filter__widget__content">
               {
                 size.map((item, index) => (
@@ -42,7 +50,7 @@ const ListProduct = () => {
                 ))
               }
             </div>
-          </div>
+          </div> */}
 
         </div>
         <div className="product-content">

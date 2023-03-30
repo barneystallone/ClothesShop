@@ -6,7 +6,8 @@ module.exports = {
         USER: process.env.MYSQL_USER,
         PASSWORD: process.env.MYSQL_PASSWORD,
         DB: process.env.MYSQL_DB_NAME,
-        PORT: process.env.MYSQL_PORT
+        PORT: process.env.MYSQL_PORT,
+        LIMIT_CONNECT: process.env.MYSQL_LIMIT_CONNECT
     },
 
     redis: {

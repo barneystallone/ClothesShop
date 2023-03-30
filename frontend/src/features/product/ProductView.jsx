@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Grid from '../../components/Grid'
-import ProductCard from './ProductCard'
 import ProductImagesSlider from './ProductImagesSlider'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/thumbs'
+// import 'swiper/css'
+// import 'swiper/css/navigation'
+// import 'swiper/css/thumbs'
 import Button from '../../components/Button'
 
 const ProductView = props => {
     const product = props.product;
-    const [previewImg, setPreviewImg] = useState(product.colors[1].image01)
+    // const [previewImg, setPreviewImg] = useState(product.colors[1].image01)
     const prodImages = product.colors.map(color => color.image01)
 
     return (

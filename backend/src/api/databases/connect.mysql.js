@@ -4,12 +4,12 @@ const dbConfig = require('../../config/db.config').mysql;
 
 var that = module.exports = {
     pool: mysql.createPool({
-        host: dbConfig.HOST, //'localhost',
+        host: dbConfig.HOST,
         user: dbConfig.USER, // 'testuser',
         password: dbConfig.PASSWORD, //'user'
         database: dbConfig.DB,
         port: dbConfig.PORT,
-        connectionLimit: 10
+        connectionLimit: dbConfig.LIMIT_CONNECT
     }),
 
     getConnection: async (callback) => {

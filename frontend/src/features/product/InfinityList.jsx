@@ -25,7 +25,7 @@ const InfinityList = props => {
         window.addEventListener("scroll", () => {
             if (listRef && listRef.current) {
                 if (window.scrollY + window.innerHeight >= listRef.current.clientHeight + listRef.current.offsetTop + 200) {
-                    console.log("bottom reach")
+                    // console.log("bottom reach")
                     setLoad(true)
                 }
             }
@@ -54,8 +54,8 @@ const InfinityList = props => {
         <div ref={listRef}>
             <Grid
                 col={4}
-                mdCol={2}
-                smCol={1}
+                mdCol={3}
+                smCol={2}
                 gap={20}
             >
                 {
