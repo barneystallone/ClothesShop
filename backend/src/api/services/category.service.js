@@ -1,4 +1,4 @@
-const Category = require('../models/category.model');
+const Category = require('../databases/category.model');
 
 const redisClient = require('../databases/init.redis').getClient();
 

@@ -1,3 +1,5 @@
+
+
 module.exports = {
 
     // onFullfilled throw err => next() : middleware handle lỗi
@@ -6,8 +8,8 @@ module.exports = {
         // console.log(fn(req, res, next));
         Promise.resolve(
             fn(req, res, next)
-        ).catch((e) =>
-            next(e)
-        )
-    }
+        ).catch(next)
+    },
+
+
 }

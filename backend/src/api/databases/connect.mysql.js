@@ -29,9 +29,7 @@ var that = module.exports = {
     },
 
 }
-
 process.on('SIGINT', async () => {
     await pool.end();
-    console.log('MySQL is disconnect')
     process.exit(0);
 })
