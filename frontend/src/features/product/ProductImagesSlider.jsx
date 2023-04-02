@@ -2,6 +2,9 @@ import React, { useRef, useState } from 'react'
 // import PropTypes from 'prop-types'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs } from "swiper";
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/thumbs'
 const ProductImagesSlider = props => {
     const swiperRef = useRef(null);
     // const swiperThumbRef = useRef(null);
@@ -17,7 +20,7 @@ const ProductImagesSlider = props => {
     return (
         <>
             <Swiper
-                // loop={true}
+                loop={true}
                 spaceBetween={20}
                 direction='vertical'
                 allowTouchMove={true}
@@ -31,11 +34,10 @@ const ProductImagesSlider = props => {
                 className='product__images__slider__thumbs'
             >
 
-
                 {
                     props.images.map((item, index) => (
 
-                        <SwiperSlide key={index}>
+                        <SwiperSlide key={index} className='wrapper-img'>
                             <img src={item} alt="" onClick={() => {
                                 const swiper = document.querySelector('.swiper ').swiper;
                                 swiper.update(null)
@@ -45,7 +47,6 @@ const ProductImagesSlider = props => {
 
                     ))
                 }
-
             </Swiper>
             <Swiper
                 loop={true}
@@ -58,22 +59,21 @@ const ProductImagesSlider = props => {
                 className='product__images__slider'
             >
 
-
                 {
                     props.images.map((item, index) => (
-                        <SwiperSlide key={index}>
+                        <SwiperSlide key={index} className='wrapper-img'>
+
                             <img src={item} alt="" />
                         </SwiperSlide>
                     ))
                 }
-
             </Swiper>
-            <button onClick={() => toSlide(0)} >
+            {/* <button onClick={() => toSlide(0)} >
                 slide 0
             </button>
             <button onClick={() => toSlide(1)} >
                 slide 1
-            </button>
+            </button> */}
         </>
     )
 }

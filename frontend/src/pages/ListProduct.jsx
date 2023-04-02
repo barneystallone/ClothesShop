@@ -5,13 +5,9 @@ import size from '../assets/fake-data/product-size'
 import InfinityList from '../features/product/InfinityList'
 import CheckBox from '../components/Checkbox'
 
-<<<<<<< HEAD
 import CategoryFilter from '../features/catalog/CategoryFilter'
 import FilterLeft from '../features/catalog/FilterLeft'
-=======
-import CategoryFilter from '../features/Catalog/CategoryFilter'
-import FilterLeft from '../features/Catalog/FilterLeft'
->>>>>>> c18c934 ([BE] Api get category)
+
 import Grid from '../components/Grid'
 const ListProduct = () => {
   const products = productData.getAllProducts();

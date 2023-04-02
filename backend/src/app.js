@@ -1,12 +1,9 @@
 const createError = require('http-errors')
 const express = require('express');
 const cors = require('cors');
-<<<<<<< HEAD
 const redisClient = require('./api/databases/connect.redis');
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
-=======
->>>>>>> c18c934 ([BE] Api get category)
 const compression = require('compression');
 
 const app = express();

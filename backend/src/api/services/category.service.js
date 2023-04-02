@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 const Category = require('../databases/category.model');
 
 const redisClient = require('../databases/connect.redis');
-=======
-const Category = require('../models/category.model');
-
-const redisClient = require('../databases/init.redis').getClient();
->>>>>>> c18c934 ([BE] Api get category)
 
 var self = module.exports = {
     getCategories: async () => {
