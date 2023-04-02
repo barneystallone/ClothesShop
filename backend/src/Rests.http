@@ -1,5 +1,38 @@
 @baseUrl=http://localhost:{{$dotenv PORT}}
-GET {{baseUrl}}/api/product
+
 
 ###
+# @name login
+POST  {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+    "email" :"11sa2s1a112s2a2avass@gmail.com",
+    "password": "sdasdd"
+}
+###
+@authToken = {{login.response.body.accessToken}}
+
+
+GET {{baseUrl}}/api/product
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODA0NDg2OTEsImV4cCI6MTY4MDQ0ODc1MX0.bMYu_fIqG45CEJVo0DGcg-9WT1rFuL4gwlWsmcHV1DQ
+###
 GET {{baseUrl}}/api/category
+
+
+###
+POST  {{baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+    "email" :"11sa2s1a112s2a2avass@gmail.com",
+    "password": "sdasdd"
+}
+
+
+
+###
+POST  {{baseUrl}}/api/user/refresh-token
+# Cookie: 
+
+

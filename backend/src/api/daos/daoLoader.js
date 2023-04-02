@@ -8,6 +8,6 @@ module.exports = {
      * @returns 
      */
     loadDao: (daoName, db) => {
-        return require(`./impl/${db}/${daoName}.dao.${db}_impl`);
+        return require(`./impl/${db}/${daoName}.dao.${db}`);
     }
 }
