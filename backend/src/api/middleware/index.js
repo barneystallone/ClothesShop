@@ -8,15 +8,8 @@ module.exports = {
         // console.log(fn(req, res, next));
         Promise.resolve(
             fn(req, res, next)
-<<<<<<< HEAD
         ).catch(next)
     },
 
 
-=======
-        ).catch((e) =>
-            next(e)
-        )
-    }
->>>>>>> c18c934 ([BE] Api get category)
 }
