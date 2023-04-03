@@ -3,8 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const redisClient = require('./api/databases/connect.redis');
 const morgan = require('morgan')
-const express = require('express');
-
 const cookieParser = require('cookie-parser')
 const compression = require('compression');
 
