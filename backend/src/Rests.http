@@ -11,7 +11,7 @@ Content-Type: application/json
     "password": "sdasdd"
 }
 ###
-@authToken = {{login.response.body.accessToken}}
+# @authToken = {{login.response.body.accessToken}}
 
 
 GET {{baseUrl}}/api/product
@@ -36,3 +36,19 @@ POST  {{baseUrl}}/api/user/refresh-token
 # Cookie: 
 
 
+###
+POST  {{baseUrl}}/api/user/create
+
+### PRODUCT
+POST {{baseUrl}}/api/product/create
+Content-Type: application/json
+
+{
+    "title": "Quần Baggy wKaki Ống Suông" ,
+    "description"  : "a",
+    "price": 135150 ,
+    "category_id": 2 
+}
+
+### 
+GET {{baseUrl}}/api/product
