@@ -18,10 +18,28 @@ create table category (
     
     primary key (id)
 ); 
--- DROP INDEX  idx_slug  ON category;
-alter table category add unique idx_slug (category_slug);
+-- DROP INDEX  idx_pid  ON category;
+alter table category add index idx_pid(p_category_id);
+-- Explain select * from category where p_category_id = 3 or p_category_id = 2 or p_category_id = 5;
+drop table if exists  role;
+create table role (
+	id int not null auto_increment primary key ,
+    role_name varchar(10) 
+);
 
--- Procedure getAllCategory
+
+drop table if exists  user;
+create table user (
+	id int not null auto_increment primary key ,
+    email varchar(254) ,
+    password varchar(60),
+    role_id int  default 1 references role(id)
+);
+Alter table user add index idx_email (email);
+
+-- alter table user auto_increment = 1;
+
+-- Procedure 
 DROP PROCEDURE IF EXISTS proc_getCategories;
 delimiter //
 CREATE PROCEDURE proc_getCategories()
@@ -42,9 +60,22 @@ begin
        
 end//
 delimiter ;
+-- 
 
-call proc_getCategories();
+DROP PROCEDURE IF EXISTS proc_insertUser;
+delimiter //
+CREATE PROCEDURE proc_insertUser(
+	email varchar(254),
+    password varchar(60)
+)
+begin
+	insert into user values(null,email,password,default);
+    SELECT * from user where id = LAST_INSERT_ID(); 
+       
+end//
+delimiter ;
 
+-- call proc_insertUser('12','2');
 
 insert into category values 
 (null,'Danh mục','all',0) ,
@@ -87,6 +118,9 @@ insert into category values
 (null,'Váy Thiết Kế','vay-thiet-ke',7),
 (null,'Váy Yếm','vay-yem',7);
 
+insert into role values
+(null,'User'),
+(null,'Admin');
 
 
 

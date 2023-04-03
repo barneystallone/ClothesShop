@@ -1,23 +1,33 @@
 .product {
-    @include flex(flex-start,flex-start);
+    @include flex(flex-start, flex-start);
     column-gap: 2.5rem;
-    
+
+    @include tablet {
+        column-gap: unset;
+    }
 
     &-filter {
         width: 20%;
+
         @include tablet {
-            width: unset;
+            width: 0;
+            overflow: hidden;
         }
+
         &__widget {
             padding: 1rem;
             border-radius: 4px;
             margin-bottom: 2rem;
             box-shadow: $box-shadow;
+
             &__title {
+                @include flex(center, space-between);
                 font-size: 1.25rem;
                 font-weight: 600;
                 text-transform: capitalize;
                 margin-bottom: 16px;
+
+
             }
 
             &__content {
@@ -27,11 +37,39 @@
                     margin-bottom: 13px;
                 }
             }
+
+            &__icon {
+                padding: 4px 12px 4px 10px;
+                position: relative;
+                right: -1rem;
+
+                &__svg {
+                    width: 2rem;
+                    height: 2rem;
+                    opacity: 0.8;
+                    transition: color .2s ease-in-out;
+
+
+
+                    &.rotate {
+                        transform: rotate(45);
+                    }
+                }
+
+                &:hover {
+                    .product-filter__widget__icon__svg {
+                        color: $main-color !important;
+                    }
+                }
+            }
+
+
         }
     }
 
     &-content {
         flex-grow: 1;
+
         @include tablet {
             width: 100%;
         }
