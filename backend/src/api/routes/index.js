@@ -1,4 +1,5 @@
 const express = require('express');
+const { auth } = require('../middleware/auth');
 const routes = express.Router();
 
 routes.use('/product', require('./product.route'))

@@ -7,11 +7,11 @@ POST  {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-    # "email" :"11sa2s1a112s2a2avass@gmail.com",
-    "password": "sdasdd"
+    "email" :"11sa2s1ass112s2a2avass@gmail.com",
+    "password": "asdasdd"
 }
 ###
-# @authToken = {{login.response.body.accessToken}}
+@authToken = {{login.response.body.accessToken}}
 
 
 GET {{baseUrl}}/api/product
@@ -52,3 +52,7 @@ Content-Type: application/json
 
 ### 
 GET {{baseUrl}}/api/product
+
+###
+GET {{baseUrl}}/api/user
+Authorization: Beare {{authToken}}

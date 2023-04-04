@@ -90,8 +90,6 @@ var self = module.exports = {
             self.generateRefreshToken({ userId, roleName }),
         ])
 
-
-
         return {
             accessToken,
             refreshToken
