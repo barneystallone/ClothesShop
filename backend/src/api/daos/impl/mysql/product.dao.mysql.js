@@ -19,11 +19,18 @@ var self = module.exports = {
 
     },
     isExist: async ({ slug, id }) => {
-        const sql = "select count(*) from product where slug = ? or id = ?"
+        const sql = "select count(*)  from product where slug = ? or id = ?"
 
         const isExist = await mysql.pool.execute(sql, [slug])
             .then(res => res[0])
-        return isExist ? isExist : 0
+        return isExist
+    },
+    isExistsItem: async ({ colorCode, pId }) => {
+        const sql = "select count(*) c from item where colorCode = ? or pId = ?"
+
+        const isExistsItem = await mysql.pool.execute(sql, [colorCode, pId])
+            .then(res => res[0][0].c)
+        return isExistsItem
     },
     findBySlug: async (slug) => {
 
@@ -36,4 +43,9 @@ var self = module.exports = {
         const sql = 'Select * from product';
         return await mysql.pool.execute(sql).then(res => res[0])
     },
+    uploadImgAndInsertItem: async ({ itemId, pId, url, thumbUrl, colorName, colorCode }) => {
+        const sql = "insert into  item values (?,?,?,?,?,?)";
+        const params = [itemId, pId, url, thumbUrl, colorName, colorCode]
+        return await mysql.pool.execute(sql, params).then(res => res[0].affectedRows)
+    }
 }

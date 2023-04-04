@@ -25,7 +25,7 @@ const ProductImagesSlider = props => {
                 direction='vertical'
                 allowTouchMove={true}
                 modules={[Thumbs]}
-                slidesPerView={4}
+                slidesPerView={3}
 
                 onSwiper={(swiper) => {
                     setActiveThumb(swiper)

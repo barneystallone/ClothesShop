@@ -51,19 +51,18 @@ create table product (
     sold int,
     category_id int references category(id)
 );
+-- insert into product values ('11','VÁo Thun Nữ Croptop Caro','VÁo Thun Nữ Croptop Caroád ádd','a',123,0,2);
 alter table product add index idx_pSlug(slug);
 drop table if exists item;
 create table item (
-	itemId varchar(13) not null primary key,
+	itemId varchar(13) not null Primary key ,
 	pId varchar(13) not null references product(pid), 
-    url varchar(100) not null,
-    thumbUrl varchar(100) not null,
+    url varchar(200) not null,
+    thumbUrl varchar(200) not null,
     colorName varchar(20) not null,
     colorCode varchar(7) not null
-   -- Primary key (pid,colorCode)
 );
-alter table item add index idx_prod(pid);
-
+alter table item add unique index idx_prod(pid,colorCode);
 drop table if exists size;
 create table size (
 	sizeId varchar(6) not null primary key,

@@ -44,8 +44,8 @@ POST {{baseUrl}}/api/product/create
 Content-Type: application/json
 
 {
-    "title": "Quần Baggy wKaki Ống Suông" ,
-    "description"  : "a",
+    "title": "qu" ,
+    "description"  : "aaaaaaaaaaa",
     "price": 135150 ,
     "category_id": 2 
 }
