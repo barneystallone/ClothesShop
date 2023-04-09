@@ -1,22 +1,26 @@
 // swip
 
 .product__wrap__inner {
-    width: 80%;
+    width: 88%;
     margin: auto;
-    display: flex;
-    justify-content: space-between;
+    @include flex (flex-start, flex-end);
+    column-gap: 4rem;
+
 
     @include tablet {
         flex-direction: column;
         align-items: center;
-
+        width: 94%;
     }
 
     &__left {
         display: flex;
-        width: 710px;
-        flex-basis: 50%;
-        column-gap: 2.4rem;
+        width: 650px;
+        flex-basis: 56%;
+        flex-grow: 1;
+        column-gap: 3rem;
+        max-height: 650px;
+        overflow: hidden;
 
         @include tablet {
             justify-content: space-between;
@@ -24,10 +28,9 @@
 
         .product__images__slider__thumbs {
             width: 80px;
-            flex-grow: 1;
+            flex-grow: 0.5;
             display: flex;
             flex-direction: column;
-            max-height: 710px;
             overflow: hidden;
 
             .wrapper-img {
@@ -48,7 +51,7 @@
                 }
 
                 &.swiper-slide-thumb-active {
-                    border: 1.2px solid $main-color
+                    border: .12rem solid $main-color
                 }
             }
         }
@@ -56,7 +59,7 @@
         .product__images__slider {
             min-width: 200px;
             flex-grow: 1;
-            flex-basis: 64%;
+            flex-basis: 56%;
             display: flex;
             flex-direction: column;
 
@@ -108,7 +111,126 @@
         }
     }
 
-    // &__right {
-    //     // display: flex;
-    // }
+    &__right {
+        flex-grow: 1;
+        // max-height: 650px;
+        // overflow: hidden;
+        width: 30%;
+
+        @include tablet {
+            flex-basis: 100%;
+            width: 650px;
+            padding: 1rem 0.5rem;
+        }
+
+        .info__group {
+            font-size: 1.2rem;
+            color: $txt-main-color ;
+            margin-bottom: 1rem;
+
+            &.title-section {
+                @include flex(flex-start, space-between);
+                column-gap: 1.5rem;
+
+                .product__title {
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                    flex-grow: 1;
+                    line-height: 1.1;
+                }
+
+                .product__group__icon {
+                    @include flex(center, center);
+                    column-gap: 1rem;
+                    min-width: 5.2rem;
+
+
+                }
+            }
+
+            .product__icon {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+
+            &.id-section {
+                @include flex(center, flex-start);
+                column-gap: 0.5rem;
+                color: $txt-second-color;
+
+            }
+
+            & .product__price {
+                color: $main-color;
+                font-size: 1.6rem;
+                margin-right: 0.5rem;
+                font-weight: 500;
+
+                &--old {
+                    color: $txt-second-color;
+                    font-weight: normal;
+                }
+            }
+
+            &.product__remain {
+                @include flex(center, flex-start);
+                color: $txt-second-color;
+
+                .seperate {
+                    padding: 0.4rem 1rem;
+                    font-size: 1.3rem;
+                    font-weight: bold;
+                }
+            }
+
+            &.product__color {
+                .product__thumbs {
+                    @include flex(center, flex-start);
+                    user-select: none;
+                    column-gap: 0.5rem;
+
+                    &__item {
+                        margin: .6rem 0;
+                        border-radius: 50%;
+                        width: 2.6rem;
+                        height: 2.6rem;
+                        @include flex(center, center);
+
+                        .image__container {
+                            border-radius: 50%;
+                            overflow: hidden;
+                            transition: all .2s ease-in-out;
+
+                            width: 2.5rem;
+                            height: 2.5rem;
+
+                        }
+
+                        &.active,
+                        &:hover {
+                            border: .12rem solid $main-color;
+
+                            .image__container {
+                                width: 2rem;
+                                height: 2rem;
+                            }
+                        }
+
+                    }
+
+
+                }
+            }
+
+            &.size-quantity {
+                @include flex(center, space-between);
+                column-gap: 1.4rem;
+
+                & .section-size {
+                    width: 0;
+                    flex-grow: 1;
+                }
+            }
+        }
+    }
 }

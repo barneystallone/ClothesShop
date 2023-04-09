@@ -1,31 +1,32 @@
 import React, { useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import FilterLeft from './FilterLeft'
-import Grid from '../../components/Grid'
-import SubCategoryFilter from './SubCategoryFilter'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCategories } from '../../app/category/categorySlice'
+import { fetchCategories } from '../../../app/category/category.slice'
+import FilterLeft from './FilterLeft'
+import Grid from '../../../components/Grid'
+import SubCategoryFilter from './SubCategoryFilter'
+import { useGetCategoriesQuery } from '../../../app/category/category.service'
 
 const CategoryFilter = (props) => {
-
-    const { categories, isLoading } = useSelector(state => state.category)
+    const { data: categories, isLoading } = useGetCategoriesQuery();
+    // const { categories, isLoading } = useSelector(state => state.category)
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        let promise
-        if (isLoading) {
-            console.log('aaa')
-            promise = dispatch(fetchCategories())
-            setTimeout(() => {
+    // useEffect(() => {
+    //     let promise
+    //     if (isLoading) {
+    //         console.log('aaa')
+    //         promise = dispatch(fetchCategories())
+    //         setTimeout(() => {
 
-            }, 1200)
-        }
+    //         }, 1200)
+    //     }
 
-        return () => {
-            promise?.abort();
-        }
-    }, [isLoading])
+    //     return () => {
+    //         promise?.abort();
+    //     }
+    // }, [isLoading])
 
     return (
         <FilterLeft title='Danh mục'>

@@ -26,7 +26,6 @@ var self = module.exports = {
             throw createHttpError.Conflict('Item đã tồn tại')
         }
         const _arrPromise = [img, thumbImg].map(file => new Promise((resolve, reject) => {
-            console.log('arr');
             cloudinaryModel.uploadFile(file[0].path).then(result => {
                 resolve(result.url)
             })

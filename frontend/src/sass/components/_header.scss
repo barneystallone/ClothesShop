@@ -1,5 +1,6 @@
 .header {
     background-color: $main-bg;
+    // color: $txt-second-color;
     position: fixed;
     top: 0;
     left: 0;
@@ -49,8 +50,10 @@
         & .header__logo img {
             height: calc(#{$header-shrink-height});
         }
+
         @include mobile {
             height: $header-mobile-height;
+
             & .header__logo img {
                 height: calc(#{$header-mobile-height});
             }
@@ -79,7 +82,7 @@
         &__item {
             @include flex(center, center);
             position: relative;
-            
+
             &:hover {
                 color: $main-color;
                 // font-weight: bold;
