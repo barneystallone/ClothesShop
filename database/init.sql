@@ -52,7 +52,7 @@ create table product (
     category_id int references category(id)
 );
 -- insert into product values ('11','VÁo Thun Nữ Croptop Caro','VÁo Thun Nữ Croptop Caroád ádd','a',123,0,2);
-alter table product add index idx_pSlug(slug);
+alter table product add index idx_pSlug(slug); 
 drop table if exists item;
 create table item (
 	itemId varchar(13) not null Primary key ,

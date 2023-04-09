@@ -2,6 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const nanoid = require('../utils/nanoid');
 
+
 const multerStorage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, path.join(__dirname, '../../../public/images'));
@@ -19,6 +20,7 @@ const fileFilter = (req, file, callback) => {
     }
     callback(new Error('Chỉ hỗ trợ định dạng image'), false)
 }
+
 
 const uploader = multer({
     storage: multerStorage,

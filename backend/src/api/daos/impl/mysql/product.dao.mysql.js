@@ -26,7 +26,7 @@ var self = module.exports = {
         return isExist
     },
     isExistsItem: async ({ colorCode, pId }) => {
-        const sql = "select count(*) c from item where colorCode = ? or pId = ?"
+        const sql = "select count(*) c from item where colorCode = ? and pId = ?"
 
         const isExistsItem = await mysql.pool.execute(sql, [colorCode, pId])
             .then(res => res[0][0].c)
