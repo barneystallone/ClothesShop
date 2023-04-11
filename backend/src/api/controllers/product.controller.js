@@ -27,7 +27,10 @@ var self = module.exports = {
         req.body.pId = 'N6p' + await nanoid(10)
         const affectedRows = await productService.insertProduct(req.body)
         if (affectedRows) {
-            return res.status(200).json(affectedRows)
+            return res.status(200).json({
+                status: "success",
+                insertedId: req.body.pId
+            })
         }
         throw createHttpError('Lỗi insert sản phẩm')
     }),
