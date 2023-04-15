@@ -2,4 +2,3 @@ node_modules
 backend/src/index*.js
 
 **/init.redis.js
-backend/public/images/*
