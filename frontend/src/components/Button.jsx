@@ -7,7 +7,7 @@ const Button = props => {
     const animate = props.animate ? `btn-animate` : ''
     return (
         <button
-            className={`btn btn-slider ${size} ${animate} ${bg}`} 
+            className={`btn btn-slider ${size} ${animate} ${bg} ${props?.className}`}
             onClick={props.onClick ? () => props.onClick() : null}
         >
             <span className="btn-txt">{props.children}</span>
@@ -16,10 +16,10 @@ const Button = props => {
                     <span className="btn-icon">
                         {
                             (typeof props.icon === 'string')
-                            ? <i className={props.icon}></i>
-                            : props.icon
+                                ? <i className={props.icon}></i>
+                                : props.icon
                         }
-                        
+
                     </span>
                 ) : null
             }
@@ -33,6 +33,7 @@ Button.propTypes = {
     icon: PropTypes.element || PropTypes.string,
     animate: PropTypes.bool,
     onClick: PropTypes.func,
+    className: PropTypes.string,
 }
 
 export default Button

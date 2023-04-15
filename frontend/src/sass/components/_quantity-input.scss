@@ -5,8 +5,9 @@
         width: 42px;
         height: 42px;
         border: 1px solid $txt-second-color;
-
+        user-select: none;
         background-color: #fff;
+
         @include flex (center, center);
 
         & svg {

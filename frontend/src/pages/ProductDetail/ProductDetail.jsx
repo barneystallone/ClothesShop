@@ -3,11 +3,14 @@ import Helmet from '../../components/Helmet'
 import Section, { SectionBody, SectionTitle } from '../../components/Section'
 // import ProductView from '../../features/product/ProductView'
 import { ReactComponent as ShareIcon } from '../../assets/images/share.svg'
+import { ReactComponent as ExchangeIcon } from '../../assets/images/exchange.svg'
+import { ReactComponent as TransportIcon } from '../../assets/images/transport.svg'
+import { ReactComponent as ShopIcon } from '../../assets/images/shop.svg'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart.svg'
 import { ReactComponent as CopyIcon } from '../../assets/images/copy.svg'
-
+import { HiShoppingCart } from 'react-icons/hi'
 import productData from '../../assets/fake-data/products'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import ProductImagesSlider from './components/ProductImageSlider'
 import Button from '../../components/Button'
 import RelatedProducts from './components/RelatedProducts'
@@ -84,7 +87,30 @@ const ProductDetail = (props) => {
                   <SelectSize className="section-size" title={size.display} sizes={sizes} onClick={handleSelectSize} />
                   <QuantityInput className="section-quantity" />
                 </div>
-                {/* <Button></Button> */}
+                <Button animate={true} icon={<HiShoppingCart />} className={"btn-add2cart"}>Thêm vào giỏ hàng</Button>
+                <Button backgroundColor={"white"} className={"btn-buy-product"} >Mua ngay</Button>
+                <div className="info__group product__in__shop">
+                  <div className="product__in__shop__btn"><ShopIcon /></div>
+                  <div className='product__in__shop__txt'>Tìm tại cửa hàng</div>
+                </div>
+                <div className="policy">
+                  <div className="policy__wrap">
+                    <Link to={''}>
+                      <div className="policy__wrap__icon  policy__transport">
+                        <TransportIcon />
+                      </div>
+                      <span className='policy__wrap__txt'>Chính sách vận chuyển</span>
+                    </Link>
+                  </div>
+                  <div className="policy__wrap ">
+                    <Link to={''}>
+                      <div className="policy__wrap__icon policy__exchange">
+                        <ExchangeIcon />
+                      </div>
+                      <span className='policy__wrap__txt '>Bảo hành & đổi trả </span>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="product__wrap__inner__bottom">

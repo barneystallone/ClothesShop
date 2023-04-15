@@ -2,6 +2,7 @@
 
 .product__wrap__inner {
     width: 88%;
+    max-width: 1060px;
     margin: auto;
     @include flex (flex-start, flex-end);
     column-gap: 4rem;
@@ -112,9 +113,8 @@
     }
 
     &__right {
+
         flex-grow: 1;
-        // max-height: 650px;
-        // overflow: hidden;
         width: 30%;
 
         @include tablet {
@@ -229,6 +229,91 @@
                 & .section-size {
                     width: 0;
                     flex-grow: 1;
+                }
+            }
+
+            &.product__in__shop {
+                @include flex(center, flex-end);
+                margin: .5rem auto;
+                column-gap: .5rem;
+                height: 3rem;
+                font-size: 1.3rem;
+
+                .product__in__shop__btn {
+                    svg {
+                        height: 2.2rem;
+                        width: 2.2rem;
+
+                    }
+
+                }
+
+                .product__in__shop__txt {
+                    color: #0054e1;
+
+                }
+            }
+
+
+        }
+
+        .btn,
+        .btn-slider {
+            margin-top: 1rem;
+            width: 100%;
+            border-radius: unset;
+            font-weight: unset;
+            font-size: 1.35rem;
+            text-transform: unset;
+            cursor: pointer;
+            transition: background .25s, color .15s;
+
+
+            &.btn-buy-product {
+                border: 1.2px solid $txt-main-color;
+                color: $txt-main-color;
+
+                &:hover {
+                    background-color: #000;
+                    color: $main-bg;
+
+                }
+            }
+        }
+
+        .policy {
+            user-select: none;
+            margin-top: 1rem;
+            @include flex(stretch, center);
+            column-gap: 1rem;
+            color: $txt-second-color;
+
+            .policy__wrap {
+
+                padding: 1rem .8rem 1.5rem;
+                background-color: #f7f8fa;
+                text-align: center;
+                font-size: 1.5rem;
+                flex-grow: 1;
+
+                &__icon {
+                    svg {
+                        height: 4rem;
+                    }
+
+                    margin-bottom: .4rem;
+                    @include flex(center, center)
+                }
+
+            }
+
+            &__wrap:hover {
+                color: $main-color;
+                transition: .18s;
+
+                svg path {
+                    fill: $main-color;
+                    transition: .18s;
                 }
             }
         }
