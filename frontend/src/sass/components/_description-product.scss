@@ -1,0 +1,56 @@
+.tab-list {
+    // padding: 0 8rem;
+    font-size: 1.4rem;
+
+    .product-tabs {
+
+        // color: red;
+        // display: block;
+        @include flex(center, flex-start);
+        margin: 3rem auto 2rem;
+        border-bottom: 1px solid $txt-second-color ;
+
+        opacity: 0.8;
+
+        &__item {
+            position: relative;
+            font-weight: bold;
+            padding: .5rem 0;
+            font-size: 1.55rem;
+            text-transform: uppercase;
+            color: $main-color;
+            margin-right: 8rem;
+            // height: 2rem;
+            // position: relative;
+
+            &::after {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 2px;
+                transform: scale(0);
+                background-color: $main-color;
+                transition: all .25s ease-in-out;
+                bottom: 0;
+                left: 0;
+            }
+
+            &:hover {
+                &::after {
+                    transform: scale(1);
+                }
+
+            }
+        }
+    }
+
+    .product-description {
+        line-height: 2.5rem;
+
+        &__title {
+            font-weight: bold;
+
+        }
+
+    }
+}

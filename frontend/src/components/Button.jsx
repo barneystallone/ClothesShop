@@ -8,7 +8,7 @@ const Button = props => {
     return (
         <button
             className={`btn btn-slider ${size} ${animate} ${bg} ${props?.className}`}
-            onClick={props.onClick ? () => props.onClick() : null}
+            onClick={props.onClick ? props.onClick : null}
         >
             <span className="btn-txt">{props.children}</span>
             {

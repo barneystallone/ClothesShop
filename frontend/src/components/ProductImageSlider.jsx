@@ -25,7 +25,7 @@ const ProductImagesSlider = props => {
                 direction='vertical'
                 allowTouchMove={true}
                 modules={[Thumbs]}
-                slidesPerView={3}
+                slidesPerView={4}
 
                 onSwiper={(swiper) => {
                     setActiveThumb(swiper)
@@ -35,7 +35,7 @@ const ProductImagesSlider = props => {
             >
 
                 {
-                    props.images.map((item, index) => (
+                    props.images?.map((item, index) => (
 
                         <SwiperSlide key={index} className='wrapper-img'>
                             <img loading='lazy' src={item} alt="" onClick={() => {
@@ -48,7 +48,33 @@ const ProductImagesSlider = props => {
                     ))
                 }
                 {
-                    props.images.map((item, index) => (
+                    props.images?.map((item, index) => (
+
+                        <SwiperSlide key={index} className='wrapper-img'>
+                            <img loading='lazy' src={item} alt="" onClick={() => {
+                                const swiper = document.querySelector('.swiper ').swiper;
+                                swiper.update(null)
+                            }} />
+                        </SwiperSlide>
+
+
+                    ))
+                }
+                {
+                    props.images?.map((item, index) => (
+
+                        <SwiperSlide key={index} className='wrapper-img'>
+                            <img loading='lazy' src={item} alt="" onClick={() => {
+                                const swiper = document.querySelector('.swiper ').swiper;
+                                swiper.update(null)
+                            }} />
+                        </SwiperSlide>
+
+
+                    ))
+                }
+                {
+                    props.images?.map((item, index) => (
 
                         <SwiperSlide key={index} className='wrapper-img'>
                             <img src={item} alt="" onClick={() => {
@@ -60,6 +86,7 @@ const ProductImagesSlider = props => {
 
                     ))
                 }
+
             </Swiper>
             <Swiper
                 loop={true}
@@ -73,7 +100,7 @@ const ProductImagesSlider = props => {
             >
 
                 {
-                    props.images.map((item, index) => (
+                    props.images?.map((item, index) => (
                         <SwiperSlide key={index} className='wrapper-img'>
 
                             <img loading='lazy' src={item} alt="" />

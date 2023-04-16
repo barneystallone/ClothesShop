@@ -2,6 +2,8 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
+import ProductViewModal from './ProductViewModal'
+import LoginSignUpModal from './LoginSignUpModal'
 const Layout = () => {
     return (
         < >
@@ -14,6 +16,8 @@ const Layout = () => {
 
             </div>
             <Footer />
+            <ProductViewModal />
+            <LoginSignUpModal />
         </>
     )
 }
