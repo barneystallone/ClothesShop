@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import logo from '../assets/images/Logo.jpg'
 import { CgMenuGridO } from 'react-icons/cg'
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineUser } from 'react-icons/ai'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectCurrentUser, setShowModalStatus } from '../app/auth/auth.slice'
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -22,24 +24,30 @@ const leftNav = [
   },
 ]
 
-
+let count = 1
 const Header = () => {
   const { pathname } = useLocation();
   const activeNav = leftNav.findIndex(e => e.path === pathname);
   const [active, setActive] = useState('header__menu__left');
-
+  // console.log('countHeader::', count++);
+  const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
   const toggleMenu = () => {
     setActive((prev) => {
-      return (prev ==='header__menu__left')
+      return (prev === 'header__menu__left')
         ? 'header__menu__left show'
         : 'header__menu__left'
 
     })
   }
-  
-  const closeMenu = () => {
+
+  const closeMenu = useCallback(() => {
     setActive('header__menu__left');
-  }
+  }, [])
+
+  const showLoginModal = useCallback(() => {
+    dispatch(setShowModalStatus(true));
+  }, [])
 
   const headerRef = useRef(null);
   useEffect(() => {
@@ -84,7 +92,9 @@ const Header = () => {
             <div className="header__menu__item header__menu__right__item">
               <AiOutlineSearch />
             </div>
-            <div className="header__menu__item header__menu__right__item header__menu__user">
+            <div className="header__menu__item header__menu__right__item header__menu__user"
+              onClick={!user && showLoginModal}
+            >
               <AiOutlineUser />
               <span>Tài khoản</span>
             </div>
@@ -95,8 +105,8 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
-export default Header
+export default React.memo(Header)

@@ -12,6 +12,7 @@ const QuantityInput = props => {
         if (((Boolean(ref.current.value) === false) || (ref.current.value * 1 <= 1)) && (negative)) return;
         ref.current.value = ref.current.value * 1 + (negative ? -1 : 1)
     }
+
     return (
         <div className={`${props.className} wrap-quantity`}>
             <div className="wrap-quantity__btn btn-minus " onClick={() => incr(true)}>

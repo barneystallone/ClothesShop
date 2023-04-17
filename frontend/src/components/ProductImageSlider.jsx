@@ -120,4 +120,4 @@ const ProductImagesSlider = props => {
 
 ProductImagesSlider.propTypes = {}
 
-export default ProductImagesSlider
+export default React.memo(ProductImagesSlider)

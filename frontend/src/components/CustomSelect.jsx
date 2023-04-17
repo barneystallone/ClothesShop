@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { ReactComponent as DownIcon } from '../assets/images/down.svg'
 const CustomSelect = props => {
     const [show, setShow] = useState(false);
+
     return (
         <div className={`custom-select ${props.className}`}>
             <div className={classNames("custom-select__content", {

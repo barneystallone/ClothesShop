@@ -16,13 +16,18 @@ import CustomSelect from './CustomSelect'
 
 const ProductView = props => {
     const [size, setSize] = useState(sizes[0]);
+
     const product = useMemo(() => props.product, [props.product]);
+
     const handleSelectSize = useCallback((elm) => {
         setSize(sizes[elm.dataset.index])
         // console.log(sizes[elm.dataset.index]);
     }, [])
+
     const prodImages = useMemo(() => product?.colors?.map(color => color.image01), [product])
+
     const prodThumbImages = useMemo(() => product?.colors?.map(color => color.image02), [product])
+
     return (
         <div className="product__wrap" >
             <div className="product__wrap__inner">
@@ -197,4 +202,4 @@ SelectSize.propTypes = {
 }
 
 
-export default ProductView
+export default React.memo(ProductView)

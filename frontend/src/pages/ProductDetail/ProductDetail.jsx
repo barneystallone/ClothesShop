@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import Helmet from '../../components/Helmet'
 import Section, { SectionBody, SectionTitle } from '../../components/Section'
 import productData from '../../assets/fake-data/products'

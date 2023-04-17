@@ -1,3 +1,1 @@
-import ShowProductList from "./ShowProductList";
-
-export default ShowProductList
+export { default } from "./ShowProductList"

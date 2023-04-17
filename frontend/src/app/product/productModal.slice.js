@@ -25,4 +25,4 @@ export const {
 } = productModalSlice.actions
 
 export const selectProductModalSlug = (state) => state.productModal.productSlug
-export const selectModalStatus = (state) => state.productModal.isShow
+export const selectShowModalStatus = (state) => state.productModal.isShow

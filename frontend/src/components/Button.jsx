@@ -9,6 +9,7 @@ const Button = props => {
         <button
             className={`btn btn-slider ${size} ${animate} ${bg} ${props?.className}`}
             onClick={props.onClick ? props.onClick : null}
+            type={props?.type || 'button'}
         >
             <span className="btn-txt">{props.children}</span>
             {
@@ -33,6 +34,7 @@ Button.propTypes = {
     icon: PropTypes.element || PropTypes.string,
     animate: PropTypes.bool,
     onClick: PropTypes.func,
+    type: PropTypes.string,
     className: PropTypes.string,
 }
 

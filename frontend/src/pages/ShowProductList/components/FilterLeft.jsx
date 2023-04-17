@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
 import { ReactComponent as SubtractIcon } from '../../../assets/images/subtract.svg'
@@ -32,18 +32,7 @@ const FilterLeft = (props) => {
             </div>
             <div className="filter-left__content" >
                 <div ref={ref}>
-
                     {props.children}
-
-                    {/* {
-                            props.data.map((item, index) => (
-                                <div key={index} className="filter-left__content__item">
-                                    <CheckBox
-                                        label={item.display}
-                                    />
-                                </div>
-                            ))
-                        } */}
                 </div>
             </div>
         </div>

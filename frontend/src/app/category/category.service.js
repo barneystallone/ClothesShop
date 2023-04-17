@@ -6,6 +6,7 @@ export const categoryApi = api.injectEndpoints({
         getCategories: build.query({
             query: () => 'category',
             keepUnusedDataFor: 2 * 60,
+            providesTags: ["categories"]
         })
     })
 })

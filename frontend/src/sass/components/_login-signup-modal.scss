@@ -1,29 +1,235 @@
 .login-signup__modal {
+    $overlay-bg: rgba($color: #000000, $alpha: 0.4);
     position: fixed;
     @include flex(center, center);
     // width: 100%;
     // height: 100%;
     inset: 0;
-    background-color: rgba($color: #000000, $alpha: 0.4);
+    background-color: $overlay-bg;
     z-index: 200;
 
     &__wrap {
-        border-radius: .8rem;
-        background-color: $main-bg;
-        padding: 1rem 2rem;
+        width: 90%;
+        max-width: 420px;
+        // overflow: hidden;
 
-        &__header {
-            &__wrap-icon {}
-        }
+        position: relative;
+        z-index: 200;
 
-        &__body {
+        &__icon {
+            position: absolute;
+            inset: -1.2rem -1.2rem auto auto;
+            width: 3rem;
+            height: 3rem;
+            @include flex(center, center);
+            background-color: #f1f1f1;
+            border-radius: 100%;
+            box-shadow: $box-shadow;
+            z-index: 250;
 
-            .form {
-                &.login-form {}
+            svg {
+                width: 2.4rem;
+                height: 2.4rem;
 
-                &.signup-form {}
             }
         }
 
+        // padding: 1rem 2rem 2rem;
+        &__content {
+            overflow: hidden;
+
+            .modal__body {
+                width: 200%;
+                @include flex(center, center);
+                position: relative;
+                background-color: $main-bg;
+                border-radius: .8rem;
+                // height: 0;
+                // background-color: #fff;
+                transition: height .15s ease-in-out;
+
+                .form {
+                    width: 50%;
+                    // max-height: 100%;
+                    // height: 100%;
+                    padding: 2rem;
+                    transition: opacity .1s ease-in-out, margin-left .1s ease-in-out;
+
+                    &::after,
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        width: 1.6rem;
+                        height: 1.6rem;
+                        inset: auto 50% 0 auto;
+                        transition: all .2s ease-in-out;
+                    }
+
+                    &::after {
+                        background-color: #fff;
+                        // z-index: 1000;
+                        border-radius: 100%;
+                    }
+
+                    &::before {
+                        background-color: $overlay-bg;
+                        border-radius: 100%;
+                        transform: translate(50%, 50%);
+                    }
+
+
+                    h2 {
+                        position: relative;
+                        font-size: 2rem;
+                        font-weight: 600;
+                        margin-bottom: 2rem;
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            inset: auto auto -1px 2px;
+                            height: 2.5px;
+                            width: 2.5rem;
+                            border-radius: 1rem;
+                            background-color: $main-color;
+                        }
+                    }
+
+                    .login-signup {
+                        span {
+                            color: $main-color;
+                            cursor: pointer;
+                            user-select: none;
+                            padding: 1rem 1rem 1rem .3rem;
+                        }
+                    }
+
+                    .fields {
+                        margin-top: 1.2rem;
+
+                        .input__box {
+                            position: relative;
+                            height: 3rem;
+                            width: 100%;
+                            margin-bottom: .5rem;
+
+
+                            input {
+                                font-size: 1.3rem;
+                                position: absolute;
+                                height: 100%;
+                                width: 100%;
+                                padding: 0 2rem;
+                                outline: none;
+                                border: none;
+                                border-bottom: 2px solid $txt-second-color;
+                                transition: all .25s ease-in-out;
+
+                                &:focus {
+                                    border-bottom-color: $main-color;
+
+                                    &~svg {
+                                        color: $main-color;
+                                    }
+                                }
+                            }
+
+                            &__icon {
+                                transition: all .25s ease-in-out;
+                                position: absolute;
+                                top: 50%;
+                                transform: translateY(-57%);
+                                right: 0;
+                                width: 1.3rem;
+                                height: 1.3rem;
+                                visibility: hidden;
+                                opacity: 0;
+                                transition: all .2s;
+
+                                &--pre {
+                                    left: 0;
+                                    visibility: visible !important;
+                                    opacity: 1;
+                                }
+
+                                &.visible {
+                                    visibility: visible;
+                                    opacity: 1;
+                                }
+
+                                // &.error__icon {
+                                //     color: $red;
+                                // }
+
+                            }
+
+                        }
+
+                        &.error__field {
+                            svg {
+                                color: $red !important;
+                            }
+
+                            input {
+                                border-color: $red !important;
+                            }
+                        }
+                    }
+
+
+                    .options-field {
+                        margin-top: 1.2rem;
+                        @include flex(center, space-between);
+
+
+
+                    }
+
+                    .submit-btn {
+                        width: 100%;
+
+                        margin: 1.5rem auto;
+                        font-size: 1.2rem;
+                        font-weight: 600;
+                        letter-spacing: 1px;
+                    }
+
+                    .login-signup {
+                        text-align: center;
+                    }
+
+                    &.login-form {
+                        opacity: 1;
+                        visibility: visible;
+                        pointer-events: unset;
+
+                        &.active {
+                            margin-left: -100%;
+                            opacity: 0;
+                            visibility: hidden;
+                            pointer-events: none;
+                        }
+                    }
+
+                    &.signup-form {
+                        opacity: 0;
+                        visibility: hidden;
+                        pointer-events: none;
+
+                        &.active {
+                            // margin-left: -50%;
+                            visibility: visible;
+                            opacity: 1;
+                            pointer-events: unset;
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+
     }
+
 }
