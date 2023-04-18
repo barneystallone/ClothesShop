@@ -5,16 +5,19 @@ import productData from '../../assets/fake-data/products'
 import { useParams } from 'react-router-dom'
 import RelatedProducts from './components/RelatedProducts'
 import ProductView from '../../components/ProductView'
+import { useMemo } from 'react'
 
 const ProductDetail = (props) => {
 
   const { slug } = useParams();
-  const product = productData.getProductBySlug(slug) || {};
+  const product = useMemo(() => {
+    return productData.getProductBySlug(slug) || {}
+  }, [slug]);
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
   }, [product])
-  const relatedProducts = productData.getProducts(5)
+  const relatedProducts = useMemo(() => productData.getProducts(5), [])
   return (
     <Helmet title={product.title}>
       <Section>
