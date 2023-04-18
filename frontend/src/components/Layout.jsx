@@ -5,21 +5,19 @@ import Footer from './Footer'
 import ProductViewModal from './ProductViewModal'
 import LoginSignUpModal from './LoginSignUpModal'
 const Layout = () => {
-    return (
-        < >
-            <Header />
-            <div className="container">
-                <div className='main'>
-                    <Outlet />
-
-                </div>
-
-            </div>
-            <Footer />
-            <ProductViewModal />
-            <LoginSignUpModal />
-        </>
-    )
+  return (
+    <>
+      <Header />
+      <div className='container'>
+        <div className='main'>
+          <Outlet />
+        </div>
+      </div>
+      <Footer />
+      <ProductViewModal />
+      <LoginSignUpModal />
+    </>
+  )
 }
 
 export default Layout

@@ -1,15 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Helmet = props => {
-    document.title = 'Shop - '+ props.title
-    return (
-        <div>{props.children}</div>
-    )
+const Helmet = (props) => {
+  document.title = 'Shop - ' + props.title
+  return <div>{props.children}</div>
 }
 
 Helmet.propTypes = {
-    title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 }
 
 export default Helmet

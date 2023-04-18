@@ -1,0 +1,43 @@
+{
+  "plugins": ["react", "react-hooks", "prettier","es"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+        "prettier/prettier": [
+            "warn",
+            {
+                "arrowParens": "always",
+                "semi" : false,
+                "trailingComma": "none",
+                "tabWidth": 2,
+                "singleQuote": true,
+                "printWidth": 120,
+                "jsxSingleQuote": true,
+                "endOfLine": "auto",
+                "useTabs": false
+              }
+        ],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "no-undef": "error",
+        "no-unused-vars": "warn"
+    },
+    "env": {
+      "browser": true,
+      "jest": true,
+      "node": true,
+      "jasmine": true
+    }
+}
