@@ -35,6 +35,7 @@ const FilterLeft = (props) => {
 
 FilterLeft.propTypes = {
   title: PropTypes.string.isRequired,
+  children: PropTypes.element,
   // data: PropTypes.array.isRequired,
   nested: PropTypes.bool
 }

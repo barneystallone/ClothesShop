@@ -1,54 +1,50 @@
 .btn {
-    border: 0;
-    outline: 0;
-    color: $btn-main-color;
-    font-size: 1.5rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
-    border-radius: 4px;
-    width: 100px;
-    @include mobile {
-        font: size 1rem;
-    }
+  border: 0;
+  outline: 0;
+  color: $btn-main-color;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  width: 100px;
+  @include mobile {
+    font: size 1rem;
+  }
 
-    &-txt,
-    &-icon {
-        display: block;
-        transition: all 0.2s ease;
-    }
+  &-txt,
+  &-icon {
+    display: block;
+    transition: all 0.2s ease;
+  }
 
-    &-txt {
-        padding: 1rem 2rem;
-    }
-
-   
+  &-txt {
+    padding: 1rem 2rem;
+  }
 }
 
 .btn-slider {
-    @extend .btn;
+  @extend .btn;
 
-    
+  .btn-icon {
+    @include flex(center, center);
+    font-size: 2rem;
+    position: absolute;
+    inset: 0;
+    transform: translate(-100%);
+  }
+
+  &.btn-animate:hover {
+    opacity: 1;
+
+    .btn-txt {
+      transform: translate(100%);
+    }
+
     .btn-icon {
-        @include flex(center, center);
-        font-size: 2rem;
-        position: absolute;
-        inset: 0;
-        transform: translate(-100%);
+      transform: translate(0);
     }
-
-    &.btn-animate:hover {
-        opacity: 1;
-
-        .btn-txt {
-            transform: translate(100%)
-        }
-
-        .btn-icon {
-            transform: translate(0)
-        }
-
-    }
+  }
 }

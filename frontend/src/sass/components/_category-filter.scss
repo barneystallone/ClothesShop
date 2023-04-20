@@ -1,35 +1,34 @@
 .accordion {
-    &__title {
-        @include flex(center, space-between);
-        // padding: .8rem 0;
+  &__title {
+    @include flex(center, space-between);
+    // padding: .8rem 0;
 
-        & .right__icon {
-            @extend .filter-left__icon;
+    & .right__icon {
+      @extend .filter-left__icon;
 
-            &__svg {
-                @extend .filter-left__icon__svg;
-                font-weight: 100
-            }
-        }
-
+      &__svg {
+        @extend .filter-left__icon__svg;
+        font-weight: 100;
+      }
     }
+  }
 
-    &__content {
-        @extend .filter-left__content;
-        height: 0;
+  &__content {
+    @extend .filter-left__content;
+    height: 0;
 
-        &__item {
-            padding: 0;
-            margin: 0 0 .8rem 1rem;
-            @extend .filter-left__content__item;
-        }
+    &__item {
+      padding: 0;
+      margin: 0 0 0.8rem 1rem;
+      @extend .filter-left__content__item;
     }
+  }
 
-    // &__content__item {
-    //     @extend .filter-left__content__item;
-    //     padding: 0;
-    //     margin: 0 0 .8rem 1rem;
-    // }
+  // &__content__item {
+  //     @extend .filter-left__content__item;
+  //     padding: 0;
+  //     margin: 0 0 .8rem 1rem;
+  // }
 }
 
 // .accordition__content__item {}

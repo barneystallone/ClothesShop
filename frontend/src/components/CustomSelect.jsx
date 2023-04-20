@@ -30,7 +30,8 @@ const CustomSelect = (props) => {
 
 CustomSelect.propTypes = {
   title: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  children: PropTypes.arrayOf(PropTypes.element)
 }
 
 export default CustomSelect

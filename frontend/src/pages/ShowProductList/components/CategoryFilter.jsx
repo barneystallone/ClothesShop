@@ -4,7 +4,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import FilterLeft from './FilterLeft'
 import Grid from '../../../components/Grid'
 import SubCategoryFilter from './SubCategoryFilter'
-import { useGetCategoriesQuery } from '../../../app/category/category.service'
+import { useGetCategoriesQuery } from '../../../features/category/category.service'
 
 const CategoryFilter = (props) => {
   // const { data: categories, isLoading } = useGetCategoriesQuery(undefined, { skip: true });

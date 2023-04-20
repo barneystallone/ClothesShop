@@ -1,121 +1,118 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    // user-select: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  // user-select: none;
 }
 
 html {
-    font-size: 13px;
-    scroll-behavior: smooth;
+  font-size: 13px;
+  scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    // position: relative;
+  font-family: 'Roboto', sans-serif;
+  // position: relative;
 }
 
 ul {
-    list-style: none;
+  list-style: none;
 }
 
 a {
-    text-decoration: none;
-    color: unset;
+  text-decoration: none;
+  color: unset;
 }
 
 ::-webkit-scrollbar {
-    // tùy chỉnh scrollbar cho trình duyệt webkit (Chrome, Safari, Edge)
-    width: 1rem;
+  // tùy chỉnh scrollbar cho trình duyệt webkit (Chrome, Safari, Edge)
+  width: 1rem;
 }
 
 ::-webkit-scrollbar-button {
-    display: block;
-    height: 3px;
+  display: block;
+  height: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: darken($main-bg, 20%);
-    border-radius: 6px;
+  background-color: darken($main-bg, 20%);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: $main-bg;
+  background-color: $main-bg;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-@each $color,
-$val in $colors {
-    .color-#{$color} {
-        color: $val;
-    }
+@each $color, $val in $colors {
+  .color-#{$color} {
+    color: $val;
+  }
 
-    .bg-#{$color} {
-        background-color: $val;
-    }
-}
-
-@each $val in $numbers {
-    .grid-col-#{$val} {
-        grid-template-columns: repeat($val, 1fr);
-    }
+  .bg-#{$color} {
+    background-color: $val;
+  }
 }
 
 @each $val in $numbers {
-    .grid-col-md-#{$val} {
-        @include tablet {
-            grid-template-columns: repeat($val, 1fr);
-        }
-    }
+  .grid-col-#{$val} {
+    grid-template-columns: repeat($val, 1fr);
+  }
 }
 
 @each $val in $numbers {
-    .grid-col-sm-#{$val} {
-        @include mobile {
-            grid-template-columns: repeat($val, 1fr);
-        }
+  .grid-col-md-#{$val} {
+    @include tablet {
+      grid-template-columns: repeat($val, 1fr);
     }
+  }
 }
 
-
+@each $val in $numbers {
+  .grid-col-sm-#{$val} {
+    @include mobile {
+      grid-template-columns: repeat($val, 1fr);
+    }
+  }
+}
 
 .container {
-    width: 100%;
-    max-width: 1620px;
-    padding: 0 50px;
-    margin: auto;
+  width: 100%;
+  max-width: 1620px;
+  padding: 0 50px;
+  margin: auto;
 
-    @include tablet {
-        padding: 0 20px;
-    }
+  @include tablet {
+    padding: 0 20px;
+  }
 
-    @include mobile {
-        padding: 0 10px;
-    }
+  @include mobile {
+    padding: 0 10px;
+  }
 }
 
 .main {
-    margin-top: calc(#{$header-height} + 30px);
-    min-height: 100vh;
+  margin-top: calc(#{$header-height} + 30px);
+  min-height: 100vh;
 
-    @include tablet {
-        margin-top: calc(#{$header-tablet-height} + 20px);
-    }
+  @include tablet {
+    margin-top: calc(#{$header-tablet-height} + 20px);
+  }
 
-    @include mobile {
-        margin-top: calc(#{$header-mobile-height} + 10px);
-    }
+  @include mobile {
+    margin-top: calc(#{$header-mobile-height} + 10px);
+  }
 }
 
 .grid {
-    display: grid;
+  display: grid;
 }
 
 .d-none {
-    display: none;
+  display: none;
 }

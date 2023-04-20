@@ -1,178 +1,171 @@
 .product-card {
-    text-align: center;
-    margin-bottom: 30px;
-    // product-card__colors__item
+  text-align: center;
+  margin-bottom: 30px;
+  // product-card__colors__item
+  position: relative;
+
+  &__tagSale {
+    position: absolute;
+    z-index: 50;
+    top: 15px;
+    left: 20px;
+    font-size: 1rem;
+    background-color: #ff2c00;
+    color: $txt-white;
+    font-weight: 600;
+    width: 4.5rem;
+    line-height: 2.5rem;
+    height: 2.5rem;
+  }
+
+  &__btn {
+    .btn {
+      background-color: rgba(248, 248, 248, 1);
+      font-weight: 400;
+      text-transform: none;
+      font-size: 1rem;
+      color: $txt-main-color;
+      width: 70%;
+
+      @include mobile {
+        font-size: 3vw;
+      }
+
+      &:hover {
+        svg {
+          color: $main-color;
+          animation: rotate 0.2s ease-in-out 0.2s;
+        }
+      }
+
+      @keyframes rotate {
+        from {
+          rotate: 0deg;
+        }
+
+        to {
+          rotate: -360deg;
+        }
+      }
+    }
+
     position: relative;
+    margin: auto;
+    transform: translateY(150%);
+    transition: all 0.5s ease;
+    z-index: 100;
 
-    &__tagSale {
-        position: absolute;
-        z-index: 50;
-        top: 15px;
-        left: 20px;
-        font-size: 1rem;
-        background-color: #ff2c00;
-        color: $txt-white;
-        font-weight: 600;
-        width: 4.5rem;
-        line-height: 2.5rem;
-        height: 2.5rem;
+    .btn-txt {
+      @include mobile {
+        padding: 1rem 0.8rem;
+      }
     }
 
-    &__btn {
-        .btn {
-            background-color: rgba(248, 248, 248, 1);
-            font-weight: 400;
-            text-transform: none;
-            font-size: 1rem;
-            color: $txt-main-color;
-            width: 70%;
+    &:hover {
+      opacity: 0.85;
+    }
+  }
 
-            @include mobile {
-                font-size: 3vw;
-            }
+  &__image {
+    padding-top: 135%;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
 
-            &:hover {
-                svg {
-                    color: $main-color;
-                    animation: rotate .2s ease-in-out .2s;
+    img {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%);
+      height: 100%;
 
-                }
-            }
+      &:nth-child(1) {
+        opacity: 1;
+        transition: opacity 0.6s ease;
+      }
 
-            @keyframes rotate {
-                from {
-                    rotate: 0deg;
-                }
+      &:nth-child(2) {
+        opacity: 0;
+        transition: opacity 0.6s ease-in-out;
+      }
 
-                to {
-                    rotate: -360deg;
-                }
-            }
-        }
+      &.show {
+        opacity: 1 !important;
+      }
 
-        position: relative;
-        margin: auto;
-        transform: translateY(150%);
-        transition: all .5s ease;
-        z-index: 100;
-
-        .btn-txt {
-            @include mobile {
-                padding: 1rem 0.8rem;
-            }
-        }
-
-        &:hover {
-            opacity: 0.85;
-
-        }
+      &.hide {
+        opacity: 0 !important;
+      }
     }
 
-    &__image {
-        padding-top: 135%;
-        overflow: hidden;
-        position: relative;
-        margin-bottom: 20px;
-
-        img {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%);
-            height: 100%;
-
-            &:nth-child(1) {
-                opacity: 1;
-                transition: opacity .6s ease;
-            }
-
-            &:nth-child(2) {
-                opacity: 0;
-                transition: opacity .6s ease-in-out;
-            }
-
-            &.show {
-                opacity: 1 !important;
-
-            }
-
-            &.hide {
-                opacity: 0 !important;
-            }
+    &:hover {
+      img {
+        &:nth-child(1) {
+          opacity: 0;
         }
 
-        &:hover {
-            img {
-                &:nth-child(1) {
-                    opacity: 0;
-
-                }
-
-                &:nth-child(2) {
-                    opacity: 1;
-
-                }
-            }
-
-            .product-card__btn {
-                transform: translateY(-40%);
-
-            }
+        &:nth-child(2) {
+          opacity: 1;
         }
+      }
+
+      .product-card__btn {
+        transform: translateY(-40%);
+      }
+    }
+  }
+
+  &__colors {
+    @include flex(center, center);
+    margin-bottom: 1rem;
+    cursor: default;
+
+    &__item + &__item {
+      margin-left: 10px;
     }
 
-    &__colors {
-        @include flex(center, center);
-        margin-bottom: 1rem;
-        cursor: default;
+    &__item {
+      z-index: 50;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: $box-shadow;
+      // background-color: red;
+      overflow: hidden;
+      border-radius: 100%;
+      width: 30px;
+      height: 30px;
 
-        &__item+&__item {
-            margin-left: 10px;
-        }
+      img {
+        width: 4rem;
+        height: 4rem;
+        // padding: .4rem;
+        // object-fit: cover;
+        // height: 100%;
+      }
 
-        &__item {
-            z-index: 50;
-            cursor: pointer;
-            border-radius: 4px;
-            box-shadow: $box-shadow;
-            // background-color: red;
-            overflow: hidden;
-            border-radius: 100%;
-            width: 30px;
-            height: 30px;
-
-            img {
-                width: 4rem;
-                height: 4rem;
-                // padding: .4rem;
-                // object-fit: cover;
-                // height: 100%;
-
-            }
-
-            &.active {
-                border: 1px solid red;
-            }
-        }
+      &.active {
+        border: 1px solid red;
+      }
     }
+  }
 
-    &__name {
-        color: $txt-second-color;
-        margin-bottom: 8px;
-        font-weight: normal;
-        font-size: 1.25rem;
+  &__name {
+    color: $txt-second-color;
+    margin-bottom: 8px;
+    font-weight: normal;
+    font-size: 1.25rem;
+  }
+
+  &__price {
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: $txt-main-color;
+
+    &--old {
+      font-weight: 300;
+      font-size: 1.2rem;
+      color: $txt-second-color;
+      margin-left: 16px;
     }
-
-    &__price {
-        font-size: 1.45rem;
-        font-weight: 600;
-        color: $txt-main-color;
-
-        &--old {
-            font-weight: 300;
-            font-size: 1.2rem;
-            color: $txt-second-color;
-            margin-left: 16px;
-        }
-    }
+  }
 }

@@ -31,15 +31,6 @@ const SubCategoryFilter = (props) => {
       <div className={`accordion__content`}>
         <div ref={ref}>
           <AccordionItems subItems={item.sub_category} />
-          {/* <div className=" accordion__content__item">
-                        <CheckBox label={item.category_name} />
-                    </div>
-                    <div className=" accordion__content__item">
-                        <CheckBox label={item.category_name} checked={props.checked} />
-                    </div>
-                    <div className=" accordion__content__item">
-                        <CheckBox label={item.category_name} />
-                    </div> */}
         </div>
       </div>
     </div>
@@ -47,7 +38,6 @@ const SubCategoryFilter = (props) => {
 }
 
 const AccordionItems = React.memo(({ subItems }) => {
-  // console.log(subItems);
   return (
     <>
       {subItems.map((subItem) => (
@@ -58,6 +48,11 @@ const AccordionItems = React.memo(({ subItems }) => {
     </>
   )
 })
+AccordionItems.displayName = 'AccordionItems'
+
+AccordionItems.propTypes = {
+  subItems: PropTypes.array
+}
 
 SubCategoryFilter.propTypes = {
   item: PropTypes.object.isRequired

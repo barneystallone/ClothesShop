@@ -4,7 +4,7 @@ import logo from '../assets/images/Logo.jpg'
 import { CgMenuGridO } from 'react-icons/cg'
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineUser } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentUser, setShowModalStatus } from '../app/auth/auth.slice'
+import { selectCurrentUser, setShowModalStatus } from '../features/auth/auth.slice'
 const leftNav = [
   {
     content: 'Trang chủ',

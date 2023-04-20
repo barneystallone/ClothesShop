@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import ProductCard from '../../../components/ProductCard'
+import { ProductCard } from '../../../features/product'
 import Grid from '../../../components/Grid'
 
 const InfinityList = (props) => {

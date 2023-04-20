@@ -2,9 +2,9 @@ import React from 'react'
 import Helmet from '../../components/Helmet'
 import Section, { SectionBody, SectionTitle } from '../../components/Section'
 import productData from '../../assets/fake-data/products'
-import { useParams } from 'react-router-dom'
 import RelatedProducts from './components/RelatedProducts'
-import ProductView from '../../components/ProductView'
+import { ProductView } from '../../features/product/'
+import { useParams } from 'react-router-dom'
 
 const ProductDetail = (props) => {
   const { slug } = useParams()

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Grid from '../../../components/Grid'
-import ProductCard from '../../../components/ProductCard'
+import { ProductCard } from '../../../features/product'
 
 const RelatedProducts = (props) => {
   const { relatedProducts } = props

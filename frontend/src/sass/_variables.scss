@@ -18,26 +18,16 @@ $box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 $box-shadow2: rgba(0, 0, 0, 0.1) 0px 8px 15px;
 
 $colors: (
-    "blue": #4267b2,
-    "orange": #fbb96b,
-    "pink": #fe7e73,
-    "white": #fff,
-    "black": #000,
-    "main": $main-color,
-    "red": #ff2c00,
+  'blue': #4267b2,
+  'orange': #fbb96b,
+  'pink': #fe7e73,
+  'white': #fff,
+  'black': #000,
+  'main': $main-color,
+  'red': #ff2c00
 );
 
 $mobile-width: 600px;
 $tablet-width: 1024px;
 
-$numbers: (
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8
-);
+$numbers: (0, 1, 2, 3, 4, 5, 6, 7, 8);

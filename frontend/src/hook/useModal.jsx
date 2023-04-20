@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 const useModal = (action, showStatusSelector, callback, delay = 200) => {
   const isShow = useSelector(showStatusSelector)
   const dispatch = useDispatch()
   const [show, setShow] = useState(isShow)
   const [event, setEvent] = useState(null)
-  // const [payload, setPayload] = useState(false);
 
   const closeModal = (e, payload) => {
     setEvent(e)
@@ -27,7 +26,7 @@ const useModal = (action, showStatusSelector, callback, delay = 200) => {
       return
     }
     setShow(true)
-  }, [isShow])
+  }, [isShow, callback, delay, event])
   return {
     show,
     closeModal
