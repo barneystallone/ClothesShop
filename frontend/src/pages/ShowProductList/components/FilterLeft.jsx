@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { ReactComponent as CloseIcon } from '../../assets/images/close.svg'
-import { ReactComponent as SubtractIcon } from '../../assets/images/subtract.svg'
+import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
+import { ReactComponent as SubtractIcon } from '../../../assets/images/subtract.svg'
 const FilterLeft = (props) => {
 
     const [show, setShow] = useState(true);

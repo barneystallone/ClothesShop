@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { HiShoppingCart } from 'react-icons/hi'
-import Button from '../../components/Button'
-import { numberToCurrency } from '../../utils'
+import Button from './Button'
+import { numberToCurrency } from '../utils'
 const ProductCard = props => {
     const [active, setActive] = useState(null);
     // const styles = {}
@@ -24,7 +24,7 @@ const ProductCard = props => {
                     {
                         props.colors.map((color, i) => (
 
-                            <img key={i} src={color.image01} alt="" className={(active === null) ? '' : (active === i) ? 'show' : 'hide'} />
+                            <img key={i} src={color.image01} loading='lazy' alt="" className={(active === null) ? '' : (active === i) ? 'show' : 'hide'} />
 
                         ))
                     }
@@ -38,7 +38,7 @@ const ProductCard = props => {
                     {
                         props.colors.map((color, i) => (
                             <div key={i} className={`product-card__colors__item ${(active === i) ? 'active' : ''}`} onClick={() => setActive(i * 1)}  >
-                                <img src={color.image02} alt="" />
+                                <img src={color.image02} alt="" loading='lazy' />
                             </div>
 
                         ))

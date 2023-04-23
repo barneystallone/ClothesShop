@@ -25,7 +25,7 @@ const ProductImagesSlider = props => {
                 direction='vertical'
                 allowTouchMove={true}
                 modules={[Thumbs]}
-                slidesPerView={4}
+                slidesPerView={3}
 
                 onSwiper={(swiper) => {
                     setActiveThumb(swiper)
@@ -34,6 +34,19 @@ const ProductImagesSlider = props => {
                 className='product__images__slider__thumbs'
             >
 
+                {
+                    props.images.map((item, index) => (
+
+                        <SwiperSlide key={index} className='wrapper-img'>
+                            <img loading='lazy' src={item} alt="" onClick={() => {
+                                const swiper = document.querySelector('.swiper ').swiper;
+                                swiper.update(null)
+                            }} />
+                        </SwiperSlide>
+
+
+                    ))
+                }
                 {
                     props.images.map((item, index) => (
 
@@ -63,7 +76,7 @@ const ProductImagesSlider = props => {
                     props.images.map((item, index) => (
                         <SwiperSlide key={index} className='wrapper-img'>
 
-                            <img src={item} alt="" />
+                            <img loading='lazy' src={item} alt="" />
                         </SwiperSlide>
                     ))
                 }

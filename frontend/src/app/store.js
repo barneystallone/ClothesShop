@@ -1,16 +1,17 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import categoryReducer from './category/categorySlice'
-import logger from "redux-logger";
+import categoryReducer from './category/category.slice'
+// import logger from "redux-logger";
+import { api } from "./api/apiSlice";
+import { rtkErrorLogger } from "./middleware";
 
 
 const rootReducer = combineReducers({
-    category: categoryReducer
+    category: categoryReducer,
+    [api.reducerPath]: api.reducer,
 });
 
 export const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-
-    }).concat(logger)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware, rtkErrorLogger)
 
 })

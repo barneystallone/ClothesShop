@@ -1,4 +1,4 @@
-
+const { uploader } = require('./uploader')
 
 module.exports = {
 
@@ -11,5 +11,6 @@ module.exports = {
         ).catch(next)
     },
 
+    uploader: uploader,
 
 }

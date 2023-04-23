@@ -39,6 +39,44 @@ Alter table user add index idx_email (email);
 
 -- alter table user auto_increment = 1;
 
+-- Product
+drop table if exists product;
+create table product (
+	-- id int auto_increment,
+    pId varchar(13) not null primary key,
+	title varchar(50) not null,
+    slug varchar(60) unique not null,
+    description TEXT ,
+    price int ,
+    sold int,
+    category_id int references category(id)
+);
+-- insert into product values ('11','VÁo Thun Nữ Croptop Caro','VÁo Thun Nữ Croptop Caroád ádd','a',123,0,2);
+alter table product add index idx_pSlug(slug); 
+drop table if exists item;
+create table item (
+	itemId varchar(13) not null Primary key ,
+	pId varchar(13) not null references product(pid), 
+    url varchar(200) not null,
+    thumbUrl varchar(200) not null,
+    colorName varchar(20) not null,
+    colorCode varchar(7) not null
+);
+alter table item add unique index idx_prod(pid,colorCode);
+drop table if exists size;
+create table size (
+	sizeId varchar(6) not null primary key,
+    title  varchar(20) not null
+);
+drop table if exists inventory;
+create table inventory (
+	itemId varchar(13) references product(pId),
+ 	sizeId varchar(6) references size(sizeId),
+	quantity int ,
+    primary key(itemId, sizeId)
+);
+
+-- <<<<<<<<<<<<<<<<<<<<<<<<< PROC >>>>>>>>>>>>>>>>>>>>>>>>>>>
 -- Procedure 
 DROP PROCEDURE IF EXISTS proc_getCategories;
 delimiter //
@@ -77,6 +115,8 @@ delimiter ;
 
 -- call proc_insertUser('12','2');
 
+
+--
 insert into category values 
 (null,'Danh mục','all',0) ,
 (null,'Áo','ao',1),

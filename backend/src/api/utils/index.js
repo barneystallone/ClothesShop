@@ -16,5 +16,17 @@ module.exports = {
         })
 
         return userSchema.validate(data);
+    },
+    productValidate: data => {
+        const productSchema = Joi.object({
+            title: Joi.string().max(50).required(),
+            slug: Joi.string().max(60).required(),
+            description: Joi.string().required(),
+            price: Joi.number().required(),
+            category_id: Joi.number().required().min(2)
+            // resetToken: ,
+        })
+
+        return productSchema.validate(data);
     }
 }

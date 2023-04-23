@@ -7,8 +7,8 @@ POST  {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-    # "email" :"11sa2s1a112s2a2avass@gmail.com",
-    "password": "sdasdd"
+   "email" :"11sa2s1ass112s2a2avass@gmail.com",
+    "password": "asdasdd"
 }
 ###
 @authToken = {{login.response.body.accessToken}}
@@ -25,7 +25,7 @@ POST  {{baseUrl}}/api/user/register
 Content-Type: application/json
 
 {
-    "email" :"11sa2s1ass112s2a2avass@gmail.com",
+   "email" :"11sa2s1ass112s2a2avass@gmail.com",
     "password": "asdasdd"
 }
 
@@ -36,3 +36,23 @@ POST  {{baseUrl}}/api/user/refresh-token
 # Cookie: 
 
 
+###
+POST  {{baseUrl}}/api/user/create
+
+### PRODUCT
+POST {{baseUrl}}/api/product/create
+Content-Type: application/json
+
+{
+    "title": "qu" ,
+    "description"  : "aaaaaaaaaaa",
+    "price": 135150 ,
+    "category_id": 2 
+}
+
+### 
+GET {{baseUrl}}/api/product
+
+###
+GET {{baseUrl}}/api/user
+Authorization: Beare {{authToken}}

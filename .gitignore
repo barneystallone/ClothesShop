@@ -1,3 +1,5 @@
 node_modules
 backend/src/index*.js
-*copy*
+
+**/init.redis.js
+backend/public/images/*

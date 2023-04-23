@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { ReactComponent as CloseIcon } from '../../assets/images/close.svg'
-import { ReactComponent as SubtractIcon } from '../../assets/images/subtract.svg'
-import CheckBox from '../../components/Checkbox'
+import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
+import { ReactComponent as SubtractIcon } from '../../../assets/images/subtract.svg'
+import CheckBox from '../../../components/Checkbox'
 const SubCategoryFilter = (props) => {
     const [show, setShow] = useState(false);
 
