@@ -1,15 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import Helmet from '../../components/Helmet'
 import Section, { SectionBody, SectionTitle } from '../../components/Section'
 import productData from '../../assets/fake-data/products'
-import { useParams } from 'react-router-dom'
 import RelatedProducts from './components/RelatedProducts'
-import ProductView from '../../components/ProductView'
+import { ProductView } from '../../features/product/'
+import { useParams } from 'react-router-dom'
 
 const ProductDetail = (props) => {
-
-  const { slug } = useParams();
-  const product = productData.getProductBySlug(slug) || {};
+  const { slug } = useParams()
+  const product = productData.getProductBySlug(slug) || {}
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
@@ -20,13 +19,10 @@ const ProductDetail = (props) => {
       <Section>
         <SectionBody>
           <ProductView product={product} />
-
         </SectionBody>
       </Section>
       <Section>
-        <SectionTitle>
-          Khám phá thêm
-        </SectionTitle>
+        <SectionTitle>Khám phá thêm</SectionTitle>
         <SectionBody>
           <RelatedProducts relatedProducts={relatedProducts} />
         </SectionBody>

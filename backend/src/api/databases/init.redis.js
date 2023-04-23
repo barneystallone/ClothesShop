@@ -1,40 +1,38 @@
-const redis = require("redis");
+const redis = require('redis')
 const { redis: redisConfig } = require('../../config/db.config')
 
-let redisClient;
-(async () => {
-    redisClient = redis.createClient({
-        password: redisConfig.PASSWORD,
-        socket: redisConfig.SOCKET
-    });
-    redisClient.on("connect", () => console.log(`Redis::: connected`));
-    redisClient.on("error", (error) => console.error(`Redis::: ${error}`));
-    await redisClient.connect();
-})();
+let redisClient
+;(async () => {
+  redisClient = redis.createClient({
+    password: redisConfig.PASSWORD,
+    socket: redisConfig.SOCKET,
+  })
+  redisClient.on('connect', () => console.log(`Redis::: connected`))
+  redisClient.on('error', (error) => console.error(`Redis::: ${error}`))
+  await redisClient.connect()
+})()
 
+var self = (module.exports = {
+  getNewClient: () => {
+    const redisClient = redis.createClient({
+      password: redisConfig.PASSWORD,
+      socket: redisConfig.SOCKET,
+    })
+    self.getConnection(redisClient)
 
+    return redisClient
+  },
 
-var self = module.exports = {
-    getNewClient: () => {
-        const redisClient = redis.createClient({
-            password: redisConfig.PASSWORD,
-            socket: redisConfig.SOCKET
-        });
-        self.getConnection(redisClient);
+  getConnection: async (redisClient) => {
+    redisClient.on('connect', () => console.log(`Redis::: connected`))
+    redisClient.on('error', (error) => console.error(`Redis::: ${error}`))
+    await redisClient.connect()
+  },
 
-        return redisClient;
-    },
-
-    getConnection: async (redisClient) => {
-        redisClient.on("connect", () => console.log(`Redis::: connected`));
-        redisClient.on("error", (error) => console.error(`Redis::: ${error}`));
-        await redisClient.connect();
-    },
-
-    getClient: () => {
-        return redisClient;
-    }
-}
+  getClient: () => {
+    return redisClient
+  },
+})
 
 // https://github.com/redis/node-redis/blob/master/README.md#redis-commands
 // Build in func

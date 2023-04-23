@@ -1,35 +1,34 @@
 .wrap-quantity {
-    @include flex (center, flex-start);
+  @include flex(center, flex-start);
 
-    &__btn {
-        width: 42px;
-        height: 42px;
-        border: 1px solid $txt-second-color;
-        user-select: none;
-        background-color: #fff;
+  &__btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid $txt-second-color;
+    user-select: none;
+    background-color: #fff;
 
-        @include flex (center, center);
+    @include flex(center, center);
 
-        & svg {
-            width: 0.8rem;
-            height: 0.8rem;
-        }
-
-        &:hover {
-            background-color: $main-color;
-            transition: all .3s ease;
-            border-width: 0;
-            color: #fff;
-        }
+    & svg {
+      width: 0.8rem;
+      height: 0.8rem;
     }
 
-    &__input {
-        height: 42px;
-        border: 1px solid $txt-second-color;
-        outline: none;
-        border-width: 1px 0;
-        text-align: center;
-        max-width: 60px;
-
+    &:hover {
+      background-color: $main-color;
+      transition: all 0.3s ease;
+      border-width: 0;
+      color: #fff;
     }
+  }
+
+  &__input {
+    height: 42px;
+    border: 1px solid $txt-second-color;
+    outline: none;
+    border-width: 1px 0;
+    text-align: center;
+    max-width: 60px;
+  }
 }
