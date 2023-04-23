@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import productData from '../../assets/fake-data/products'
 import Helmet from '../../components/Helmet'
 import size from '../../assets/fake-data/product-size'
@@ -13,8 +13,12 @@ import CategoryFilter from './components/CategoryFilter'
 import Grid from '../../components/Grid'
 const ShowProductList = () => {
 
-  const products = productData.getAllProducts();
+  // const products = useMemo(productData.getAllProducts());
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    setProducts(productData.getAllProducts())
+  }, [])
 
   return (
     <Helmet title='Sản phẩm'>

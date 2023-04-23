@@ -15,11 +15,11 @@ const QuantityInput = props => {
     return (
         <div className={`${props.className} wrap-quantity`}>
             <div className="wrap-quantity__btn btn-minus " onClick={() => incr(true)}>
-                <MinusIcon className='minus-icon' />
+                <MinusIcon className='icon minus-icon' />
             </div>
-            <input ref={ref} className='wrap-quantity__input color-blue' type="number" onChange={(e) => { console.log(e.target.value); }} />
+            <input ref={ref} className='wrap-quantity__input color-blue' type="number" value={1} onChange={(e) => { console.log(e.target.value); }} />
             <div className="wrap-quantity__btn btn-plus" onClick={() => incr()}>
-                <PlusIcon className='plus-icon' />
+                <PlusIcon className='icon plus-icon' />
             </div>
         </div>
     )

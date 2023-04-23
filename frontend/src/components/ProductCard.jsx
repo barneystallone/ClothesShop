@@ -1,11 +1,21 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { HiShoppingCart } from 'react-icons/hi'
 import Button from './Button'
 import { numberToCurrency } from '../utils'
+import { useDispatch } from 'react-redux'
+import { setProductSlug } from '../app/product/productModal.slice'
+// import { Link } from 'react-router-dom'
 const ProductCard = props => {
     const [active, setActive] = useState(null);
+    const dispatch = useDispatch();
+
+    const handleClick = useCallback((e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        dispatch(setProductSlug(props.slug))
+    }, [props.slug]);
     // const styles = {}
     return (
 
@@ -22,21 +32,29 @@ const ProductCard = props => {
                 }
                 <div className="product-card__image">
                     {
-                        props.colors.map((color, i) => (
+                        props.colors?.map((color, i) => (
 
                             <img key={i} src={color.image01} loading='lazy' alt="" className={(active === null) ? '' : (active === i) ? 'show' : 'hide'} />
 
                         ))
                     }
                     <div className="product-card__btn">
-                        <Button animate={true} icon={<HiShoppingCart />}>Add to cart</Button>
+                        {/* <Link to=''> */}
+                        <Button
+                            animate={true}
+                            icon={<HiShoppingCart />}
+                            onClick={handleClick}
+                        >
+                            Add to cart
+                        </Button>
+                        {/* </Link> */}
                     </div>
                 </div>
             </Link>
             <div className="product-card__info">
                 <div className="product-card__colors">
                     {
-                        props.colors.map((color, i) => (
+                        props.colors?.map((color, i) => (
                             <div key={i} className={`product-card__colors__item ${(active === i) ? 'active' : ''}`} onClick={() => setActive(i * 1)}  >
                                 <img src={color.image02} alt="" loading='lazy' />
                             </div>

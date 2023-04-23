@@ -12,6 +12,7 @@ html {
 
 body {
     font-family: 'Roboto', sans-serif;
+    // position: relative;
 }
 
 ul {
@@ -21,6 +22,25 @@ ul {
 a {
     text-decoration: none;
     color: unset;
+}
+
+::-webkit-scrollbar {
+    // tùy chỉnh scrollbar cho trình duyệt webkit (Chrome, Safari, Edge)
+    width: 1rem;
+}
+
+::-webkit-scrollbar-button {
+    display: block;
+    height: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: darken($main-bg, 20%);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: $main-bg;
 }
 
 input::-webkit-outer-spin-button,
