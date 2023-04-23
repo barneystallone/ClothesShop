@@ -1,4 +1,4 @@
-const { customAlphabet } = require('nanoid/async');
+const { customAlphabet } = require('nanoid/async')
 
 const customStr = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const nanoid = customAlphabet(customStr)

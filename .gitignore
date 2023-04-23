@@ -1,4 +1,4 @@
 node_modules
 backend/src/index*.js
-
+.vscode/*
 **/init.redis.js

@@ -29,8 +29,6 @@ Content-Type: application/json
     "password": "asdasdd"
 }
 
-
-
 ###
 POST  {{baseUrl}}/api/user/refresh-token
 # Cookie: 

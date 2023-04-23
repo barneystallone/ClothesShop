@@ -2,6 +2,8 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { ReactComponent as PlusIcon } from '../assets/images/plus.svg'
 import { ReactComponent as MinusIcon } from '../assets/images/minus.svg'
+// import { ReactComponent  PlusIcon } from '../assets/images/plus.svg'
+// import { ReactComponent as MinusIcon } from '../assets/images/minus.svg'
 const QuantityInput = (props) => {
   const ref = useRef(null)
 

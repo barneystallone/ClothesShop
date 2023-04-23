@@ -98,7 +98,32 @@ begin
 end//
 delimiter ;
 -- 
+DROP PROCEDURE IF EXISTS proc_getProducts;
+delimiter //
+CREATE PROCEDURE proc_getProducts()
+begin
+	SELECT 	JSON_OBJECT (
+		'pId',p.pId, 
+        'title',title, 
+        'slug',slug, 
+        'description',description, 
+        'price',price, 
+        'sold',sold, 
+        'category_id',category_id,
+        'img', ( 
+			SELECT JSON_ARRAYAGG(
+				JSON_OBJECT(
+					'url',url, 
+					'thumbUrl', thumbUrl
+				)
+			) from item i where  i.pId = p.pId
+        )
+	) 'data' from product  p ;
+end//
+delimiter ;
 
+
+--
 DROP PROCEDURE IF EXISTS proc_insertUser;
 delimiter //
 CREATE PROCEDURE proc_insertUser(

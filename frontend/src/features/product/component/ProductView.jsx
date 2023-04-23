@@ -3,23 +3,16 @@ import PropTypes from 'prop-types'
 import QuantityInput from '../../../components/QuantityInput'
 import ProductImagesSlider from './ProductImageSlider'
 import Button from '../../../components/Button'
-import { HiShoppingCart } from 'react-icons/hi'
 import CustomSelect from '../../../components/CustomSelect'
 import sizes from '../../../assets/fake-data/product-size'
 import { Link } from 'react-router-dom'
+import { HiShoppingCart } from 'react-icons/hi'
 import { ReactComponent as ShareIcon } from '../../../assets/images/share.svg'
 import { ReactComponent as ExchangeIcon } from '../../../assets/images/exchange.svg'
-import { ReactComponent as TransportIcon } from '../../..//assets/images/transport.svg'
+import { ReactComponent as TransportIcon } from '../../../assets/images/transport.svg'
 import { ReactComponent as ShopIcon } from '../../..//assets/images/shop.svg'
 import { ReactComponent as HeartIcon } from '../../../assets/images/heart.svg'
 import { ReactComponent as CopyIcon } from '../../../assets/images/copy.svg'
-// import { ReactSVG as SVG } from 'react-svg'
-// import ShareIcon from '../assets/images/share.svg'
-// import ExchangeIcon from '../assets/images/exchange.svg'
-// import TransportIcon from '../assets/images/transport.svg'
-// import ShopIcon from '../assets/images/shop.svg'
-// import HeartIcon from '../assets/images/heart.svg'
-// import CopyIcon from '../assets/images/copy.svg'
 
 const ProductView = (props) => {
   const [size, setSize] = useState(sizes[0])
@@ -32,7 +25,6 @@ const ProductView = (props) => {
   }, [])
 
   const prodImages = useMemo(() => product?.colors?.map((color) => color.image01), [product])
-
   const prodThumbImages = useMemo(() => product?.colors?.map((color) => color.image02), [product])
 
   return (
@@ -45,15 +37,12 @@ const ProductView = (props) => {
           <div className='info__group title-section '>
             <h3 className='product__title'>Váy Thiết Kế Chỉ Nổi Thắt Nơ Cổ</h3>
             <div className='product__group__icon'>
-              {/* <SVG src={HeartIcon} className='product__icon' />
-              <SVG src={ShareIcon} className='product__icon' /> */}
               <HeartIcon className='product__icon' />
               <ShareIcon className='product__icon' />
             </div>
           </div>
           <div className='info__group id-section '>
             <p className='product__id'>2302VDU8882101</p>
-            {/* <SVG src={CopyIcon} className='product__icon' /> */}
             <CopyIcon className='product__icon' />
           </div>
           <div className='info__group  '>
@@ -62,6 +51,7 @@ const ProductView = (props) => {
               <del>269.000đ</del>
             </span>
           </div>
+
           <div className='info__group product__remain '>
             <div className='remain'>Còn lại: 30</div>
             <div className='seperate'>|</div>
@@ -92,7 +82,6 @@ const ProductView = (props) => {
           <div className='info__group product__in__shop'>
             <div className='product__in__shop__btn'>
               <ShopIcon />
-              {/* <SVG src={ShopIcon} /> */}
             </div>
             <div className='product__in__shop__txt'>Tìm tại cửa hàng</div>
           </div>
@@ -101,7 +90,6 @@ const ProductView = (props) => {
               <Link>
                 <div className='policy__wrap__icon  policy__transport'>
                   <TransportIcon />
-                  {/* <SVG src={TransportIcon} /> */}
                 </div>
                 <span className='policy__wrap__txt'>Chính sách vận chuyển</span>
               </Link>
@@ -110,7 +98,6 @@ const ProductView = (props) => {
               <Link>
                 <div className='policy__wrap__icon policy__exchange'>
                   <ExchangeIcon />
-                  {/* <SVG src={ExchangeIcon} /> */}
                 </div>
                 <span className='policy__wrap__txt '>Bảo hành & Đổi trả </span>
               </Link>
