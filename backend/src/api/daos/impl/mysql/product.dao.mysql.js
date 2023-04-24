@@ -35,9 +35,9 @@ var self = (module.exports = {
       return
     }
     const sql = 'Call  proc_getProducts()'
-    return await mysql.pool.execute(sql).then((res) => res[0])
+    return await mysql.pool.execute(sql).then((res) => res[0][0])
   },
-  uploadImgAndInsertItem: async ({ itemId, pId, url, thumbUrl, colorName, colorCode }) => {
+  uploadImg: async ({ itemId, pId, url, thumbUrl, colorName, colorCode }) => {
     const sql = 'insert into  item values (?,?,?,?,?,?)'
     const params = [itemId, pId, url, thumbUrl, colorName, colorCode]
     return await mysql.pool.execute(sql, params).then((res) => res[0].affectedRows)

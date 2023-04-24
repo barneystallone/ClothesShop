@@ -1,37 +1,52 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { HiShoppingCart } from 'react-icons/hi'
 import Button from '../../../components/Button'
 import { numberToCurrency } from '../../../utils'
 import { useDispatch } from 'react-redux'
-import { setProductSlug } from '../productModal.slice'
+import { setProductModalSlug } from '../product.slice'
+
 // import { Link } from 'react-router-dom'
 const ProductCard = (props) => {
   const [active, setActive] = useState(null)
   const dispatch = useDispatch()
-
   const handleClick = useCallback(
     (e) => {
       e.stopPropagation()
       e.preventDefault()
-      dispatch(setProductSlug(props.slug))
+      dispatch(setProductModalSlug(props.slug))
     },
     [props.slug, dispatch]
   )
+  useEffect(() => {
+    if (props.img.length === 1) {
+      return setActive(0)
+    }
+    setActive(null)
+  }, [props.img])
   // const styles = {}
   return (
     <div className='product-card'>
       <Link to={`/product/${props.slug}`}>
         {props.sale ? <div className='product-card__tagSale'>-{props.sale}%</div> : null}
         <div className='product-card__image'>
-          {props.colors?.map((color, i) => (
+          {props?.colors?.map((color, i) => (
             <img
               key={i}
               src={color.image01}
               loading='lazy'
               alt=''
               className={active === null ? '' : active === i ? 'show' : 'hide'}
+            />
+          ))}
+          {props?.img?.map((item, index) => (
+            <img
+              key={index}
+              src={item.url}
+              loading='lazy'
+              alt=''
+              className={active === null ? '' : active === index ? 'show' : 'hide'}
             />
           ))}
           <div className='product-card__btn'>
@@ -54,20 +69,31 @@ const ProductCard = (props) => {
               <img src={color.image02} alt='' loading='lazy' />
             </div>
           ))}
+          {props.img?.map((item, index) => (
+            <div
+              key={index}
+              className={`product-card__colors__item ${active === index ? 'active' : ''}`}
+              onClick={() => setActive(index * 1)}
+            >
+              <img src={item.thumbUrl} alt='' loading='lazy' />
+            </div>
+          ))}
         </div>
         <Link to={`/product/${props.slug}`}>
-          <h3 className='product-card__name'>{props.title}</h3>
+          <h3 className='product-card__name'>
+            {props.title.length <= 26 ? props.title : props.title.substring(0, 23).concat('...')}
+          </h3>
 
           <div className='product-card__price'>
             {props.sale ? (
               <>
-                {numberToCurrency((props.price * (100 - props.sale)) / 100)}
+                {numberToCurrency((props.price * (100 - props.sale)) / 100)}đ
                 <span className='product-card__price--old'>
-                  <del>{numberToCurrency(props.price)}</del>
+                  <del>{numberToCurrency(props.price)}đ</del>
                 </span>
               </>
             ) : (
-              numberToCurrency(props.price)
+              <>{numberToCurrency(props.price)}đ</>
             )}
           </div>
         </Link>
@@ -80,10 +106,14 @@ ProductCard.propTypes = {
   title: PropTypes.string,
   price: PropTypes.number,
   sale: PropTypes.number,
-  productId: PropTypes.string,
-  categorySlug: PropTypes.string,
   slug: PropTypes.string,
+  img: PropTypes.arrayOf(PropTypes.object),
+  sold: PropTypes.number,
   colors: PropTypes.arrayOf(PropTypes.object)
+  // categoryId: PropTypes.string,
+  // pId: PropTypes.string,
+  // categorySlug: PropTypes.string,
+  // description: PropTypes.string,
 }
 
 export default React.memo(ProductCard)

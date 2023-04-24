@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, Suspense } from 'react'
 import ProductView from './ProductView'
 import { useSelector } from 'react-redux'
-import { removeProductSlug, selectShowModalStatus, selectProductModalSlug } from '../productModal.slice'
-// import {  selectProductModalSlug } from '../app/product/productModal.slice'
-import productData from '../../../assets/fake-data/products'
-import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
+import { removeProductModalSlug, selectShowModalStatus, selectProductModalSlug } from '../product.slice'
 import useModal from '../../../hook/useModal'
+import { useGetProductQuery } from '../product.service'
+import { CloseIcon } from '../../../assets'
 
 const ProductModal = () => {
   const productSlug = useSelector(selectProductModalSlug)
@@ -14,24 +13,28 @@ const ProductModal = () => {
     e?.target.closest('.product-view__modal').classList.add('active')
   }, [])
 
-  const { show, closeModal } = useModal(removeProductSlug, selectShowModalStatus, beforeCloseModalCb)
+  const { show, closeModal } = useModal(removeProductModalSlug, selectShowModalStatus, beforeCloseModalCb)
+  const { data } = useGetProductQuery(productSlug, {
+    skip: !productSlug
+  })
+  // const [product, setProduct] = useState({})
 
-  const [product, setProduct] = useState({})
-
-  useEffect(() => {
-    setProduct(productData.getProductBySlug(productSlug) || {})
-  }, [productSlug])
+  // useEffect(() => {
+  //   setProduct(productData.getProductBySlug(productSlug) || {})
+  // }, [productSlug])
 
   return show ? (
     <div className='product-view__modal' onClick={closeModal}>
       <div className='product-view__modal__content' onClick={(e) => e.stopPropagation()}>
         <div className='product-view__modal__content__header'>
           <span className='title'>Thêm vào giỏ hàng</span>
-          <div className='icon-wrap' onClick={closeModal}>
-            <CloseIcon />
-          </div>
+          <Suspense fallback={<div>...</div>}>
+            <div className='icon-wrap' onClick={closeModal}>
+              <CloseIcon />
+            </div>
+          </Suspense>
         </div>
-        <ProductView product={product} modal />
+        <ProductView product={data?.product} modal />
       </div>
     </div>
   ) : (

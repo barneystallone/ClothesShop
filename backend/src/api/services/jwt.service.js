@@ -1,6 +1,6 @@
 const createHttpError = require('http-errors')
 const JWT = require('jsonwebtoken')
-const redisClient = require('../databases/connect.redis')
+const redisClient = require('../databases/connect.redis.v2')
 const { ACCESS_KEY_SECRET, REFRESH_KEY_SECRET } = process.env
 
 var self = (module.exports = {
@@ -54,8 +54,11 @@ var self = (module.exports = {
       JWT.sign(payload, secretKey, options, (err, token) => {
         if (err) reject(err)
         redisClient
-          .set(`refreshToken:${userId}`, token, { EX: 30 * 24 * 3600 })
+          .set(`refreshToken:${userId}`, token, 'EX', 30 * 24 * 3600)
           .catch((err) => reject(createHttpError.InternalServerError()))
+        // redisClient
+        //   .set(`refreshToken:${userId}`, token, { EX: 30 * 24 * 3600 })
+        //   .catch((err) => reject(createHttpError.InternalServerError()))
 
         resolve(token)
       })

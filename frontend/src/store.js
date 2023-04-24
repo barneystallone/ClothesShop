@@ -1,14 +1,14 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { rtkErrorLogger } from './middleware'
 import { api } from './apiSlice'
-import productModalReducer from './features/product/productModal.slice'
+import productReducer from './features/product/product.slice'
 import categoryReducer from './features/category/category.slice'
 import authReducer from './features/auth/auth.slice'
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   category: categoryReducer,
-  productModal: productModalReducer,
+  product: productReducer,
   auth: authReducer
 })
 

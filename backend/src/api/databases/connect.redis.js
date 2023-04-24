@@ -4,7 +4,6 @@ let redisClient = redis.createClient({
   password: redisConfig.PASSWORD,
   socket: redisConfig.SOCKET,
 })
-
 ;(async () => {
   redisClient.on('connect', () => console.log(`Redis:::connected`))
 

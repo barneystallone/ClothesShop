@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import productData from '../../assets/fake-data/products'
+import React from 'react'
+import { useGetProductsQuery } from '../../features/product/product.service'
+
 import Helmet from '../../components/Helmet'
 import size from '../../assets/fake-data/product-size'
 import CheckBox from '../../components/Checkbox'
-
-// import FilterLeft from '../../features/catalog/FilterLeft'
-// import CategoryFilter from '../../features/catalog/CategoryFilter'
-// import Grid from '../../components/Grid'
 import InfinityList from './components/InfinityList'
 import FilterLeft from './components/FilterLeft'
 import CategoryFilter from './components/CategoryFilter'
 import Grid from '../../components/Grid'
+
 const ShowProductList = () => {
   // const products = useMemo(productData.getAllProducts());
-  const [products, setProducts] = useState([])
+  const { data, isFetching, isLoading } = useGetProductsQuery(undefined, {
+    pollingInterval: 1000 * 2 * 60
+  })
+  // console.log(products)
+  // const [products, setProducts] = useState([])
 
-  useEffect(() => {
-    setProducts(productData.getAllProducts())
-  }, [])
+  // useEffect(() => {
+  //   setProducts(productData.getAllProducts())
+  // }, [])
 
   return (
     <Helmet title='Sản phẩm'>
@@ -35,7 +37,7 @@ const ShowProductList = () => {
           </FilterLeft>
         </div>
         <div className='product-content'>
-          <InfinityList data={products} />
+          <InfinityList resp={data} hasCallApi={isFetching || isLoading} />
         </div>
       </div>
     </Helmet>

@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
-import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
-import { ReactComponent as SubtractIcon } from '../../../assets/images/subtract.svg'
+import { CloseIcon, SubtractIcon } from '../../../assets'
 const FilterLeft = (props) => {
   const [show, setShow] = useState(true)
 
@@ -18,13 +17,15 @@ const FilterLeft = (props) => {
     <div className='filter-left'>
       <div className='filter-left__title'>
         <span>{props.title}</span>
-        <span className='filter-left__icon' onClick={handleClick}>
-          {show ? (
-            <SubtractIcon className='filter-left__icon__svg' />
-          ) : (
-            <CloseIcon className={`filter-left__icon__svg rotate`} />
-          )}
-        </span>
+        <Suspense fallback={<div>...</div>}>
+          <span className='filter-left__icon' onClick={handleClick}>
+            {show ? (
+              <SubtractIcon className='filter-left__icon__svg' />
+            ) : (
+              <CloseIcon className={`filter-left__icon__svg rotate`} />
+            )}
+          </span>
+        </Suspense>
       </div>
       <div className='filter-left__content'>
         <div ref={ref}>{props.children}</div>

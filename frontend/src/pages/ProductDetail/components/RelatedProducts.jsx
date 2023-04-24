@@ -14,7 +14,8 @@ const RelatedProducts = (props) => {
             categorySlug={item.categorySlug}
             key={index}
             title={item.title}
-            colors={item.colors}
+            img={item.img}
+            // colors={item.colors}
             price={Number(item.price)}
             slug={item.slug}
             sale={Number(item.sale)}
@@ -26,7 +27,7 @@ const RelatedProducts = (props) => {
 }
 
 RelatedProducts.propTypes = {
-  relatedProducts: PropTypes.arrayOf(PropTypes.object).isRequired
+  relatedProducts: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default RelatedProducts

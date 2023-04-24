@@ -5,6 +5,8 @@ const { productValidate } = require('../utils')
 const productService = require('../services/product.service')
 const nanoid = require('../utils/nanoid')
 
+const itemPerPage = process.env.ITEM_PER_PAGE * 1
+
 var self = (module.exports = {
   insertProduct: asyncHandler(async (req, res, next) => {
     if (!req.body.title) {
@@ -33,12 +35,56 @@ var self = (module.exports = {
   }),
 
   getAllProduct: asyncHandler(async (req, res, next) => {
-    const results = await productService.getAllProducts()
-    res.status(200).json(results)
+    const { c: strListId, page } = req.query
+    if (strListId) {
+      const results = await productService.getProductsByCategoryIDs({
+        strListId,
+        page: page ?? 1,
+      })
+      return res.status(200).json(results)
+    }
+
+    const results = await productService.getProducts(page)
+    setTimeout(() => res.status(200).json(results), 300)
+    // res.status(200).json(results)
     // const s_results = JSON.stringify(results)
     // res.status(200).json(s_results.repeat(50))
   }),
+  findBySlug: asyncHandler(async (req, res, next) => {
+    const { slug } = req.params
+    const result = await productService.findBySlug(slug)
 
+    setTimeout(() => {
+      res.status(200).json({
+        ...result,
+        meta: {
+          slug,
+        },
+      })
+    }, 300)
+
+    //
+  }),
+  findRelatedProducts: asyncHandler(async (req, res, next) => {
+    const { slug } = req.params
+    try {
+      const result = await productService.findRelatedProducts(slug)
+      res.status(200).json({
+        ...result,
+        meta: {
+          slug,
+        },
+      })
+    } catch (error) {
+      if (error?.message.includes('number 0 is not iterable')) {
+        next(createHttpError(404, 'NotFound'))
+      }
+
+      next(createHttpError(error))
+    }
+    // setTimeout(() => {
+    // }, 300)
+  }),
   // ipload image , insert 1 item của sản phẩm
   // 1 sp có nhiều item
   upload: asyncHandler(async (req, res, next) => {

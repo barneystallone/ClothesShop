@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
+import React, { useCallback, useEffect, useRef, useState, Suspense } from 'react'
 import { joiResolver } from '@hookform/resolvers/joi'
 import Joi from 'joi'
-import LoginForm from './LoginForm'
-import SignUpForm from './SignUpForm'
+import { selectShowModalStatus, setShowModalStatus } from '../auth.slice'
 import useToggle from '../../../hook/useToggle'
 import useModal from '../../../hook/useModal'
-import { selectShowModalStatus, setShowModalStatus } from '../auth.slice'
+
+import { CloseIcon } from '../../../assets'
+import LoginForm from './LoginForm'
+import SignUpForm from './SignUpForm'
 
 const LoginSignUpModal = () => {
   const modalBodyRef = useRef(null)
@@ -45,7 +46,9 @@ const LoginSignUpModal = () => {
     <div className='login-signup__modal' onClick={closeModal}>
       <div className='login-signup__modal__wrap'>
         <div className='login-signup__modal__wrap__icon' onClick={(e) => closeModal(e, false)}>
-          <CloseIcon className='icon' />
+          <Suspense fallback={<div>...</div>}>
+            <CloseIcon className='icon' />
+          </Suspense>
         </div>
         <div className='login-signup__modal__wrap__content'>
           <div className='modal__body ' ref={modalBodyRef}>

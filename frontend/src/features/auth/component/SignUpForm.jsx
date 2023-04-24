@@ -63,7 +63,7 @@ const SignUpForm = forwardRef(({ onSubmit, showLogin, navigate: toLogin, resolve
         </Button>
 
         <div className='login-signup'>
-          Đã có tài khoản? <span onClick={toLogin}>Quay lại đăng ký</span>
+          Đã có tài khoản? <span onClick={toLogin}>Quay lại đăng nhập</span>
         </div>
       </form>
       <DevTool control={control} />

@@ -1,9 +1,6 @@
-import React, { useRef } from 'react'
+import React, { Suspense, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { ReactComponent as PlusIcon } from '../assets/images/plus.svg'
-import { ReactComponent as MinusIcon } from '../assets/images/minus.svg'
-// import { ReactComponent  PlusIcon } from '../assets/images/plus.svg'
-// import { ReactComponent as MinusIcon } from '../assets/images/minus.svg'
+import { MinusIcon, PlusIcon } from '../assets'
 const QuantityInput = (props) => {
   const ref = useRef(null)
 
@@ -15,23 +12,25 @@ const QuantityInput = (props) => {
   }
 
   return (
-    <div className={`${props.className} wrap-quantity`}>
-      <div className='wrap-quantity__btn btn-minus ' onClick={() => incr(true)}>
-        <MinusIcon className='icon minus-icon' />
+    <Suspense fallback={<div>...</div>}>
+      <div className={`${props.className} wrap-quantity`}>
+        <div className='wrap-quantity__btn btn-minus ' onClick={() => incr(true)}>
+          <MinusIcon className='icon minus-icon' />
+        </div>
+        <input
+          ref={ref}
+          className='wrap-quantity__input color-blue'
+          type='number'
+          value={1}
+          onChange={(e) => {
+            console.log(e.target.value)
+          }}
+        />
+        <div className='wrap-quantity__btn btn-plus' onClick={() => incr()}>
+          <PlusIcon className='icon plus-icon' />
+        </div>
       </div>
-      <input
-        ref={ref}
-        className='wrap-quantity__input color-blue'
-        type='number'
-        value={1}
-        onChange={(e) => {
-          console.log(e.target.value)
-        }}
-      />
-      <div className='wrap-quantity__btn btn-plus' onClick={() => incr()}>
-        <PlusIcon className='icon plus-icon' />
-      </div>
-    </div>
+    </Suspense>
   )
 }
 

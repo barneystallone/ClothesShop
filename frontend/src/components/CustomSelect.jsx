@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ReactComponent as DownIcon } from '../assets/images/down.svg'
+import { DownIcon } from '../assets'
 const CustomSelect = (props) => {
   const [show, setShow] = useState(false)
 
@@ -16,7 +16,9 @@ const CustomSelect = (props) => {
         <div className='custom-select__content--left'>{props.title}</div>
         <div className='custom-select__content--right'>
           <div className='center'>
-            <DownIcon className='custom-select__icon down-icon' />
+            <Suspense fallback={<div />}>
+              <DownIcon className='custom-select__icon down-icon' />
+            </Suspense>
           </div>
         </div>
         <div className={classNames('custom-select__content__dropdown ')}>

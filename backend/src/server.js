@@ -1,4 +1,5 @@
-require('dotenv').config()
+const dotenvExpand = require('dotenv-expand')
+dotenvExpand.expand(require('dotenv').config())
 const os = require('os')
 process.env.UV_THREAD_POOL = os.cpus().length
 
