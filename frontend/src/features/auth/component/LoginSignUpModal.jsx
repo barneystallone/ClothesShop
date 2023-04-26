@@ -4,8 +4,8 @@ import Joi from 'joi'
 import { selectShowModalStatus, setShowModalStatus } from '../auth.slice'
 import useToggle from '../../../hook/useToggle'
 import useModal from '../../../hook/useModal'
-
-import { CloseIcon } from '../../../assets'
+import { handleLazyLoadSvgPromise } from '../../../utils'
+const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
 import LoginForm from './LoginForm'
 import SignUpForm from './SignUpForm'
 

@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import { removeProductModalSlug, selectShowModalStatus, selectProductModalSlug } from '../product.slice'
 import useModal from '../../../hook/useModal'
 import { useGetProductQuery } from '../product.service'
-import { CloseIcon } from '../../../assets'
+import { handleLazyLoadSvgPromise } from '../../../utils'
+const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
 
 const ProductModal = () => {
   const productSlug = useSelector(selectProductModalSlug)

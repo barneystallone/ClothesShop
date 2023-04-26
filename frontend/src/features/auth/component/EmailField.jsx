@@ -1,7 +1,8 @@
 import classNames from 'classnames'
-import React from 'react'
-import { HiOutlineEnvelope } from 'react-icons/hi2'
-import { RiErrorWarningFill } from 'react-icons/ri'
+import React, { Suspense } from 'react'
+const BiEnvelope = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiEnvelope })))
+const BiError = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiError })))
+
 import PropTypes from 'prop-types'
 const EmailField = ({ className, placeholder, register, error }) => {
   return (
@@ -12,12 +13,16 @@ const EmailField = ({ className, placeholder, register, error }) => {
     >
       <div className={`input__box `}>
         <input type='text' placeholder={placeholder} {...register} />
-        <RiErrorWarningFill
-          className={classNames('input__box__icon  ', {
-            visible: !!error
-          })}
-        />
-        <HiOutlineEnvelope className='input__box__icon input__box__icon--pre' />
+        <Suspense fallback={<div>...</div>}>
+          <BiError
+            className={classNames('input__box__icon  ', {
+              visible: !!error
+            })}
+          />
+        </Suspense>
+        <Suspense fallback={<div>...</div>}>
+          <BiEnvelope className='input__box__icon input__box__icon--pre' />
+        </Suspense>
       </div>
       <p className='color-red error__message'>{error?.message}</p>
     </div>

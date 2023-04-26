@@ -1,6 +1,10 @@
 import React, { useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
-import { CloseIcon, SubtractIcon } from '../../../assets'
+
+import { handleLazyLoadSvgPromise } from '../../../utils'
+const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
+const SubtractIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/subtract.svg')))
+
 import CheckBox from '../../../components/Checkbox'
 const SubCategoryFilter = (props) => {
   const [show, setShow] = useState(false)

@@ -4,4 +4,7 @@ const handlePromise = (promise) => {
   return promise.then((data) => [undefined, data]).catch((err) => [err, undefined])
 }
 
-export { numberToCurrency, handlePromise }
+const handleLazyLoadSvgPromise = (promise) => {
+  return promise.then((module) => ({ default: module.ReactComponent }))
+}
+export { numberToCurrency, handlePromise, handleLazyLoadSvgPromise }

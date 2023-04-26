@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
-import { BsCheckLg } from 'react-icons/bs'
+
+const BiCheck = React.lazy(() => import('react-icons/bi').then(({ BiCheck }) => ({ default: BiCheck })))
 const CheckBox = (props) => {
   const inputRef = React.useRef(null)
   const className = props.className ? props.className : ''
@@ -14,9 +15,11 @@ const CheckBox = (props) => {
     <>
       <label className={`custom-checkbox ${className}`}>
         <input type='checkbox' ref={inputRef} onChange={onChange} checked={props.checked} />
-        <span className='custom-checkbox__checkmark'>
-          <BsCheckLg />
-        </span>
+        <Suspense fallback={<div>..</div>}>
+          <span className='custom-checkbox__checkmark'>
+            <BiCheck />
+          </span>
+        </Suspense>
         {props.label}
       </label>
     </>

@@ -45,7 +45,7 @@ var self = (module.exports = {
     }
 
     const results = await productService.getProducts(page)
-    setTimeout(() => res.status(200).json(results), 300)
+    setTimeout(() => res.status(200).json(results), 200)
     // res.status(200).json(results)
     // const s_results = JSON.stringify(results)
     // res.status(200).json(s_results.repeat(50))
@@ -54,14 +54,12 @@ var self = (module.exports = {
     const { slug } = req.params
     const result = await productService.findBySlug(slug)
 
-    setTimeout(() => {
-      res.status(200).json({
-        ...result,
-        meta: {
-          slug,
-        },
-      })
-    }, 300)
+    res.status(200).json({
+      ...result,
+      meta: {
+        slug,
+      },
+    })
 
     //
   }),

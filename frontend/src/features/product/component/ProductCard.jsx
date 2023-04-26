@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { HiShoppingCart } from 'react-icons/hi'
+const BiCartAlt = React.lazy(() => import('react-icons/bi').then(({ BiCartAlt }) => ({ default: BiCartAlt })))
 import Button from '../../../components/Button'
 import { numberToCurrency } from '../../../utils'
 import { useDispatch } from 'react-redux'
@@ -51,7 +51,15 @@ const ProductCard = (props) => {
           ))}
           <div className='product-card__btn'>
             {/* <Link to=''> */}
-            <Button animate={true} icon={<HiShoppingCart />} onClick={handleClick}>
+            <Button
+              animate={true}
+              icon={
+                <Suspense fallback={<div>...</div>}>
+                  <BiCartAlt />
+                </Suspense>
+              }
+              onClick={handleClick}
+            >
               Add to cart
             </Button>
             {/* </Link> */}

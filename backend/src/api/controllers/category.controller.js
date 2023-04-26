@@ -4,7 +4,7 @@ const { getCategories } = require('../services/category.service')
 var self = (module.exports = {
   getCategories: asyncHandler(async (req, res, next) => {
     const categories = await getCategories()
-    setTimeout(() => res.json(categories), 300)
+    setTimeout(() => res.json(categories), 200)
     // return res.json(categories)
   }),
 })

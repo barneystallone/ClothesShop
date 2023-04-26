@@ -56,8 +56,7 @@ var self = (module.exports = {
   },
   findBySlug: async (slug) => {
     const query = `@slug:{${slug.replace(/-/g, '\\-')}}`
-    return await self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, query)).then(({ count, products }) => ({
-      count,
+    return await self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, query)).then(({ _, products }) => ({
       product: products[0],
     }))
   },
@@ -69,7 +68,6 @@ var self = (module.exports = {
       // console.log([_ ,...rest ])
       //prettier-ignore
       return {
-        total: _,
         products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
           // console.log('arr::',arr);
             return arr?.reduce((product, key, index) => {

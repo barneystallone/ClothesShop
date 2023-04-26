@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import logo from '../assets/images/Logo.jpg'
-import { CgMenuGridO } from 'react-icons/cg'
-import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineUser } from 'react-icons/ai'
+import { BiMenu, BiSearch, BiCartAlt, BiUser } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentUser, setShowModalStatus } from '../features/auth/auth.slice'
 const leftNav = [
@@ -85,22 +84,22 @@ const Header = () => {
             ))}
           </div>
           <div className='header__menu__mobile-toggle' onClick={toggleMenu}>
-            <CgMenuGridO />
+            <BiMenu />
           </div>
           <div className='header__menu__right '>
             <div className='header__menu__item header__menu__right__item'>
-              <AiOutlineSearch />
+              <BiSearch />
             </div>
             <div
               className='header__menu__item header__menu__right__item header__menu__user'
               onClick={!user && showLoginModal}
             >
-              <AiOutlineUser />
+              <BiUser />
               <span>Tài khoản</span>
             </div>
 
             <div className='header__menu__item header__menu__right__item'>
-              <AiOutlineShoppingCart />
+              <BiCartAlt />
             </div>
           </div>
         </div>

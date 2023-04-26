@@ -7,8 +7,16 @@ import Button from '../../../components/Button'
 import ProductViewSkeleton from './ProductViewSkeleton'
 import sizes from '../../../assets/fake-data/product-size'
 import { Link } from 'react-router-dom'
-import { HiShoppingCart } from 'react-icons/hi'
-import { ShareIcon, ExchangeIcon, TransportIcon, ShopIcon, HeartIcon, CopyIcon } from '../../../assets'
+
+const BiCartAlt = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiCartAlt })))
+import { handleLazyLoadSvgPromise } from '../../../utils'
+const ShareIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/share.svg')))
+const ExchangeIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/exchange.svg')))
+const TransportIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/transport.svg')))
+const ShopIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/shop.svg')))
+const HeartIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/heart.svg')))
+const CopyIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/copy.svg')))
+
 import { numberToCurrency } from '../../../utils'
 
 const ProductView = (props) => {
@@ -79,7 +87,7 @@ const ProductView = (props) => {
                   <SelectSize className='section-size' title={size.display} sizes={sizes} onClick={handleSelectSize} />
                   <QuantityInput className='section-quantity' />
                 </div>
-                <Button animate={true} icon={<HiShoppingCart />} className={'btn-add2cart'}>
+                <Button animate={true} icon={<BiCartAlt />} className={'btn-add2cart'}>
                   Thêm vào giỏ hàng
                 </Button>
                 <Button backgroundColor={'white'} className={'btn-buy-product'}>

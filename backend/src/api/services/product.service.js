@@ -89,7 +89,12 @@ var self = (module.exports = {
     }
     const affectedRows = await productDao.uploadImg(item)
     if (affectedRows) {
-      redisProductDao.uploadImg(item).then(() => console.log(`redis upload ${pId} ok`))
+      redisProductDao
+        .uploadImg(item)
+        .then(() => console.log(`redis upload ${pId} ok`))
+        .catch((e) => {
+          console.trace('redis err::', e.message)
+        })
     }
     return affectedRows
   },
