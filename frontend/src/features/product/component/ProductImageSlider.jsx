@@ -1,24 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Thumbs } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
-const ProductImagesSlider = (props) => {
-  const swiperRef = useRef(null)
-  // const swiperThumbRef = useRef(null);
+
+const ProductImagesSlider = React.forwardRef((props, ref) => {
   const [activeThumb, setActiveThumb] = useState()
-
-  // const toSlide = (num) => {
-  //   console.log('go to slide', num)
-  //   swiperRef.current?.swiper.slideToLoop(num)
-  //   console.log(swiperRef.current?.swiper)
-  // }
-
+  console.log('hello')
   return (
     <>
       <Swiper
+        // onClick={() => console.log(ref.current?.swiper.realIndex)}
         loop={true}
         spaceBetween={20}
         direction='vertical'
@@ -46,9 +40,10 @@ const ProductImagesSlider = (props) => {
         ))}
       </Swiper>
       <Swiper
+        // onSlideChange={(swiper) => console.log(swiper.realIndex)}
         loop={true}
         spaceBetween={20}
-        ref={swiperRef}
+        ref={ref}
         thumbs={{ swiper: activeThumb && !activeThumb.destroyed ? activeThumb : null }}
         navigation={true}
         modules={[Navigation, Thumbs]}
@@ -69,8 +64,9 @@ const ProductImagesSlider = (props) => {
             </button> */}
     </>
   )
-}
+})
 
+ProductImagesSlider.displayName = 'ProductImagesSlider'
 ProductImagesSlider.propTypes = {
   images: PropTypes.arrayOf(PropTypes.string).isRequired
 }
