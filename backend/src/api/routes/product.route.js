@@ -6,7 +6,7 @@ const routes = express.Router()
 
 routes.get('/', productController.getAllProduct)
 routes.get('/:slug', productController.findBySlug)
-routes.get('/related/:slug', productController.findRelatedProducts)
+routes.get('/related/:slug', productController.getRelatedProducts)
 routes.post('/create', productController.insertProduct) // autuploadImagesh admin
 routes.post('/upload/:pId', uploader.fields([{ name: 'img' }, { name: 'thumbImg' }]), productController.upload) // auth admin
 

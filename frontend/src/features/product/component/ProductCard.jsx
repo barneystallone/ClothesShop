@@ -31,15 +31,6 @@ const ProductCard = (props) => {
       <Link to={`/product/${props.slug}`}>
         {props.sale ? <div className='product-card__tagSale'>-{props.sale}%</div> : null}
         <div className='product-card__image'>
-          {props?.colors?.map((color, i) => (
-            <img
-              key={i}
-              src={color.image01}
-              loading='lazy'
-              alt=''
-              className={active === null ? '' : active === i ? 'show' : 'hide'}
-            />
-          ))}
           {props?.img?.map((item, index) => (
             <img
               key={index}
@@ -68,15 +59,6 @@ const ProductCard = (props) => {
       </Link>
       <div className='product-card__info'>
         <div className='product-card__colors'>
-          {props.colors?.map((color, i) => (
-            <div
-              key={i}
-              className={`product-card__colors__item ${active === i ? 'active' : ''}`}
-              onClick={() => setActive(i * 1)}
-            >
-              <img src={color.image02} alt='' loading='lazy' />
-            </div>
-          ))}
           {props.img?.map((item, index) => (
             <div
               key={index}
@@ -111,13 +93,19 @@ const ProductCard = (props) => {
 }
 
 ProductCard.propTypes = {
-  title: PropTypes.string,
-  price: PropTypes.number,
-  sale: PropTypes.number,
-  slug: PropTypes.string,
-  img: PropTypes.arrayOf(PropTypes.object),
+  title: PropTypes.string.isRequired,
+  pId: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  price: PropTypes.number.isRequired,
   sold: PropTypes.number,
-  colors: PropTypes.arrayOf(PropTypes.object)
+  img: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      thumbUrl: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  sale: PropTypes.number
   // categoryId: PropTypes.string,
   // pId: PropTypes.string,
   // categorySlug: PropTypes.string,

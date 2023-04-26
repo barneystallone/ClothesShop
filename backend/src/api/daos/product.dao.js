@@ -11,7 +11,7 @@ module.exports = {
       uploadImg: async (item) => impl.uploadImg(item),
       putProducts: async (data) => impl.putProducts(data),
       findBySlug: async (slug) => impl.findBySlug(slug),
-      findRelatedProducts: async (slug) => impl.findRelatedProducts(slug),
+      getRelatedProducts: async (slug) => impl.getRelatedProducts(slug),
       getProductsByCategoryIDs: async (data) => impl.getProductsByCategoryIDs(data),
     }
     return db

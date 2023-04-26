@@ -4,6 +4,9 @@ const initialState = {
   modal: {
     productSlug: '',
     isShow: false
+  },
+  filter: {
+    categoryIds: []
   }
 }
 
@@ -15,6 +18,7 @@ export const productSlice = createSlice({
       state.modal.productSlug = action.payload
       state.modal.isShow = true
     },
+
     removeProductModalSlug: (state) => {
       state.modal = initialState.modal
     }

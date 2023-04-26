@@ -34,26 +34,26 @@ var self = (module.exports = {
 
     return {
       total: count,
-      data: products,
+      products,
+      itemPerPage,
       meta: {
         page,
-        itemPerPage,
       },
     }
   },
 
   getProducts: async (page) => {
-    const { count, products } = await redisProductDao.getProducts({
+    const { total, products } = await redisProductDao.getProducts({
       limit: itemPerPage,
       offset: itemPerPage * ((page ?? 1) - 1),
     })
 
     return {
-      total: count,
-      data: products,
+      total,
+      products,
+      itemPerPage,
       meta: {
         page: page ?? 1,
-        itemPerPage,
       },
     }
   },
@@ -101,8 +101,8 @@ var self = (module.exports = {
   findBySlug: async (slug) => {
     return await redisProductDao.findBySlug(slug)
   },
-  findRelatedProducts: async (slug) => {
-    return await redisProductDao.findRelatedProducts(slug)
+  getRelatedProducts: async (slug) => {
+    return await redisProductDao.getRelatedProducts(slug)
   },
 })
 // `

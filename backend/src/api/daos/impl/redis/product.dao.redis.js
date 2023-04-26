@@ -26,7 +26,45 @@ var self = (module.exports = {
   },
   getProducts: async ({ limit = 20, offset = 0 }) => {
     // return await redis.call('FT.SEARCH', SEARCH_INDEX, '*', 'LIMIT', offset, limit)
-    return self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, '*', 'LIMIT', offset, limit))
+    return redis
+      .call(
+        'FT.SEARCH',
+        SEARCH_INDEX,
+        '*',
+        'RETURN',
+        8,
+        'pId',
+        'title',
+        'price',
+        'slug',
+        'sold',
+        '$.img',
+        'as',
+        'img',
+        'LIMIT',
+        offset,
+        limit
+      )
+      .then(([total, ...rest]) => {
+        // console.log([_ ,...rest ])
+        //prettier-ignore
+        return {
+          total,
+          products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
+            // console.log('arr::',arr);
+              return arr?.reduce((product, key, index) => {
+                if (index % 2 === 0) {
+                  if(key === 'img') {
+                    product[key] = JSON.parse(arr[index + 1])
+                    return product
+                  }
+                  product[key] = arr[index + 1]
+                }
+                return product
+              }, {})
+            }),
+        }
+      })
   },
   putProducts: async (data) => {
     const pipeline = redis.pipeline()
@@ -60,7 +98,7 @@ var self = (module.exports = {
       product: products[0],
     }))
   },
-  findRelatedProducts: async (slug) => {
+  getRelatedProducts: async (slug) => {
     const _slug = slug.replace(/-/g, '\\-')
     const limit = 5
 

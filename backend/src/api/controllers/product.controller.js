@@ -5,8 +5,6 @@ const { productValidate } = require('../utils')
 const productService = require('../services/product.service')
 const nanoid = require('../utils/nanoid')
 
-const itemPerPage = process.env.ITEM_PER_PAGE * 1
-
 var self = (module.exports = {
   insertProduct: asyncHandler(async (req, res, next) => {
     if (!req.body.title) {
@@ -45,7 +43,7 @@ var self = (module.exports = {
     }
 
     const results = await productService.getProducts(page)
-    setTimeout(() => res.status(200).json(results), 200)
+    res.status(200).json(results)
     // res.status(200).json(results)
     // const s_results = JSON.stringify(results)
     // res.status(200).json(s_results.repeat(50))
@@ -63,10 +61,10 @@ var self = (module.exports = {
 
     //
   }),
-  findRelatedProducts: asyncHandler(async (req, res, next) => {
+  getRelatedProducts: asyncHandler(async (req, res, next) => {
     const { slug } = req.params
     try {
-      const result = await productService.findRelatedProducts(slug)
+      const result = await productService.getRelatedProducts(slug)
       res.status(200).json({
         ...result,
         meta: {

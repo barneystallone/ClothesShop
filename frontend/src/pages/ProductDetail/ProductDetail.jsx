@@ -11,7 +11,7 @@ const ProductDetail = () => {
   const { slug } = useParams()
   // const product = productData.getProductBySlug(slug) || {}
   const { data } = useGetProductQuery(slug, { skip: !slug })
-  const { data: relatedResp } = useGetRelatedProductsQuery(slug, { skip: !slug })
+  const { data: relatedRes } = useGetRelatedProductsQuery(slug, { skip: !slug })
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
@@ -27,7 +27,7 @@ const ProductDetail = () => {
       <Section>
         <SectionTitle>Khám phá thêm</SectionTitle>
         <SectionBody>
-          <RelatedProducts relatedProducts={relatedResp?.products} />
+          <RelatedProducts relatedProducts={relatedRes?.products} />
         </SectionBody>
       </Section>
     </Helmet>

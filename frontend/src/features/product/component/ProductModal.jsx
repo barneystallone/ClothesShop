@@ -2,7 +2,7 @@ import React, { useCallback, Suspense } from 'react'
 import ProductView from './ProductView'
 import { useSelector } from 'react-redux'
 import { removeProductModalSlug, selectShowModalStatus, selectProductModalSlug } from '../product.slice'
-import useModal from '../../../hook/useModal'
+import { useModal } from '../../../hook'
 import { useGetProductQuery } from '../product.service'
 import { handleLazyLoadSvgPromise } from '../../../utils'
 const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))

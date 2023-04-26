@@ -7,22 +7,21 @@ const RelatedProducts = (props) => {
   const { relatedProducts } = props
 
   return (
-    <>
+    relatedProducts && (
       <Grid col={5} mdCol={2} smCol={1} gap={20}>
         {relatedProducts?.map((item, index) => (
           <ProductCard
-            categorySlug={item.categorySlug}
+            pId={item.pId}
             key={index}
             title={item.title}
             img={item.img}
-            // colors={item.colors}
             price={Number(item.price)}
             slug={item.slug}
             sale={Number(item.sale)}
           />
         ))}
       </Grid>
-    </>
+    )
   )
 }
 

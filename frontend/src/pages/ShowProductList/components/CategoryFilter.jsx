@@ -24,4 +24,4 @@ const CategoryFilter = () => {
   )
 }
 
-export default CategoryFilter
+export default React.memo(CategoryFilter)

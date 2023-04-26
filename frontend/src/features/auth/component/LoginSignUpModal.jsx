@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useRef, useState, Suspense } from 'react
 import { joiResolver } from '@hookform/resolvers/joi'
 import Joi from 'joi'
 import { selectShowModalStatus, setShowModalStatus } from '../auth.slice'
-import useToggle from '../../../hook/useToggle'
-import useModal from '../../../hook/useModal'
+import { useModal, useToggle } from '../../../hook'
 import { handleLazyLoadSvgPromise } from '../../../utils'
 const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
 import LoginForm from './LoginForm'

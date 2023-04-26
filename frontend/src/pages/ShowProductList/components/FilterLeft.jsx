@@ -42,4 +42,4 @@ FilterLeft.propTypes = {
   // data: PropTypes.array.isRequired,
   nested: PropTypes.bool
 }
-export default FilterLeft
+export default React.memo(FilterLeft)

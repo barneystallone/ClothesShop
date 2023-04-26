@@ -14,6 +14,7 @@ const Grid = React.forwardRef((props, ref) => {
     </div>
   )
 })
+Grid.displayName = 'Grid'
 Grid.propTypes = {
   col: PropTypes.number.isRequired,
   mdCol: PropTypes.number,

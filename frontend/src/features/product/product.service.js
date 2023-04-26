@@ -1,15 +1,21 @@
 import { api } from '../../apiSlice'
-
+import qs from 'qs'
+const alphabetSort = (a, b) => a.localeCompare(b)
 export const productApi = api.injectEndpoints({
   endpoints: (build) => ({
     getProducts: build.query({
-      query: (params) => ({
-        url: 'product',
-        params: params
-      }),
+      // params : {page, categoryFilter:c}
+      query: (params) => {
+        if (params?.c) {
+          params.c = params.c.sort().join('|')
+        }
+        console.log('params::', qs.stringify(params, { sort: alphabetSort }))
+        return { url: `product?${qs.stringify(params, { sort: alphabetSort })}` }
+      },
+      keepUnusedDataFor: 60,
       providesTags: (results) =>
         results
-          ? [...results.data.map(({ pId }) => ({ type: 'Products', pId })), { type: 'Products', id: 'LIST' }]
+          ? [...results.products.map(({ pId }) => ({ type: 'Products', pId })), { type: 'Products', id: 'LIST' }]
           : [{ type: 'Products', id: 'LIST' }]
     }),
     getProduct: build.query({
