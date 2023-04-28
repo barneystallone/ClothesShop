@@ -12,13 +12,27 @@ import Button from '../../../components/Button'
 import ProductViewSkeleton from './ProductViewSkeleton'
 
 import { handleLazyLoadSvgPromise } from '../../../utils'
-const BiCartAlt = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiCartAlt })))
-const ShareIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/share.svg')))
-const ExchangeIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/exchange.svg')))
-const TransportIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/transport.svg')))
-const ShopIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/shop.svg')))
-const HeartIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/heart.svg')))
-const CopyIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/copy.svg')))
+const BiCartAlt = React.lazy(() =>
+  import('react-icons/bi').then((module) => ({ default: module.BiCartAlt }))
+)
+const ShareIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/share.svg'))
+)
+const ExchangeIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/exchange.svg'))
+)
+const TransportIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/transport.svg'))
+)
+const ShopIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/shop.svg'))
+)
+const HeartIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/heart.svg'))
+)
+const CopyIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/copy.svg'))
+)
 
 const ProductView = (props) => {
   const [size, setSize] = useState(sizes[0])
@@ -38,7 +52,10 @@ const ProductView = (props) => {
   }, [])
 
   const prodImages = useMemo(() => product?.img?.map((item) => item.url), [product])
-  const prodThumbImages = useMemo(() => product?.img?.map((item) => item.thumbUrl), [product])
+  const prodThumbImages = useMemo(
+    () => product?.img?.map((item) => item.thumbUrl),
+    [product]
+  )
   const handleClickThumb = useCallback(
     (index) => {
       setActiveThumb(index)
@@ -46,7 +63,7 @@ const ProductView = (props) => {
     },
     [slideTo]
   )
-  return product ? (
+  return product && !props.loading ? (
     <div className='product__wrap'>
       <div className='product__wrap__inner'>
         <div className='product__wrap__inner__left'>
@@ -102,7 +119,12 @@ const ProductView = (props) => {
               </div>
             </div>
             <div className='info__group size-quantity'>
-              <SelectSize className='section-size' title={size.display} sizes={sizes} onClick={handleSelectSize} />
+              <SelectSize
+                className='section-size'
+                title={size.display}
+                sizes={sizes}
+                onClick={handleSelectSize}
+              />
               <QuantityInput className='section-quantity' />
             </div>
             <Button animate={true} icon={<BiCartAlt />} className={'btn-add2cart'}>
@@ -158,7 +180,12 @@ const SelectSize = React.memo((props) => {
   return (
     <CustomSelect title={props.title} className={props.className}>
       {props.sizes?.map((size, index) => (
-        <div key={index} className='custom-select__content__dropdown__option' onClick={handleClick} data-index={index}>
+        <div
+          key={index}
+          className='custom-select__content__dropdown__option'
+          onClick={handleClick}
+          data-index={index}
+        >
           {size?.display}
         </div>
       ))}
@@ -177,7 +204,10 @@ const ProductDescription = React.memo((props) => {
       <div className='tab-container'>
         <div className='product-description'>
           <p className='product-description__title'>Mô tả sản phẩm</p>
-          <div className='product-description__content' dangerouslySetInnerHTML={{ __html: props.content }} />
+          <div
+            className='product-description__content'
+            dangerouslySetInnerHTML={{ __html: props.content }}
+          />
         </div>
       </div>
     </div>
@@ -187,7 +217,8 @@ ProductDescription.displayName = 'ProductDescription'
 
 ProductView.propTypes = {
   product: PropTypes.object,
-  modal: PropTypes.bool
+  modal: PropTypes.bool,
+  loading: PropTypes.bool
 }
 SelectSize.propTypes = {
   onClick: PropTypes.func,

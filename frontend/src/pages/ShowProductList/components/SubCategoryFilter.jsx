@@ -2,8 +2,12 @@ import React, { useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 
 import { handleLazyLoadSvgPromise } from '../../../utils'
-const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
-const SubtractIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/subtract.svg')))
+const CloseIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/close.svg'))
+)
+const SubtractIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/subtract.svg'))
+)
 
 import CheckBox from '../../../components/Checkbox'
 const SubCategoryFilter = (props) => {
@@ -29,7 +33,11 @@ const SubCategoryFilter = (props) => {
         <CheckBox label={item.category_name} />
         <Suspense fallback={<div>...</div>}>
           <span className='right__icon' onClick={handleClick}>
-            {show ? <SubtractIcon className='right__icon__svg' /> : <CloseIcon className={`right__icon__svg rotate`} />}
+            {show ? (
+              <SubtractIcon className='right__icon__svg' />
+            ) : (
+              <CloseIcon className={`right__icon__svg rotate`} />
+            )}
           </span>
         </Suspense>
       </div>

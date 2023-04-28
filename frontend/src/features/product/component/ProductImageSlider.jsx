@@ -56,12 +56,6 @@ const ProductImagesSlider = React.forwardRef((props, ref) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      {/* <button onClick={() => toSlide(0)} >
-                slide 0
-            </button>
-            <button onClick={() => toSlide(1)} >
-                slide 1
-            </button> */}
     </>
   )
 })

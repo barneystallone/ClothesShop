@@ -1,11 +1,17 @@
 import React, { useCallback, Suspense } from 'react'
 import ProductView from './ProductView'
 import { useSelector } from 'react-redux'
-import { removeProductModalSlug, selectShowModalStatus, selectProductModalSlug } from '../product.slice'
+import {
+  removeProductModalSlug,
+  selectShowModalStatus,
+  selectProductModalSlug
+} from '../product.slice'
 import { useModal } from '../../../hook'
 import { useGetProductQuery } from '../product.service'
 import { handleLazyLoadSvgPromise } from '../../../utils'
-const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
+const CloseIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/close.svg'))
+)
 
 const ProductModal = () => {
   const productSlug = useSelector(selectProductModalSlug)
@@ -14,15 +20,14 @@ const ProductModal = () => {
     e?.target.closest('.product-view__modal').classList.add('active')
   }, [])
 
-  const { show, closeModal } = useModal(removeProductModalSlug, selectShowModalStatus, beforeCloseModalCb)
-  const { data } = useGetProductQuery(productSlug, {
+  const { show, closeModal } = useModal(
+    removeProductModalSlug,
+    selectShowModalStatus,
+    beforeCloseModalCb
+  )
+  const { data, isFetching } = useGetProductQuery(productSlug, {
     skip: !productSlug
   })
-  // const [product, setProduct] = useState({})
-
-  // useEffect(() => {
-  //   setProduct(productData.getProductBySlug(productSlug) || {})
-  // }, [productSlug])
 
   return show ? (
     <div className='product-view__modal' onClick={closeModal}>
@@ -35,7 +40,7 @@ const ProductModal = () => {
             </div>
           </Suspense>
         </div>
-        <ProductView product={data?.product} modal />
+        <ProductView loading={isFetching} product={data?.product} modal />
       </div>
     </div>
   ) : (

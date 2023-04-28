@@ -1,8 +1,12 @@
 import React, { useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { handleLazyLoadSvgPromise } from '../../../utils'
-const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
-const SubtractIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/subtract.svg')))
+const CloseIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/close.svg'))
+)
+const SubtractIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/subtract.svg'))
+)
 const FilterLeft = (props) => {
   const [show, setShow] = useState(true)
 

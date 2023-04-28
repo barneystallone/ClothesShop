@@ -1,4 +1,11 @@
-import React, { Fragment, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+  Fragment,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import PropTypes from 'prop-types'
 import { usePagination } from '../../../hook'
 import classNames from 'classnames'
@@ -17,7 +24,10 @@ const BiChevronsRight = React.lazy(() =>
 let count = 1
 const Pagination = () => {
   // console.log('count::', count++)
-  const range = useCallback((start, stop) => Array.from({ length: stop - start }, (_, i) => start + i), [])
+  const range = useCallback(
+    (start, stop) => Array.from({ length: stop - start }, (_, i) => start + i),
+    []
+  )
   const { navigateToPage, totalPage, activePage, start, end } = usePagination()
 
   return end !== 1 ? (
@@ -39,12 +49,6 @@ const Pagination = () => {
             </Suspense>
           </div>
         </li>
-        {/* totalPage < 6 ==> 1 -> totalPage  
-          totalPage >6 : 1,2 => 1,2,3,4,5...  totalPage
-          totalPage =7 : >=3 => 1,2,3,4,5,6,7 
-          totalPage > 7 : 3,4 => 1,2,3,4,5,6,... totalPage
-      
-      */}
 
         {start > 1 && <li className='pagination__list__item dots '>...</li>}
         {range(start, end + 1).map((value, index) => (
@@ -71,12 +75,6 @@ const Pagination = () => {
             </div>
           </Suspense>
         </li>
-        {/* <li className='pagination__list__item btn btn-next chevs '>
-          <Suspense fallback={<div>...</div>}>
-            <BiChevronsRight />
-          </Suspense>
-          ❮
-        </li> */}
       </ul>
     </div>
   ) : (

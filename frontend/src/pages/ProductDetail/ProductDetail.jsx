@@ -5,7 +5,10 @@ import Section, { SectionBody, SectionTitle } from '../../components/Section'
 import RelatedProducts from './components/RelatedProducts'
 import { ProductView } from '../../features/product/'
 import { useParams } from 'react-router-dom'
-import { useGetProductQuery, useGetRelatedProductsQuery } from '../../features/product/product.service'
+import {
+  useGetProductQuery,
+  useGetRelatedProductsQuery
+} from '../../features/product/product.service'
 
 const ProductDetail = () => {
   const { slug } = useParams()

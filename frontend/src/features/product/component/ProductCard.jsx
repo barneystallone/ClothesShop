@@ -1,7 +1,9 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-const BiCartAlt = React.lazy(() => import('react-icons/bi').then(({ BiCartAlt }) => ({ default: BiCartAlt })))
+const BiCartAlt = React.lazy(() =>
+  import('react-icons/bi').then(({ BiCartAlt }) => ({ default: BiCartAlt }))
+)
 import Button from '../../../components/Button'
 import { numberToCurrency } from '../../../utils'
 import { useDispatch } from 'react-redux'
@@ -71,7 +73,9 @@ const ProductCard = (props) => {
         </div>
         <Link to={`/product/${props.slug}`}>
           <h3 className='product-card__name'>
-            {props.title.length <= 26 ? props.title : props.title.substring(0, 23).concat('...')}
+            {props.title.length <= 26
+              ? props.title
+              : props.title.substring(0, 23).concat('...')}
           </h3>
 
           <div className='product-card__price'>

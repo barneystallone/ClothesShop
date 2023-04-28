@@ -33,7 +33,9 @@ const Header = () => {
   const dispatch = useDispatch()
   const toggleMenu = () => {
     setActive((prev) => {
-      return prev === 'header__menu__left' ? 'header__menu__left show' : 'header__menu__left'
+      return prev === 'header__menu__left'
+        ? 'header__menu__left show'
+        : 'header__menu__left'
     })
   }
 
@@ -74,7 +76,9 @@ const Header = () => {
             {leftNav.map((item, index) => (
               <div
                 key={index}
-                className={`header__menu__item header__menu__left__item ${index === activeNav ? 'active' : ''}`}
+                className={`header__menu__item header__menu__left__item ${
+                  index === activeNav ? 'active' : ''
+                }`}
                 onClick={closeMenu}
               >
                 <Link to={item.path}>

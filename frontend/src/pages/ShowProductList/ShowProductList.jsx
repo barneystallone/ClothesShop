@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useGetProductsQuery } from '../../features/product/product.service'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectActivePage, setActivePage, setTotalPage } from '../../features/pagination/pagination.slice'
+import {
+  selectActivePage,
+  setActivePage,
+  setTotalPage
+} from '../../features/pagination/pagination.slice'
 
 import Helmet from '../../components/Helmet'
 import size from '../../assets/fake-data/product-size'
@@ -78,7 +82,10 @@ const ShowProductList = () => {
           </FilterLeft>
         </div>
         <div className='product-content'>
-          <ProductList data={data?.products} hasCallApi={loading || isFetching || isLoading} />
+          <ProductList
+            data={data?.products}
+            hasCallApi={loading || isFetching || isLoading}
+          />
           <Pagination />
         </div>
       </div>

@@ -25,50 +25,37 @@ var self = (module.exports = {
         JSON.stringify({ url, thumbUrl }))
   },
   getProducts: async ({ limit = 20, offset = 0 }) => {
-    // return await redis.call('FT.SEARCH', SEARCH_INDEX, '*', 'LIMIT', offset, limit)
+    //prettier-ignore
     return redis
       .call(
-        'FT.SEARCH',
-        SEARCH_INDEX,
-        '*',
-        'RETURN',
-        8,
-        'pId',
-        'title',
-        'price',
-        'slug',
-        'sold',
-        '$.img',
-        'as',
-        'img',
-        'LIMIT',
-        offset,
-        limit
+        'FT.SEARCH', SEARCH_INDEX, '*', 'RETURN', 8,
+        'pId', 'title', 'price', 'slug', 'sold', '$.img', 'as', 'img',
+        'LIMIT', offset, limit
       )
       .then(([total, ...rest]) => {
-        // console.log([_ ,...rest ])
         //prettier-ignore
         return {
           total,
           products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
-            // console.log('arr::',arr);
-              return arr?.reduce((product, key, index) => {
-                if (index % 2 === 0) {
-                  if(key === 'img') {
-                    product[key] = JSON.parse(arr[index + 1])
-                    return product
-                  }
-                  product[key] = arr[index + 1]
+            return arr?.reduce((product, key, index) => {
+              if (index % 2 === 0) {
+                if(key === 'img') {
+                  product[key] = JSON.parse(arr[index + 1])
+                  return product
                 }
-                return product
-              }, {})
-            }),
+                product[key] = arr[index + 1]
+              }
+              return product
+            }, {})
+          }),
         }
-      })
+    })
   },
+
+  // EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 "product:*"
   putProducts: async (data) => {
     const pipeline = redis.pipeline()
-    // EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 "product:*"
+
     pipeline.call('EVAL', "return redis.call('del', unpack(redis.call('keys', ARGV[1])))", 0, 'product:*')
     data.forEach((item) => {
       pipeline.call('JSON.SET', `product:${item.pId}`, '$', JSON.stringify(item))
@@ -76,12 +63,14 @@ var self = (module.exports = {
 
     return await pipeline.exec()
   },
+
   getProductsByCategoryIDs: async ({ strListId, limit = 20, offset = 0 }) => {
-    // const categories = listId.map((item) => item).join('|')
     return self.getProductsHandler(
       redis.call('FT.SEARCH', SEARCH_INDEX, `@category_id:{${strListId}}`, 'LIMIT', offset, limit)
     )
+    // const categories = listId.map((item) => item).join('|')
   },
+
   getProductsHandler: (promise) => {
     return promise.then(([count, ...prodKeysAndValues]) => {
       let products = prodKeysAndValues
@@ -92,12 +81,14 @@ var self = (module.exports = {
       return { count, products }
     })
   },
+
   findBySlug: async (slug) => {
     const query = `@slug:{${slug.replace(/-/g, '\\-')}}`
     return await self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, query)).then(({ _, products }) => ({
       product: products[0],
     }))
   },
+
   getRelatedProducts: async (slug) => {
     const _slug = slug.replace(/-/g, '\\-')
     const limit = 5

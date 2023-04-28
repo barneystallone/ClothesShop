@@ -78,11 +78,8 @@ var self = (module.exports = {
 
       next(createHttpError(error))
     }
-    // setTimeout(() => {
-    // }, 300)
   }),
-  // ipload image , insert 1 item của sản phẩm
-  // 1 sp có nhiều item
+  // upload image , insert item cho sản phẩm
   upload: asyncHandler(async (req, res, next) => {
     const { img, thumbImg } = req.files
     const { pId } = req.params

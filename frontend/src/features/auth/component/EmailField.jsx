@@ -1,7 +1,11 @@
 import classNames from 'classnames'
 import React, { Suspense } from 'react'
-const BiEnvelope = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiEnvelope })))
-const BiError = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiError })))
+const BiEnvelope = React.lazy(() =>
+  import('react-icons/bi').then((module) => ({ default: module.BiEnvelope }))
+)
+const BiError = React.lazy(() =>
+  import('react-icons/bi').then((module) => ({ default: module.BiError }))
+)
 
 import PropTypes from 'prop-types'
 const EmailField = ({ className, placeholder, register, error }) => {

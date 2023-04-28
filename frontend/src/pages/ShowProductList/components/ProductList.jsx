@@ -31,7 +31,12 @@ const ProductList = (props) => {
       ) : (
         <>
           {props.data?.map(({ price, sold, ...rest }, index) => (
-            <ProductCard {...rest} key={index} price={Number(price)} sold={Number(sold)} />
+            <ProductCard
+              {...rest}
+              key={index}
+              price={Number(price)}
+              sold={Number(sold)}
+            />
           ))}
         </>
       )}

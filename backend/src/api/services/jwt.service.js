@@ -56,9 +56,6 @@ var self = (module.exports = {
         redisClient
           .set(`refreshToken:${userId}`, token, 'EX', 30 * 24 * 3600)
           .catch((err) => reject(createHttpError.InternalServerError()))
-        // redisClient
-        //   .set(`refreshToken:${userId}`, token, { EX: 30 * 24 * 3600 })
-        //   .catch((err) => reject(createHttpError.InternalServerError()))
 
         resolve(token)
       })
@@ -73,7 +70,7 @@ var self = (module.exports = {
 
     JWT.verify(refreshToken, REFRESH_KEY_SECRET, (err, payload) => {
       if (err) {
-        return next(createHttpError('Token không hợp lệ'))
+        return next(createHttpError.Forbidden('Token không hợp lệ'))
       }
       redisClient
         .get(`refreshToken:${payload.userId}`)
@@ -82,11 +79,9 @@ var self = (module.exports = {
             req.payload = payload
             return next()
           }
-          return next(createHttpError.Unauthorized('Token không khớp'))
+          return next(createHttpError.Conflict('Token không khớp'))
         })
         .catch((err) => next(createHttpError.InternalServerError('Error:::Redis server')))
-      // req.payload = payload; // userId, roleName
-      // next();
     })
   },
 

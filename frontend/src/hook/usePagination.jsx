@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { selecTotalPage, selectActivePage, setActivePage } from '../features/pagination/pagination.slice'
+import {
+  selecTotalPage,
+  selectActivePage,
+  setActivePage
+} from '../features/pagination/pagination.slice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 let count = 1
@@ -15,9 +19,7 @@ const usePagination = () => {
   const [end, setEnd] = useState(totalPage)
   const dispatch = useDispatch()
   const activePage = useSelector(selectActivePage)
-  // const activePage = useMemo(() => {
-  //   return Number(searchParams.get('page')) || 1
-  // }, [searchParams])
+
   const setRangeOnChangePage = useCallback(
     (page) => {
       if (page <= 3) {

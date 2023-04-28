@@ -2,7 +2,9 @@ import React, { useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { handleLazyLoadSvgPromise } from '../utils'
-const DownIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../assets/images/down.svg')))
+const DownIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../assets/images/down.svg'))
+)
 const CustomSelect = (props) => {
   const [show, setShow] = useState(false)
 

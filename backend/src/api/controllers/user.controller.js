@@ -23,7 +23,7 @@ var self = (module.exports = {
   login: asyncHandler(async (req, res, next) => {
     const { error } = userValidate(req.body)
     if (error) {
-      throw createHttpError(error.details[0].message)
+      throw createHttpError.BadRequest(error.details[0].message)
     }
     const { email, password } = req.body
 

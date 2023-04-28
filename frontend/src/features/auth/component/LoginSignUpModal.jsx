@@ -4,7 +4,9 @@ import Joi from 'joi'
 import { selectShowModalStatus, setShowModalStatus } from '../auth.slice'
 import { useModal, useToggle } from '../../../hook'
 import { handleLazyLoadSvgPromise } from '../../../utils'
-const CloseIcon = React.lazy(() => handleLazyLoadSvgPromise(import('../../../assets/images/close.svg')))
+const CloseIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/close.svg'))
+)
 import LoginForm from './LoginForm'
 import SignUpForm from './SignUpForm'
 
@@ -44,7 +46,10 @@ const LoginSignUpModal = () => {
   return show ? (
     <div className='login-signup__modal' onClick={closeModal}>
       <div className='login-signup__modal__wrap'>
-        <div className='login-signup__modal__wrap__icon' onClick={(e) => closeModal(e, false)}>
+        <div
+          className='login-signup__modal__wrap__icon'
+          onClick={(e) => closeModal(e, false)}
+        >
           <Suspense fallback={<div>...</div>}>
             <CloseIcon className='icon' />
           </Suspense>

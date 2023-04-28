@@ -11,12 +11,6 @@ var self = (module.exports = {
         .set('categories', JSON.stringify(categories), 'EX', 24 * 3600, 'NX')
         .then((res) => console.log('Category cache miss:::', res))
 
-      // await redisClient
-      //   .set('categories', JSON.stringify(categories), {
-      //     EX: 30,
-      //     NX: true,
-      //   })
-      //   .then((res) => console.log('Caching categories:::', res))
       return categories
     }
     return JSON.parse(cachedResult)

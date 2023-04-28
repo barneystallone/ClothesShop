@@ -15,9 +15,20 @@ const ProductViewSkeleton = () => {
       <div style={{ display: 'flex', width: '35%', gap: '0 20px' }}>
         <div style={{ width: '100%' }}>
           <Skeleton count={4} height={30} style={{ marginBottom: '12px' }} />
-          <Skeleton circle={true} inline={true} count={3} width={40} height={40} style={{ margin: '0 6px 6px 0' }} />
+          <Skeleton
+            circle={true}
+            inline={true}
+            count={3}
+            width={40}
+            height={40}
+            style={{ margin: '0 6px 6px 0' }}
+          />
           <div>
-            <Skeleton inline={true} height={40} style={{ margin: '10px 16px 10px 0', width: '60%' }} />
+            <Skeleton
+              inline={true}
+              height={40}
+              style={{ margin: '10px 16px 10px 0', width: '60%' }}
+            />
             <Skeleton inline={true} height={40} style={{ width: 'calc(40% - 16px)' }} />
           </div>
           <Skeleton inline={true} count={3} height={40} style={{ marginTop: '12px' }} />

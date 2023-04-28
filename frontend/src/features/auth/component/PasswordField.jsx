@@ -2,10 +2,18 @@ import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import React, { Suspense, useCallback, useMemo, useState } from 'react'
 
-const BiError = React.lazy(() => import('react-icons/bi').then((module) => ({ default: module.BiError })))
-const BiShow = React.lazy(() => import('react-icons/bi').then(({ BiShow }) => ({ default: BiShow })))
-const BiHide = React.lazy(() => import('react-icons/bi').then(({ BiHide }) => ({ default: BiHide })))
-const BiLockAlt = React.lazy(() => import('react-icons/bi').then(({ BiLockAlt }) => ({ default: BiLockAlt })))
+const BiError = React.lazy(() =>
+  import('react-icons/bi').then((module) => ({ default: module.BiError }))
+)
+const BiShow = React.lazy(() =>
+  import('react-icons/bi').then(({ BiShow }) => ({ default: BiShow }))
+)
+const BiHide = React.lazy(() =>
+  import('react-icons/bi').then(({ BiHide }) => ({ default: BiHide }))
+)
+const BiLockAlt = React.lazy(() =>
+  import('react-icons/bi').then(({ BiLockAlt }) => ({ default: BiLockAlt }))
+)
 
 const PasswordField = ({ className, placeholder, register, error }) => {
   const [show, setShow] = useState(false)
@@ -28,7 +36,11 @@ const PasswordField = ({ className, placeholder, register, error }) => {
       })}
     >
       <div className={`input__box ${className}`}>
-        <input type={!show ? 'password' : 'text'} placeholder={placeholder} {...register} />
+        <input
+          type={!show ? 'password' : 'text'}
+          placeholder={placeholder}
+          {...register}
+        />
         <Suspense fallback={<div>...</div>}>
           <BiError
             className={classNames('input__box__icon  ', {

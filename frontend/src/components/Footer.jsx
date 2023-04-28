@@ -85,8 +85,9 @@ const Footer = () => {
               </Link>
             </p>
             <p>
-              Hướng đến mục tiêu mang lại niềm vui ăn mặc mới mỗi ngày cho hàng triệu người tiêu dùng Việt. Hãy cùng
-              chúng tôi hướng đên một cuộc sống năng động,tích cực hơn
+              Hướng đến mục tiêu mang lại niềm vui ăn mặc mới mỗi ngày cho hàng triệu
+              người tiêu dùng Việt. Hãy cùng chúng tôi hướng đên một cuộc sống năng
+              động,tích cực hơn
             </p>
           </div>
         </Grid>

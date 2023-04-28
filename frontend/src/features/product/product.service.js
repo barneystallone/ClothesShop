@@ -1,6 +1,7 @@
 import { api } from '../../apiSlice'
 import qs from 'qs'
 const alphabetSort = (a, b) => a.localeCompare(b)
+
 export const productApi = api.injectEndpoints({
   endpoints: (build) => ({
     getProducts: build.query({
@@ -15,7 +16,10 @@ export const productApi = api.injectEndpoints({
       keepUnusedDataFor: 60,
       providesTags: (results) =>
         results
-          ? [...results.products.map(({ pId }) => ({ type: 'Products', pId })), { type: 'Products', id: 'LIST' }]
+          ? [
+              ...results.products.map(({ pId }) => ({ type: 'Products', pId })),
+              { type: 'Products', id: 'LIST' }
+            ]
           : [{ type: 'Products', id: 'LIST' }]
     }),
     getProduct: build.query({
@@ -27,11 +31,15 @@ export const productApi = api.injectEndpoints({
       query: (slug) => `product/related/${slug}`,
       providesTags: (results) =>
         results
-          ? [...results.products.map(({ pId }) => ({ type: 'Products', pId })), { type: 'Products', id: 'LIST' }]
+          ? [
+              ...results.products.map(({ pId }) => ({ type: 'Products', pId })),
+              { type: 'Products', id: 'LIST' }
+            ]
           : [{ type: 'Products', id: 'LIST' }],
       keepUnusedDataFor: 30
     })
   })
 })
 
-export const { useGetProductsQuery, useGetProductQuery, useGetRelatedProductsQuery } = productApi
+export const { useGetProductsQuery, useGetProductQuery, useGetRelatedProductsQuery } =
+  productApi

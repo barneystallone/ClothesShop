@@ -3,7 +3,6 @@ const nanoid = require('../utils/nanoid')
 const cloudinaryModel = require('../models/cloudinary.model')
 const productDao = require('../daos/product.dao').getDB('mysql')
 const redisProductDao = require('../daos/product.dao').getDB('redis')
-const redis = require('../databases/connect.redis.v2')
 
 const itemPerPage = process.env.ITEM_PER_PAGE * 1
 var self = (module.exports = {
@@ -25,10 +24,10 @@ var self = (module.exports = {
 
   getProductsByCategoryIDs: async (params) => {
     const { page, ...rest } = params
-    const offset = ((page ?? 1) - 1) * itemPerPage
+    const _offset = ((page ?? 1) - 1) * itemPerPage
     const { count, products } = await redisProductDao.getProductsByCategoryIDs({
       ...rest,
-      offset,
+      offset: _offset,
       limit: itemPerPage,
     })
 
@@ -63,13 +62,13 @@ var self = (module.exports = {
    * @returns affectedRows: số row được thêm vào
    */
   upload: async ({ pId, colorName, colorCode, img, thumbImg }) => {
-    const isExistsItem = await productDao.isExistsItem({ pId, colorCode })
-    if (isExistsItem) {
+    const _isExistsItem = await productDao.isExistsItem({ pId, colorCode })
+    if (_isExistsItem) {
       throw createHttpError.Conflict('Item đã tồn tại')
     }
     const _arrPromise = [img, thumbImg].map(
       (file) =>
-        new Promise((resolve, reject) => {
+        new Promise((resolve) => {
           cloudinaryModel.uploadFile(file[0].path).then((result) => {
             resolve(result.url)
           })
@@ -105,17 +104,3 @@ var self = (module.exports = {
     return await redisProductDao.getRelatedProducts(slug)
   },
 })
-// `
-// eval 'local categoryId = redis.call("FT.SEARCH", "products", "@slug:{ao\\-thun\\-nu\\-croptop\\-in\\-hinh\\-con\\-gai}", "RETURN", 1, "category_id" )[3][2] local results= redis.call("FT.SEARCH", "products", "@category_id:{"..categoryId.."}") local filteredResults = {}
-// for i, val in ipairs(results) do
-// if i % 2 ~= 0 then table.insert(filteredResults, val)
-// end
-// end
-// return filteredResults' 0
-// eval 'local categoryId = redis.call("FT.SEARCH", "products", "@slug:{"..ARGV"}", "RETURN", 1, "category_id" )[3][2] local results= redis.call("FT.SEARCH", "products", "@category_id:{"..categoryId.."}") local filteredResults = {}
-// for i, val in ipairs(results) do
-// if i % 2 ~= 0 then table.insert(filteredResults, val)
-// end
-// end
-// return filteredResults' 0
-// `

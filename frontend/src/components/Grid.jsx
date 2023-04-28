@@ -9,7 +9,11 @@ const Grid = React.forwardRef((props, ref) => {
   const mdCol = props.mdCol ? `grid-col-md-${props.mdCol}` : ''
   const smCol = props.smCol ? `grid-col-sm-${props.smCol}` : ''
   return (
-    <div ref={ref} className={`grid ${col} ${mdCol} ${smCol} ${props?.className}`} style={style}>
+    <div
+      ref={ref}
+      className={`grid ${col} ${mdCol} ${smCol} ${props?.className}`}
+      style={style}
+    >
       {props.children}
     </div>
   )

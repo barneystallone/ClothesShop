@@ -13,7 +13,9 @@ const Button = (props) => {
     >
       <span className='btn-txt'>{props.children}</span>
       {props.icon ? (
-        <span className='btn-icon'>{typeof props.icon === 'string' ? <i className={props.icon}></i> : props.icon}</span>
+        <span className='btn-icon'>
+          {typeof props.icon === 'string' ? <i className={props.icon}></i> : props.icon}
+        </span>
       ) : null}
     </button>
   )
