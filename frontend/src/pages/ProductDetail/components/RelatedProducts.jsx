@@ -9,16 +9,8 @@ const RelatedProducts = (props) => {
   return (
     relatedProducts && (
       <Grid col={5} mdCol={2} smCol={1} gap={20}>
-        {relatedProducts?.map((item, index) => (
-          <ProductCard
-            pId={item.pId}
-            key={index}
-            title={item.title}
-            img={item.img}
-            price={Number(item.price)}
-            slug={item.slug}
-            sale={Number(item.sale)}
-          />
+        {relatedProducts?.map(({ price, sold, ...rest }, index) => (
+          <ProductCard key={index} {...rest} price={Number(price)} sale={Number(sold)} />
         ))}
       </Grid>
     )

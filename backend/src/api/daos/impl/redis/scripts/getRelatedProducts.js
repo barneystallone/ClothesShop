@@ -9,7 +9,8 @@ var that = (module.exports = {
         local categoryId = foundCategory[3][2]
         local results = redis.call(
           "FT.SEARCH", "products", "@category_id:{" .. categoryId .. "} -@slug:{" .. ARGV[1] .. "}",
-          "RETURN", 8, "pId" , "title", "price", "slug", "sold", "$.img", "as", "img",
+          "DIALECT", 3, "RETURN", 11, "pId", "title", "price", "slug", "sold", 
+          "$.collections[*].url", "as", "url", "$.collections[*].thumbUrl", "as", "thumbUrl",
           "LIMIT", 0, 1000
         )
         local offset = ARGV[2] - results[1]
@@ -17,7 +18,8 @@ var that = (module.exports = {
         if offset > 0 then
           local arr = redis.call(
             "FT.SEARCH", "products", "-@slug:{" .. ARGV[1] .. "}",
-            "RETURN", 8,"pId", "title", "price", "slug", "sold", "$.img", "as", "img",
+            "DIALECT", 3, "RETURN", 11, "pId", "title", "price", "slug", "sold", "$.collections[*].url", "as", 
+            "url", "$.collections[*].thumbUrl", "as", "thumbUrl",
             "LIMIT", 0, 1000
           )
           local extra = {}

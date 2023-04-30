@@ -8,7 +8,14 @@ import 'swiper/css/thumbs'
 
 const ProductImagesSlider = React.forwardRef((props, ref) => {
   const [activeThumb, setActiveThumb] = useState()
-  console.log('hello')
+
+  const handleSlideChange = (swiper) => {
+    if (props?.onSlideChange) {
+      props.onSlideChange(swiper.realIndex)
+    }
+    console.log(swiper.realIndex)
+  }
+
   return (
     <>
       <Swiper
@@ -31,16 +38,16 @@ const ProductImagesSlider = React.forwardRef((props, ref) => {
               loading='lazy'
               src={item}
               alt=''
-              onClick={() => {
-                const swiper = document.querySelector('.swiper ').swiper
-                swiper.update(null)
-              }}
+              // onClick={() => {
+              //   const swiper = document.querySelector('.swiper ').swiper
+              //   swiper.update(null)
+              // }}
             />
           </SwiperSlide>
         ))}
       </Swiper>
       <Swiper
-        // onSlideChange={(swiper) => console.log(swiper.realIndex)}
+        onSlideChange={handleSlideChange}
         loop={true}
         spaceBetween={20}
         ref={ref}
@@ -62,7 +69,8 @@ const ProductImagesSlider = React.forwardRef((props, ref) => {
 
 ProductImagesSlider.displayName = 'ProductImagesSlider'
 ProductImagesSlider.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onSlideChange: PropTypes.func
 }
 
 export default React.memo(ProductImagesSlider)

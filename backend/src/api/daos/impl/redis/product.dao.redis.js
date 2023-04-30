@@ -18,38 +18,39 @@ var self = (module.exports = {
       })
     )
   },
-  uploadImg: async ({ pId, url, thumbUrl }) => {
-    // prettier-ignore
-    return await redis.call(
-        'JSON.ARRAPPEND', `${PREFIX}${pId}`, '$.img', 
-        JSON.stringify({ url, thumbUrl }))
-  },
+  // uploadImg: async ({ pId, url, thumbUrl }) => {
+  //   // prettier-ignore
+  //   return await redis.call(
+  //       'JSON.ARRAPPEND', `${PREFIX}${pId}`, '$.img',
+  //       JSON.stringify({ url, thumbUrl }))
+  // },
   getProducts: async ({ limit = 20, offset = 0 }) => {
     //prettier-ignore
-    return redis
+    return self.getProductsHandler(redis
       .call(
-        'FT.SEARCH', SEARCH_INDEX, '*', 'RETURN', 8,
-        'pId', 'title', 'price', 'slug', 'sold', '$.img', 'as', 'img',
+        'FT.SEARCH', SEARCH_INDEX, '*', 'DIALECT', 3, 'RETURN', 11, 
+        'pId', 'title', 'price', 'slug', 'sold', '$.collections[*].url', 'as', 'url',
+        '$.collections[*].thumbUrl', 'as', 'thumbUrl',
         'LIMIT', offset, limit
-      )
-      .then(([total, ...rest]) => {
-        //prettier-ignore
-        return {
-          total,
-          products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
-            return arr?.reduce((product, key, index) => {
-              if (index % 2 === 0) {
-                if(key === 'img') {
-                  product[key] = JSON.parse(arr[index + 1])
-                  return product
-                }
-                product[key] = arr[index + 1]
-              }
-              return product
-            }, {})
-          }),
-        }
-    })
+      ))
+    //   .then(([total, ...rest]) => {
+    //     //prettier-ignore
+    //     return {
+    //       total,
+    //       products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
+    //         return arr?.reduce((product, key, index) => {
+    //           if (index % 2 === 0) {
+    //             if(key === ('url' || 'thumbUrl')) {
+    //               product[key] = JSON.parse(arr[index + 1])
+    //               return product
+    //             }
+    //             product[key] = JSON.parse(arr[index + 1])[0]
+    //           }
+    //           return product
+    //         }, {})
+    //       }),
+    //     }
+    // })
   },
 
   // EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 "product:*"
@@ -64,54 +65,90 @@ var self = (module.exports = {
     return await pipeline.exec()
   },
 
+  /**
+   * @example ft.search products '@category_id:{c10\\|c30\\|c15\\|c14}' DIALECT 3 RETURN 11
+   * pId title price slug sold $.collections[*].url as url $.collections[*].thumbUrl as thumbUrl LIMIT 0 10
+   */
   getProductsByCategoryIDs: async ({ strListId, limit = 20, offset = 0 }) => {
+    // prettier-ignore
     return self.getProductsHandler(
-      redis.call('FT.SEARCH', SEARCH_INDEX, `@category_id:{${strListId}}`, 'LIMIT', offset, limit)
+      redis.call(
+      'FT.SEARCH', SEARCH_INDEX, `@category_id:{${strListId}}`, 'DIALECT', 3, 'RETURN', 11, 
+      'pId', 'title', 'price', 'slug', 'sold', '$.collections[*].url', 'as', 'url',
+      '$.collections[*].thumbUrl', 'as', 'thumbUrl',
+      'LIMIT', offset, limit)
     )
     // const categories = listId.map((item) => item).join('|')
   },
 
   getProductsHandler: (promise) => {
-    return promise.then(([count, ...prodKeysAndValues]) => {
-      let products = prodKeysAndValues
-        .filter((_, index) => index % 2 !== 0)
-        .map((productArray) => {
-          return JSON.parse(productArray[1])
-        })
-      return { count, products }
+    return promise.then(([total, ...rest]) => {
+      //prettier-ignore
+      return {
+        total,
+        products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
+          return arr?.reduce((product, key, index) => {
+            if (index % 2 === 0) {
+              if(key === 'url' || key === 'thumbUrl') {
+                product[key] = JSON.parse(arr[index + 1])
+                return product
+              }
+              product[key] = JSON.parse(arr[index + 1])[0]
+            }
+            return product
+          }, {})
+        }),
+      }
     })
+    // return promise.then(([count, ...prodKeysAndValues]) => {
+    //   let products = prodKeysAndValues
+    //     .filter((_, index) => index % 2 !== 0)
+    //     .map((productArray) => {
+    //       return JSON.parse(productArray[1])
+    //     })
+    //   return { count, products }
+    // })
   },
 
   findBySlug: async (slug) => {
     const query = `@slug:{${slug.replace(/-/g, '\\-')}}`
-    return await self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, query)).then(({ _, products }) => ({
-      product: products[0],
-    }))
+    return await redis.call('FT.SEARCH', SEARCH_INDEX, query).then(([count, ...prodKeysAndValues]) => {
+      let productWrap = prodKeysAndValues
+        .filter((_, index) => index % 2 !== 0)
+        .map((productArray) => {
+          return JSON.parse(productArray[1])
+        })
+      return { count, product: productWrap[0] }
+    })
+    // return await self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, query)).then(({ _, products }) => ({
+    //   product: products[0],
+    // }))
   },
 
   getRelatedProducts: async (slug) => {
     const _slug = slug.replace(/-/g, '\\-')
     const limit = 5
 
-    return await redis.getRelatedProducts(0, _slug, limit).then(([_, ...rest]) => {
-      // console.log([_ ,...rest ])
-      //prettier-ignore
-      return {
-        products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
-          // console.log('arr::',arr);
-            return arr?.reduce((product, key, index) => {
-              if (index % 2 === 0) {
-                if(key === 'img') {
-                  product[key] = JSON.parse(arr[index + 1])
-                  return product
-                }
-                product[key] = arr[index + 1]
-              }
-              return product
-            }, {})
-          }),
-      }
-    })
+    return self.getProductsHandler(redis.getRelatedProducts(0, _slug, limit))
+    // .then(([_, ...rest]) => {
+    //   // console.log([_ ,...rest ])
+    //   //prettier-ignore
+    //   return {
+    //     products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
+    //       // console.log('arr::',arr);
+    //         return arr?.reduce((product, key, index) => {
+    //           if (index % 2 === 0) {
+    //             if(key === 'img') {
+    //               product[key] = JSON.parse(arr[index + 1])
+    //               return product
+    //             }
+    //             product[key] = arr[index + 1]
+    //           }
+    //           return product
+    //         }, {})
+    //       }),
+    //   }
+    // })
     // const res = await redis.call('EVAL', scripts, 0, _slug).then((res) => res.map((arr) => JSON.parse(arr[1])))
   },
   init: async () => {

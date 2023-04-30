@@ -22,21 +22,21 @@ const ProductCard = (props) => {
     [props.slug, dispatch]
   )
   useEffect(() => {
-    if (props.img.length === 1) {
+    if (props.url.length === 1) {
       return setActive(0)
     }
     setActive(null)
-  }, [props.img])
+  }, [props.url])
   // const styles = {}
   return (
     <div className='product-card'>
       <Link to={`/product/${props.slug}`}>
         {props.sale ? <div className='product-card__tagSale'>-{props.sale}%</div> : null}
         <div className='product-card__image'>
-          {props?.img?.map((item, index) => (
+          {props?.url?.map((item, index) => (
             <img
               key={index}
-              src={item.url}
+              src={item}
               loading='lazy'
               alt=''
               className={active === null ? '' : active === index ? 'show' : 'hide'}
@@ -61,13 +61,13 @@ const ProductCard = (props) => {
       </Link>
       <div className='product-card__info'>
         <div className='product-card__colors'>
-          {props.img?.map((item, index) => (
+          {props.thumbUrl?.map((item, index) => (
             <div
               key={index}
               className={`product-card__colors__item ${active === index ? 'active' : ''}`}
               onClick={() => setActive(index * 1)}
             >
-              <img src={item.thumbUrl} alt='' loading='lazy' />
+              <img src={item} alt='' loading='lazy' />
             </div>
           ))}
         </div>
@@ -103,12 +103,8 @@ ProductCard.propTypes = {
   description: PropTypes.string,
   price: PropTypes.number.isRequired,
   sold: PropTypes.number,
-  img: PropTypes.arrayOf(
-    PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      thumbUrl: PropTypes.string.isRequired
-    })
-  ).isRequired,
+  url: PropTypes.arrayOf(PropTypes.string).isRequired,
+  thumbUrl: PropTypes.arrayOf(PropTypes.string).isRequired,
   sale: PropTypes.number
   // categoryId: PropTypes.string,
   // pId: PropTypes.string,

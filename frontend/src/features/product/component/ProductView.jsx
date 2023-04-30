@@ -1,9 +1,17 @@
-import React, { Fragment, useCallback, useMemo, useState, Suspense, useRef } from 'react'
+import React, {
+  Fragment,
+  useCallback,
+  useMemo,
+  useState,
+  Suspense,
+  useRef,
+  useEffect
+} from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { numberToCurrency } from '../../../utils'
-import sizes from '../../../assets/fake-data/product-size'
+// import sizes from '../../../assets/fake-data/product-size'
 
 import QuantityInput from '../../../components/QuantityInput'
 import CustomSelect from '../../../components/CustomSelect'
@@ -35,27 +43,43 @@ const CopyIcon = React.lazy(() =>
 )
 
 const ProductView = (props) => {
-  const [size, setSize] = useState(sizes[0])
   const swiperRef = useRef(null)
   const slideTo = useCallback((index) => {
     console.log('go to slide', index)
     swiperRef.current?.swiper.slideToLoop(index)
     console.log(swiperRef.current?.swiper)
   }, [])
+  const [selectItem, setSelectItem] = useState(null)
   const [activeThumb, setActiveThumb] = useState(0)
 
   const { product } = props
 
-  const handleSelectSize = useCallback((elm) => {
-    setSize(sizes[elm.dataset.index])
-    // console.log(sizes[elm.dataset.index]);
+  const handleSlideChange = useCallback((index) => {
+    setActiveThumb(index)
   }, [])
 
-  const prodImages = useMemo(() => product?.img?.map((item) => item.url), [product])
-  const prodThumbImages = useMemo(
-    () => product?.img?.map((item) => item.thumbUrl),
+  const handleSelectSize = useCallback((item) => {
+    setSelectItem(item)
+  }, [])
+
+  const listProductItem = useMemo(() => {
+    setSelectItem(product?.collections[activeThumb].inventory[0])
+    return product?.collections[activeThumb].inventory.reduce(
+      (result, item) => result.concat(item),
+      []
+    )
+  }, [product, activeThumb])
+
+  const prodImages = useMemo(
+    () => product?.collections?.map((item) => item.url),
     [product]
   )
+
+  const prodThumbImages = useMemo(
+    () => product?.collections?.map((item) => item.thumbUrl),
+    [product]
+  )
+
   const handleClickThumb = useCallback(
     (index) => {
       setActiveThumb(index)
@@ -63,11 +87,16 @@ const ProductView = (props) => {
     },
     [slideTo]
   )
+
   return product && !props.loading ? (
     <div className='product__wrap'>
       <div className='product__wrap__inner'>
         <div className='product__wrap__inner__left'>
-          <ProductImagesSlider images={prodImages || []} ref={swiperRef} />
+          <ProductImagesSlider
+            images={prodImages || []}
+            ref={swiperRef}
+            onSlideChange={handleSlideChange}
+          />
         </div>
         <Suspense fallback={<div>...Loading</div>}>
           <div className='product__wrap__inner__right'>
@@ -83,7 +112,7 @@ const ProductView = (props) => {
               <CopyIcon className='product__icon' />
             </div>
             <div className='info__group  '>
-              {product?.saleOff ? (
+              {product?.sale ? (
                 <Fragment>
                   <span className='product__price'>228.650đ</span>
                   <span className='product__price--old'>
@@ -96,12 +125,14 @@ const ProductView = (props) => {
             </div>
 
             <div className='info__group product__remain '>
-              <div className='remain'>Còn lại: 30</div>
-              <div className='seperate'>|</div>
-              <div className='sold'>Đã bán: 30</div>
+              <div className='remain'>Còn lại: {selectItem?.quantity}</div>
+              {/* <div className='seperate'>|</div>
+              <div className='sold'>Đã bán: 30</div> */}
             </div>
             <div className='info__group product__color '>
-              <div className='product__color__title'>Màu sắc: Be</div>
+              <div className='product__color__title'>
+                Màu sắc: {product.collections[activeThumb].colorName}
+              </div>
               <div className='product__thumbs'>
                 {prodThumbImages?.map((image, index) => (
                   <div
@@ -119,12 +150,15 @@ const ProductView = (props) => {
               </div>
             </div>
             <div className='info__group size-quantity'>
-              <SelectSize
-                className='section-size'
-                title={size.display}
-                sizes={sizes}
-                onClick={handleSelectSize}
-              />
+              {selectItem && (
+                <SelectSize
+                  className='section-size'
+                  title={selectItem.sizeName}
+                  items={listProductItem}
+                  onClick={handleSelectSize}
+                />
+              )}
+
               <QuantityInput className='section-quantity' />
             </div>
             <Button animate={true} icon={<BiCartAlt />} className={'btn-add2cart'}>
@@ -170,23 +204,21 @@ const ProductView = (props) => {
 }
 
 const SelectSize = React.memo((props) => {
-  const handleClick = (e) => {
+  const handleClick = (item) => {
     if (props.onClick) {
-      props.onClick(e.target)
-    } else {
-      console.log(e.target.dataset.index)
+      props.onClick(item)
+      console.log(item)
     }
   }
   return (
     <CustomSelect title={props.title} className={props.className}>
-      {props.sizes?.map((size, index) => (
+      {props.items?.map((item, index) => (
         <div
           key={index}
           className='custom-select__content__dropdown__option'
-          onClick={handleClick}
-          data-index={index}
+          onClick={() => handleClick(item)}
         >
-          {size?.display}
+          {item?.sizeName}
         </div>
       ))}
     </CustomSelect>
@@ -216,14 +248,39 @@ const ProductDescription = React.memo((props) => {
 ProductDescription.displayName = 'ProductDescription'
 
 ProductView.propTypes = {
-  product: PropTypes.object,
+  product: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    pId: PropTypes.string.isRequired,
+    slug: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    collections: PropTypes.arrayOf(
+      PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        itemId: PropTypes.string.isRequired,
+        colorName: PropTypes.string.isRequired,
+        inventory: PropTypes.arrayOf(
+          PropTypes.shape({
+            pId: PropTypes.string,
+            itemId: PropTypes.string.isRequired,
+            sizeId: PropTypes.string.isRequired,
+            sizeName: PropTypes.string.isRequired,
+            quantity: PropTypes.number.isRequired
+          })
+        ),
+        thumbUrl: PropTypes.string.isRequired
+      })
+    ),
+    price: PropTypes.number.isRequired,
+    sold: PropTypes.number,
+    sale: PropTypes.number
+  }),
   modal: PropTypes.bool,
   loading: PropTypes.bool
 }
 SelectSize.propTypes = {
   onClick: PropTypes.func,
   title: PropTypes.string.isRequired,
-  sizes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
   className: PropTypes.string
 }
 

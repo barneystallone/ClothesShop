@@ -4,6 +4,7 @@ const cloudinaryModel = require('../models/cloudinary.model')
 const productDao = require('../daos/product.dao').getDB('mysql')
 const redisProductDao = require('../daos/product.dao').getDB('redis')
 
+// JSON.GET product:N6pZN2uM8x0YZ '$.collections[*].inventory[?(@.sizeId=="S001")]
 const itemPerPage = process.env.ITEM_PER_PAGE * 1
 var self = (module.exports = {
   init: async () => {
@@ -86,16 +87,16 @@ var self = (module.exports = {
       thumbUrl,
       itemId,
     }
-    const affectedRows = await productDao.uploadImg(item)
-    if (affectedRows) {
-      redisProductDao
-        .uploadImg(item)
-        .then(() => console.log(`redis upload ${pId} ok`))
-        .catch((e) => {
-          console.trace('redis err::', e.message)
-        })
-    }
-    return affectedRows
+    // const affectedRows = await productDao.uploadImg(item)
+    // if (affectedRows) {
+    //   redisProductDao
+    //     .uploadImg(item)
+    //     .then(() => console.log(`redis upload ${pId} ok`))
+    //     .catch((e) => {
+    //       console.trace('redis err::', e.message)
+    //     })
+    // }
+    return await productDao.uploadImg(item)
   },
   findBySlug: async (slug) => {
     return await redisProductDao.findBySlug(slug)
