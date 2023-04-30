@@ -7,8 +7,8 @@ POST  {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-   "email" :"11sa2s1ass112s2a2avass@gmail.com",
-    "password": "asdasdd"
+   "email" :"abcd@gmail.com",
+    "password": "abcd"
 }
 ###
 @authToken = {{login.response.body.accessToken}}
@@ -45,7 +45,8 @@ Content-Type: application/json
 }
 
 ###
-POST  {{baseUrl}}/api/user/refresh-token
+# không test được vì set cookie secure là true 
+GET  {{baseUrl}}/api/user/refresh-token
 # Cookie: 
 
 

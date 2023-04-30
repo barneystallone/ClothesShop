@@ -14,6 +14,7 @@ const LoginForm = forwardRef(
       register,
       control,
       handleSubmit,
+      setFocus,
       formState: { errors }
     } = useForm({
       defaultValues: {
@@ -27,6 +28,10 @@ const LoginForm = forwardRef(
       updateHeight()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [!!errors.email, !!errors.password])
+
+    useEffect(() => {
+      setFocus('email')
+    }, [setFocus])
 
     return (
       <div

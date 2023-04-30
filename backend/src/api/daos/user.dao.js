@@ -6,6 +6,7 @@ module.exports = {
       insertUser: async ({ email, password }) => impl.insertUser({ email, password }),
       isExistsEmail: async (email) => impl.isExistsEmail(email),
       findByEmail: async (email) => impl.findByEmail(email),
+      findById: async (id) => impl.findById(id),
     }
     // const insertUser = async (impl, user) => impl.insertUser(user)
     // const isExistsEmail = async (impl, email) => impl.isExistsEmail(email)

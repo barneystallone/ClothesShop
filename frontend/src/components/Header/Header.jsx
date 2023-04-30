@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import logo from '../assets/images/Logo.jpg'
-import { BiMenu, BiSearch, BiCartAlt, BiUser } from 'react-icons/bi'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentUser, setShowModalStatus } from '../features/auth/auth.slice'
+import logo from '../../assets/images/Logo.jpg'
+import { BiMenu, BiSearch, BiCartAlt } from 'react-icons/bi'
+import UserItem from './components/UserItem'
+
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -27,10 +27,9 @@ let count = 1
 const Header = () => {
   const { pathname } = useLocation()
   const activeNav = leftNav.findIndex((e) => e.path === pathname)
+  const headerRef = useRef(null)
   const [active, setActive] = useState('header__menu__left')
   // console.log('countHeader::', count++);
-  const user = useSelector(selectCurrentUser)
-  const dispatch = useDispatch()
   const toggleMenu = () => {
     setActive((prev) => {
       return prev === 'header__menu__left'
@@ -43,11 +42,6 @@ const Header = () => {
     setActive('header__menu__left')
   }, [])
 
-  const showLoginModal = useCallback(() => {
-    dispatch(setShowModalStatus(true))
-  }, [])
-
-  const headerRef = useRef(null)
   useEffect(() => {
     const handleScroll = () => {
       if (document.documentElement.scrollTop > 20) {
@@ -94,14 +88,7 @@ const Header = () => {
             <div className='header__menu__item header__menu__right__item'>
               <BiSearch />
             </div>
-            <div
-              className='header__menu__item header__menu__right__item header__menu__user'
-              onClick={!user && showLoginModal}
-            >
-              <BiUser />
-              <span>Tài khoản</span>
-            </div>
-
+            <UserItem />
             <div className='header__menu__item header__menu__right__item'>
               <BiCartAlt />
             </div>

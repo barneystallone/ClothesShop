@@ -37,4 +37,13 @@ var self = (module.exports = {
 
     return _user
   },
+  findById: async (id) => {
+    const _user = await mysql.pool
+      .execute('select u.id, u.email from user u join role r on u.role_id = r.id where u.id = ?', [id])
+      .then((res) => {
+        return res[0][0]
+      })
+
+    return _user
+  },
 })

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../assets/images/Logo.jpg'
-import Grid from './Grid'
+import logo from '../../assets/images/Logo.jpg'
+import Grid from '../Grid'
 const footerAboutLink = [
   {
     content: 'Giới thiệu',

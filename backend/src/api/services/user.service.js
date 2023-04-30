@@ -7,7 +7,7 @@ var self = (module.exports = {
   register: async ({ email, password }) => {
     const isExist = await userDao.isExistsEmail(email)
     if (isExist) {
-      throw createError.Conflict(`Email ${email} đã tồn tại`)
+      throw createError.Conflict(`Email ${email} đã được đăng ký`)
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -20,13 +20,13 @@ var self = (module.exports = {
   login: async ({ email, password }) => {
     const _user = await userDao.findByEmail(email)
     if (!_user) {
-      throw createError.NotFound(`Tài khoản chưa được đăng ký`)
+      throw createError.NotFound(`Email chưa được đăng ký`)
     }
 
     const isValidPassword = await bcrypt.compare(password, _user.password)
 
     if (!isValidPassword) {
-      throw createError.Unauthorized()
+      throw createError.NotFound('Sai tên đăng nhập hoặc mật khẩu')
     }
     const payload = {
       userId: _user.id,
@@ -40,5 +40,14 @@ var self = (module.exports = {
       userEmail: _user.email,
       userId: _user.id,
     }
+  },
+
+  findById: async (userId) => {
+    const user = await userDao.findById(userId)
+    //  có id rồi mới lấy ra user
+    if (!user) {
+      throw createError.NotFound(`Không tìm thấy user có id là ${userId}`)
+    }
+    return { userEmail: user.email, userId: user.id }
   },
 })

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 const Helmet = (props) => {
   document.title = props.title ? 'Shop - ' + props.title : 'Shop'
+
   return <div>{props.children}</div>
 }
 

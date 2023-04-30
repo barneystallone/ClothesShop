@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState, Suspense } from 'react'
 import { joiResolver } from '@hookform/resolvers/joi'
 import Joi from 'joi'
-import { selectShowModalStatus, setShowModalStatus } from '../auth.slice'
+import { toast } from 'react-toastify'
+
+import { selectShowModalStatus, setCredentials, setShowModalStatus } from '../auth.slice'
 import { useModal, useToggle } from '../../../hook'
 import { handleLazyLoadSvgPromise } from '../../../utils'
 const CloseIcon = React.lazy(() =>
@@ -9,31 +11,63 @@ const CloseIcon = React.lazy(() =>
 )
 import LoginForm from './LoginForm'
 import SignUpForm from './SignUpForm'
+import { useLoginMutation, useRegisterMutation } from '../auth.service'
+import { useDispatch } from 'react-redux'
+
+const LOGIN_SUCCESS_MSG = 'Đăng nhập thành công'
+const REGISTER_SUCCESS_MSG = 'Đăng ký thành công'
 
 const LoginSignUpModal = () => {
   const modalBodyRef = useRef(null)
   const loginRef = useRef(null)
   const registerRef = useRef(null)
-
-  const [showLogin, setShowLogin] = useState(true)
-
+  const [showLogin, toggleFormLogin] = useToggle(true)
   const [loginHeightChange, updateLoginHeight] = useToggle()
-
   const [signUpHeightChange, updateSignUpHeight] = useToggle()
-
   const { show, closeModal } = useModal(setShowModalStatus, selectShowModalStatus)
+  const [login] = useLoginMutation()
+  const [register] = useRegisterMutation()
+  const dispatch = useDispatch()
 
-  const onLoginSubmit = useCallback((data) => {
-    console.log(data)
+  const handleAuthPromise = useCallback((promise, successMessage) => {
+    return promise
+      .unwrap()
+      .then((payload) => {
+        dispatch(setCredentials(payload))
+        dispatch(setShowModalStatus(false))
+        toast.success(successMessage)
+      })
+      .catch(() => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  const onLoginSubmit = useCallback(
+    (data) => {
+      handleAuthPromise(login(data), LOGIN_SUCCESS_MSG)
+      // .unwrap()
+      // .then((payload) => {
+      //   dispatch(setCredentials(payload))
+      //   dispatch(setShowModalStatus(false))
+      //   toast.success('Đăng nhập thành công')
+      // })
+      // .catch(() => {})
+      // toast.loading
+      // console.log(data)
+    },
+    [login, handleAuthPromise]
+  )
 
-  const onSignUpSubmit = useCallback((data) => {
-    console.log(data)
-  }, [])
+  const onSignUpSubmit = useCallback(
+    ({ email, password, ...rest }) => {
+      handleAuthPromise(register({ email, password }), REGISTER_SUCCESS_MSG)
+    },
+    [register, handleAuthPromise]
+  )
 
-  const handleShowLogin = useCallback(() => {
-    setShowLogin(!showLogin)
-  }, [showLogin])
+  // useEffect(() => {
+  //   if (showLogin && loginError) {
+  //     toast()
+  //   }
+  // }, [loginError, registerError])
 
   // set height của  element bọc  2 form login , signup
   // khi login <-> signup hoặc là khi height của form thay đổi
@@ -61,7 +95,7 @@ const LoginSignUpModal = () => {
               onSubmit={onLoginSubmit}
               updateHeight={updateLoginHeight}
               resolver={joiResolver(loginSchema)}
-              navigate={handleShowLogin}
+              navigate={toggleFormLogin}
               showLogin={showLogin}
             />
             <SignUpForm
@@ -69,7 +103,7 @@ const LoginSignUpModal = () => {
               onSubmit={onSignUpSubmit}
               updateHeight={updateSignUpHeight}
               resolver={joiResolver(registerSchema)}
-              navigate={handleShowLogin}
+              navigate={toggleFormLogin}
               showLogin={showLogin}
             />
           </div>

@@ -9,11 +9,30 @@ const authApi = api.injectEndpoints({
           method: 'POST',
           body: { ...user }
         }
-      },
-
-      extraOptions: {
-        // credentials
+      }
+    }),
+    register: builder.mutation({
+      query: (user) => {
+        return {
+          url: 'user/register',
+          method: 'POST',
+          body: user
+        }
+      }
+    }),
+    refresh: builder.query({
+      query: () => {
+        return {
+          url: 'user/refresh'
+        }
       }
     })
   })
 })
+
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLazyRefreshQuery,
+  useRefreshQuery
+} = authApi

@@ -1,13 +1,5 @@
-import React, {
-  Fragment,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from 'react'
-import PropTypes from 'prop-types'
-import { usePagination } from '../../../hook'
+import React, { Fragment, Suspense, useCallback } from 'react'
+import { usePagination } from '../../hook'
 import classNames from 'classnames'
 const BiChevronsLeft = React.lazy(() =>
   import('react-icons/bi').then(({ BiChevronsLeft }) => ({ default: BiChevronsLeft }))

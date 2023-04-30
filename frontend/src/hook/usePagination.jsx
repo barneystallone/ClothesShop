@@ -68,7 +68,6 @@ const usePagination = () => {
     [totalPage, setRangeOnChangePage]
   )
 
-  console.log({ start, end })
   return {
     navigateToPage,
     start,

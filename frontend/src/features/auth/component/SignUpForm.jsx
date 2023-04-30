@@ -12,6 +12,7 @@ const SignUpForm = forwardRef(
       register,
       control,
       handleSubmit,
+      setFocus,
       formState: { errors }
     } = useForm({
       defaultValues: {
@@ -21,6 +22,10 @@ const SignUpForm = forwardRef(
       },
       resolver: resolver
     })
+
+    useEffect(() => {
+      setFocus('email')
+    }, [setFocus])
 
     useEffect(() => {
       updateHeight()

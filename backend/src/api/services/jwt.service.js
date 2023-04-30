@@ -22,11 +22,11 @@ var self = (module.exports = {
   },
 
   verifyToken: (req, res, next) => {
-    if (!req.headers['authorization']) {
+    if (!req.headers['Authorization']) {
       return next(createHttpError.Unauthorized())
     }
 
-    const token = req.headers['authorization'].split(' ')[1]
+    const token = req.headers['Authorization'].split(' ')[1]
     JWT.verify(token, ACCESS_KEY_SECRET, (err, payload) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {
@@ -62,6 +62,7 @@ var self = (module.exports = {
     })
   },
   verifyRefreshToken: (req, res, next) => {
+    console.log(req)
     const { refreshToken } = req.cookies
     console.log({ refreshToken })
     if (!refreshToken) {
@@ -79,7 +80,7 @@ var self = (module.exports = {
             req.payload = payload
             return next()
           }
-          return next(createHttpError.Conflict('Token không khớp'))
+          return next(createHttpError.Forbidden('Token không khớp'))
         })
         .catch((err) => next(createHttpError.InternalServerError('Error:::Redis server')))
     })

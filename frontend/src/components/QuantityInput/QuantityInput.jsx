@@ -1,11 +1,11 @@
 import React, { Suspense, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { handleLazyLoadSvgPromise } from '../utils'
+import { handleLazyLoadSvgPromise } from '../../utils'
 const MinusIcon = React.lazy(() =>
-  handleLazyLoadSvgPromise(import('../assets/images/minus.svg'))
+  handleLazyLoadSvgPromise(import('../../assets/images/minus.svg'))
 )
 const PlusIcon = React.lazy(() =>
-  handleLazyLoadSvgPromise(import('../assets/images/plus.svg'))
+  handleLazyLoadSvgPromise(import('../../assets/images/plus.svg'))
 )
 const QuantityInput = (props) => {
   const ref = useRef(null)
