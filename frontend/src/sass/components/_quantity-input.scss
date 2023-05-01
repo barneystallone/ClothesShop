@@ -1,9 +1,10 @@
 .wrap-quantity {
   @include flex(center, flex-start);
+  $height: 32px;
 
   &__btn {
-    width: 42px;
-    height: 42px;
+    width: calc($height - 2px);
+    height: $height;
     border: 1px solid $txt-second-color;
     user-select: none;
     background-color: #fff;
@@ -21,10 +22,17 @@
       border-width: 0;
       color: #fff;
     }
+
+    &.btn-minus {
+      border-radius: 100% 0 0 100%;
+    }
+    &.btn-plus {
+      border-radius: 0 100% 100% 0;
+    }
   }
 
   &__input {
-    height: 42px;
+    height: $height;
     border: 1px solid $txt-second-color;
     outline: none;
     border-width: 1px 0;

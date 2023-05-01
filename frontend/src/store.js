@@ -4,12 +4,14 @@ import { api } from './apiSlice'
 import productReducer from './features/product/product.slice'
 import categoryReducer from './features/category/category.slice'
 import authReducer from './features/auth/auth.slice'
+import cartReducer from './features/cart/cart.slice'
 import paginationReducer from './features/pagination/pagination.slice'
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   category: categoryReducer,
   product: productReducer,
+  cart: cartReducer,
   auth: authReducer,
   pagination: paginationReducer
 })

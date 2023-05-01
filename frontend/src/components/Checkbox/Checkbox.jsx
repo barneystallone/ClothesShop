@@ -38,4 +38,4 @@ CheckBox.propTypes = {
   checked: PropTypes.bool
 }
 
-export default React.memo(CheckBox)
+export default CheckBox

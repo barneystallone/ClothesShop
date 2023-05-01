@@ -125,7 +125,10 @@ const ProductView = (props) => {
             </div>
 
             <div className='info__group product__remain '>
-              <div className='remain'>Còn lại: {selectItem?.quantity}</div>
+              <div className='remain'>
+                Còn lại: {selectItem?.quantity} {''}
+                {console.log(selectItem?.itemId)}
+              </div>
               {/* <div className='seperate'>|</div>
               <div className='sold'>Đã bán: 30</div> */}
             </div>

@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState, Suspense } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import logo from '../../assets/images/Logo.jpg'
 import { BiMenu, BiSearch, BiCartAlt } from 'react-icons/bi'
 import UserItem from './components/UserItem'
-
+// const { SubCart } = React.lazy(() => import('../../features/cart'))
+import { SubCart } from '../../features/cart'
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -88,10 +89,12 @@ const Header = () => {
             <div className='header__menu__item header__menu__right__item'>
               <BiSearch />
             </div>
-            <UserItem />
-            <div className='header__menu__item header__menu__right__item'>
+            <div className='header__menu__item header__menu__right__item cart-wrap'>
               <BiCartAlt />
+              <span className='count__item'>99</span>
+              <SubCart />
             </div>
+            <UserItem />
           </div>
         </div>
       </div>
@@ -99,4 +102,4 @@ const Header = () => {
   )
 }
 
-export default React.memo(Header)
+export default Header

@@ -1,0 +1,190 @@
+$width: 478px;
+$height: 60px;
+$paddingCartTopLeft: 0 0 0 8px;
+$paddingCartTopRightBtn: 0 1rem;
+
+.overlay {
+  position: fixed;
+  z-index: 100;
+  width: 200vw;
+  height: 200vh;
+  background: rgba($color: #000000, $alpha: 0.2);
+}
+.subCart-wrap {
+  position: relative;
+}
+
+.subCart {
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  transform: translate(30%, 30px);
+  background: #fff;
+  z-index: 200;
+  width: $width;
+  font-size: 1.15rem;
+  font-weight: 500;
+  box-shadow: $box-shadow2;
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 11px 15px;
+    border-color: transparent transparent $main-color;
+    top: -10px;
+    right: 30.5%;
+  }
+
+  &__header {
+    @include flex(center, space-between);
+    padding: 4px 0;
+    color: $main-bg;
+    background: $main-color;
+
+    &__item {
+      height: $height;
+      margin: auto;
+      @include flex(center, center);
+
+      &.login--left {
+        min-width: 130px;
+        text-align: center;
+        border-right: 1px solid rgba($color: #eeeeee, $alpha: 0.2);
+        margin-right: 16px;
+        padding: $paddingCartTopLeft;
+
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      &.login--right {
+        flex-grow: 1;
+        font-size: 1.1rem;
+        font-weight: 400;
+
+        .arrow-btn {
+          padding: $paddingCartTopRightBtn;
+          transform: rotate(-90deg) translate(5px);
+          animation: floating 2s ease-in-out infinite;
+        }
+
+        svg {
+          path {
+            fill: $txt-main-color;
+          }
+        }
+      }
+    }
+  }
+
+  .body-wrapper {
+    max-height: 350px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-button {
+      height: 0;
+    }
+  }
+
+  &__body {
+    font-weight: 400;
+    font-size: 1.1rem;
+    padding: 15px 12px 0;
+    color: #000000;
+    &__item {
+      @include flex(start, space-between);
+      gap: 0 12px;
+      & + & {
+        margin-top: 10px;
+      }
+      .cart-item {
+        &--left {
+          width: 86px;
+          .image-wrap {
+            padding-top: 120%;
+            position: relative;
+
+            img {
+              position: absolute;
+              inset: 0;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+        &--right {
+          flex-grow: 1;
+          height: 103px;
+          @include flex(start, space-between);
+          flex-direction: column;
+          &-top {
+            padding-left: 6px;
+            div + div {
+              margin-top: 4px;
+            }
+            .item__price {
+              font-weight: 500;
+              color: $yellow-color;
+            }
+          }
+          &-bot {
+            $height: 26px;
+            width: 100%;
+            @include flex(center, space-between);
+            .wrap-quantity {
+              &__btn {
+                width: calc($height - 2px);
+                height: $height;
+              }
+              &__input {
+                height: $height;
+              }
+            }
+            .item__total__price {
+              font-size: 1.1rem;
+              font-weight: 500;
+              color: $txt-main-color;
+              text-align: end;
+              span {
+                color: $red;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__footer {
+    padding: 10px;
+    .total-price-wrap {
+      border-top: 1px solid #dbdbdb;
+      padding-top: 10px;
+      text-align: end;
+      span {
+        color: $red;
+      }
+    }
+    .btn-xemGioHang {
+      margin-top: 10px;
+      width: 100%;
+      font-weight: 600;
+      font-size: 1.2rem;
+      text-transform: unset;
+    }
+  }
+}
+
+.size-color__group {
+  color: #363636;
+  background: #f5f5f5;
+  padding: 0 12px;
+  line-height: 2rem;
+  border-radius: 13px;
+  width: fit-content;
+}
