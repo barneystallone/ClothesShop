@@ -5,6 +5,8 @@ import { BiMenu, BiSearch, BiCartAlt } from 'react-icons/bi'
 import UserItem from './components/UserItem'
 // const { SubCart } = React.lazy(() => import('../../features/cart'))
 import { SubCart } from '../../features/cart'
+import { useDispatch } from 'react-redux'
+import { setShowCart } from '../../features/cart/cart.slice'
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -30,6 +32,7 @@ const Header = () => {
   const activeNav = leftNav.findIndex((e) => e.path === pathname)
   const headerRef = useRef(null)
   const [active, setActive] = useState('header__menu__left')
+  const dispatch = useDispatch()
   // console.log('countHeader::', count++);
   const toggleMenu = () => {
     setActive((prev) => {
@@ -89,7 +92,10 @@ const Header = () => {
             <div className='header__menu__item header__menu__right__item'>
               <BiSearch />
             </div>
-            <div className='header__menu__item header__menu__right__item cart-wrap'>
+            <div
+              className='header__menu__item header__menu__right__item cart-wrap'
+              onClick={() => dispatch(setShowCart(true))}
+            >
               <BiCartAlt />
               <span className='count__item'>99</span>
               <SubCart />

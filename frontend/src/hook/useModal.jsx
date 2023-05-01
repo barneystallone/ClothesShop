@@ -8,10 +8,13 @@ const useModal = (action, showStatusSelector, callback, delay = 200) => {
 
   const closeModal = (e, payload) => {
     setEvent(e)
+    console.log('vaof')
+    console.log(payload)
     dispatch(action(payload))
   }
   // Tạo hiệu ứng, sau 1 khoảng delay mới unmount
   useEffect(() => {
+    console.log(isShow)
     if (!isShow) {
       // Animation
       if (callback) {

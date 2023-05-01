@@ -1,27 +1,33 @@
-$width: 478px;
-$height: 60px;
+$subCartWidth: 480px;
+$heightCartHeader: 60px;
 $paddingCartTopLeft: 0 0 0 8px;
+$itemImageWidth: 90px;
 $paddingCartTopRightBtn: 0 1rem;
-
+$cartBodyMaxHeight: 380px;
 .overlay {
   position: fixed;
   z-index: 100;
   width: 200vw;
   height: 200vh;
-  background: rgba($color: #000000, $alpha: 0.2);
+  // background: rgba($color: #000000, $alpha: 0.2);
 }
 .subCart-wrap {
   position: relative;
 }
 
 .subCart {
+  &.active {
+    opacity: 0;
+    visibility: hidden;
+  }
+  transition: all 0.2s ease-in-out;
   position: absolute;
   right: 0px;
   top: 100%;
   transform: translate(30%, 30px);
   background: #fff;
   z-index: 200;
-  width: $width;
+  width: $subCartWidth;
   font-size: 1.15rem;
   font-weight: 500;
   box-shadow: $box-shadow2;
@@ -43,7 +49,7 @@ $paddingCartTopRightBtn: 0 1rem;
     background: $main-color;
 
     &__item {
-      height: $height;
+      height: $heightCartHeader;
       margin: auto;
       @include flex(center, center);
 
@@ -79,14 +85,12 @@ $paddingCartTopRightBtn: 0 1rem;
   }
 
   .body-wrapper {
-    max-height: 350px;
+    max-height: $cartBodyMaxHeight;
     overflow-y: scroll;
 
     &::-webkit-scrollbar {
       width: 6px;
-    }
-    &::-webkit-scrollbar-button {
-      height: 0;
+      // display: none;
     }
   }
 
@@ -99,11 +103,17 @@ $paddingCartTopRightBtn: 0 1rem;
       @include flex(start, space-between);
       gap: 0 12px;
       & + & {
-        margin-top: 10px;
+        margin-top: 8px;
       }
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e9e9e9;
+      &:last-child {
+        border-bottom: none;
+      }
+
       .cart-item {
         &--left {
-          width: 86px;
+          width: $itemImageWidth;
           .image-wrap {
             padding-top: 120%;
             position: relative;
@@ -119,30 +129,48 @@ $paddingCartTopRightBtn: 0 1rem;
         }
         &--right {
           flex-grow: 1;
-          height: 103px;
+          position: relative;
+          height: calc($itemImageWidth * 1.2);
           @include flex(start, space-between);
           flex-direction: column;
           &-top {
             padding-left: 6px;
+            margin-right: 20px;
             div + div {
               margin-top: 4px;
+            }
+            .item__name {
+              font-size: 1.2rem;
+              font-weight: 500;
+              // line-height: 2rem;
             }
             .item__price {
               font-weight: 500;
               color: $yellow-color;
             }
           }
+          .btn-delete {
+            position: absolute;
+            font-size: 1.8rem;
+            color: #000000;
+            top: 0;
+            right: 0;
+            &:hover {
+              color: rgba($color: $red, $alpha: 0.8);
+              transition: color 0.15s ease;
+            }
+          }
           &-bot {
-            $height: 26px;
+            $heightCartHeader: 26px;
             width: 100%;
             @include flex(center, space-between);
             .wrap-quantity {
               &__btn {
-                width: calc($height - 2px);
-                height: $height;
+                width: calc($heightCartHeader - 2px);
+                height: $heightCartHeader;
               }
               &__input {
-                height: $height;
+                height: $heightCartHeader;
               }
             }
             .item__total__price {
