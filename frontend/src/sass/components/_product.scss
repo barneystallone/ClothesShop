@@ -206,6 +206,10 @@
                 transition: all 0.2s ease-in-out;
                 width: 2.5rem;
                 height: 2.5rem;
+                img {
+                  width: 2.5rem;
+                  height: 2.5rem;
+                }
               }
 
               &.active,

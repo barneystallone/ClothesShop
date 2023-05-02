@@ -40,7 +40,12 @@ const ProductModal = () => {
             </div>
           </Suspense>
         </div>
-        <ProductView loading={isFetching} product={data?.product} modal />
+        <ProductView
+          loading={isFetching}
+          product={data?.product}
+          modal
+          closeModal={closeModal}
+        />
       </div>
     </div>
   ) : (

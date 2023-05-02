@@ -16,7 +16,7 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions)
-  console.log(result)
+  // console.log(result)
   const error = result?.error
   if (error && isForbiddenError(error)) {
     console.log('error::', error?.status)

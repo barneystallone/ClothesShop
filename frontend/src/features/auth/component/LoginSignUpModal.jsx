@@ -13,6 +13,7 @@ import LoginForm from './LoginForm'
 import SignUpForm from './SignUpForm'
 import { useLoginMutation, useRegisterMutation } from '../auth.service'
 import { useDispatch } from 'react-redux'
+import { persistor } from '../../../store'
 
 const LOGIN_SUCCESS_MSG = 'Đăng nhập thành công'
 const REGISTER_SUCCESS_MSG = 'Đăng ký thành công'
@@ -35,6 +36,8 @@ const LoginSignUpModal = () => {
       .then((payload) => {
         dispatch(setCredentials(payload))
         dispatch(setShowModalStatus(false))
+        persistor.pause()
+        persistor.purge()
         toast.success(successMessage)
       })
       .catch(() => {})
@@ -43,15 +46,6 @@ const LoginSignUpModal = () => {
   const onLoginSubmit = useCallback(
     (data) => {
       handleAuthPromise(login(data), LOGIN_SUCCESS_MSG)
-      // .unwrap()
-      // .then((payload) => {
-      //   dispatch(setCredentials(payload))
-      //   dispatch(setShowModalStatus(false))
-      //   toast.success('Đăng nhập thành công')
-      // })
-      // .catch(() => {})
-      // toast.loading
-      // console.log(data)
     },
     [login, handleAuthPromise]
   )
@@ -63,14 +57,10 @@ const LoginSignUpModal = () => {
     [register, handleAuthPromise]
   )
 
-  // useEffect(() => {
-  //   if (showLogin && loginError) {
-  //     toast()
-  //   }
-  // }, [loginError, registerError])
-
-  // set height của  element bọc  2 form login , signup
-  // khi login <-> signup hoặc là khi height của form thay đổi
+  /**
+   * set height của  element bọc  2 form login , signup
+   * khi login <-> signup hoặc là khi height của form thay đổi
+   */
   useEffect(() => {
     modalBodyRef?.current &&
       (modalBodyRef.current.style.height = showLogin
@@ -80,10 +70,7 @@ const LoginSignUpModal = () => {
   return show ? (
     <div className='login-signup__modal' onClick={closeModal}>
       <div className='login-signup__modal__wrap'>
-        <div
-          className='login-signup__modal__wrap__icon'
-          onClick={(e) => closeModal(e, false)}
-        >
+        <div className='login-signup__modal__wrap__icon' onClick={(e) => closeModal(e)}>
           <Suspense fallback={<div>...</div>}>
             <CloseIcon className='icon' />
           </Suspense>

@@ -7,15 +7,21 @@ const MinusIcon = React.lazy(() =>
 const PlusIcon = React.lazy(() =>
   handleLazyLoadSvgPromise(import('../../assets/images/plus.svg'))
 )
+
 const QuantityInput = React.forwardRef((props, ref) => {
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(props.initValue || 1)
 
   const incr = (negative = false) => {
-    // let value = ref.current.value * 1;'
-    // console.log(ref.current.value == false);
     if ((Boolean(quantity) === false || quantity * 1 <= 1) && negative) return
     setQuantity(quantity * 1 + (negative ? -1 : 1))
   }
+
+  useEffect(() => {
+    if (props?.onChange) {
+      props.onChange(quantity * 1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quantity])
 
   return (
     <Suspense fallback={<div>...</div>}>
@@ -29,9 +35,9 @@ const QuantityInput = React.forwardRef((props, ref) => {
           type='number'
           value={quantity}
           onChange={(e) => {
-            if (e.target.value === '') return setQuantity(1)
+            if (e.target.value === '') return
             const s_number = e.target.value.replace(/^0*/g, '')
-            if (s_number && s_number * 1 >= 1) setQuantity(s_number)
+            if (s_number && s_number * 1 >= 1 && s_number < 1000) setQuantity(s_number)
           }}
         />
         <div className='wrap-quantity__btn btn-plus' onClick={() => incr()}>
@@ -44,7 +50,9 @@ const QuantityInput = React.forwardRef((props, ref) => {
 QuantityInput.displayName = 'QuantityInput'
 
 QuantityInput.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  initValue: PropTypes.number,
+  onChange: PropTypes.func
 }
 
 export default QuantityInput

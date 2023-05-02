@@ -15,11 +15,16 @@ import { numberToCurrency } from '../../../utils'
 
 import QuantityInput from '../../../components/QuantityInput'
 import CustomSelect from '../../../components/CustomSelect'
-import ProductImagesSlider from './ProductImageSlider'
+const ProductImagesSlider = React.lazy(() => import('./ProductImageSlider'))
+// import ProductImagesSlider from './ProductImageSlider'
 import Button from '../../../components/Button'
 import ProductViewSkeleton from './ProductViewSkeleton'
 
 import { handleLazyLoadSvgPromise } from '../../../utils'
+import { useDispatch } from 'react-redux'
+import { putCartItem } from '../../cart/cart.slice'
+import { useToggle } from '../../../hook'
+import { removeProductModalSlug } from '../product.slice'
 const BiCartAlt = React.lazy(() =>
   import('react-icons/bi').then((module) => ({ default: module.BiCartAlt }))
 )
@@ -41,18 +46,21 @@ const HeartIcon = React.lazy(() =>
 const CopyIcon = React.lazy(() =>
   handleLazyLoadSvgPromise(import('../../../assets/images/copy.svg'))
 )
+let delay
 
 const ProductView = (props) => {
   const swiperRef = useRef(null)
+  const [selectItem, setSelectItem] = useState(null)
+  const [activeThumb, setActiveThumb] = useState(0)
+  const { product } = props
+  const dispatch = useDispatch()
+  const quantityRef = useRef(null)
+  // const [onChangeCartBadge, toggleCartAnimation] = useToggle()
+
   const slideTo = useCallback((index) => {
-    console.log('go to slide', index)
     swiperRef.current?.swiper.slideToLoop(index)
     console.log(swiperRef.current?.swiper)
   }, [])
-  const [selectItem, setSelectItem] = useState(null)
-  const [activeThumb, setActiveThumb] = useState(0)
-
-  const { product } = props
 
   const handleSlideChange = useCallback((index) => {
     setActiveThumb(index)
@@ -88,15 +96,67 @@ const ProductView = (props) => {
     [slideTo]
   )
 
+  const handleClickAddToCart = useCallback(
+    (e, item) => {
+      // eslint-disable-next-line no-unused-vars
+      const { quantity, ...rest } = item
+      const { slug, title, price } = product
+
+      // eslint-disable-next-line no-unused-vars
+      const { inventory, itemId, ...rest2 } = product.collections[activeThumb]
+      console.log()
+      const payload = {
+        ...rest,
+        ...rest2, // ...rest2 === colorName, colorCode, thumbUrl, url
+        quantity: quantityRef.current.value * 1,
+        slug,
+        title,
+        price
+      }
+
+      dispatch(putCartItem(payload))
+      props.modal && props.closeModal && props.closeModal(e, false)
+
+      //set animation
+      clearTimeout(delay)
+
+      const cartElement = document.querySelector('.cart-wrap.header__menu__item')
+
+      cartElement.classList.add('active')
+      setTimeout(() => {
+        cartElement.classList.remove('active')
+      }, 600)
+    },
+    [activeThumb, product, dispatch]
+  )
+  // useEffect(() => {
+
+  //   }
+  //   // return () => {
+  //   //   if (cartElement.classList.contains('active')) {
+  //   //     cartElement.classList.remove('active')
+  //   //   }
+  //   //   clearTimeout(delay)
+  //   // }
+  // }, [onChangeCartBadge])
+
+  useEffect(() => {
+    if (quantityRef && quantityRef.current?.value) {
+      quantityRef.current.value = '1'
+    }
+  }, [product])
+
   return product && !props.loading ? (
     <div className='product__wrap'>
       <div className='product__wrap__inner'>
         <div className='product__wrap__inner__left'>
-          <ProductImagesSlider
-            images={prodImages || []}
-            ref={swiperRef}
-            onSlideChange={handleSlideChange}
-          />
+          <Suspense>
+            <ProductImagesSlider
+              images={prodImages || []}
+              ref={swiperRef}
+              onSlideChange={handleSlideChange}
+            />
+          </Suspense>
         </div>
         <Suspense fallback={<div>...Loading</div>}>
           <div className='product__wrap__inner__right'>
@@ -127,7 +187,6 @@ const ProductView = (props) => {
             <div className='info__group product__remain '>
               <div className='remain'>
                 Còn lại: {selectItem?.quantity} {''}
-                {console.log(selectItem?.itemId)}
               </div>
               {/* <div className='seperate'>|</div>
               <div className='sold'>Đã bán: 30</div> */}
@@ -162,9 +221,14 @@ const ProductView = (props) => {
                 />
               )}
 
-              <QuantityInput className='section-quantity' />
+              <QuantityInput className='section-quantity' ref={quantityRef} />
             </div>
-            <Button animate={true} icon={<BiCartAlt />} className={'btn-add2cart'}>
+            <Button
+              animate={true}
+              icon={<BiCartAlt />}
+              className={'btn-add2cart'}
+              onClick={(e) => handleClickAddToCart(e, selectItem)}
+            >
               Thêm vào giỏ hàng
             </Button>
             <Button backgroundColor={'white'} className={'btn-buy-product'}>
@@ -261,6 +325,7 @@ ProductView.propTypes = {
         url: PropTypes.string.isRequired,
         itemId: PropTypes.string.isRequired,
         colorName: PropTypes.string.isRequired,
+        colorCode: PropTypes.string.isRequired,
         inventory: PropTypes.arrayOf(
           PropTypes.shape({
             pId: PropTypes.string,
@@ -278,6 +343,7 @@ ProductView.propTypes = {
     sale: PropTypes.number
   }),
   modal: PropTypes.bool,
+  closeModal: PropTypes.func,
   loading: PropTypes.bool
 }
 SelectSize.propTypes = {

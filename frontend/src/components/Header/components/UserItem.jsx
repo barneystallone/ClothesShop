@@ -8,6 +8,7 @@ import {
 } from '../../../features/auth/auth.slice'
 import { useRefreshQuery } from '../../../features/auth/auth.service'
 import { BiUser } from 'react-icons/bi'
+import { persistor } from '../../../store'
 const UserItem = React.memo(() => {
   const dispatch = useDispatch()
 
@@ -28,7 +29,11 @@ const UserItem = React.memo(() => {
   useEffect(() => {
     if (!isLoading) {
       setLoading(false)
-      isSuccess && dispatch(setCredentials(data))
+      if (isSuccess) {
+        dispatch(setCredentials(data))
+        persistor.pause()
+        persistor.purge()
+      }
     }
   }, [isLoading, dispatch, isSuccess, data])
 

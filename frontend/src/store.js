@@ -6,6 +6,17 @@ import categoryReducer from './features/category/category.slice'
 import authReducer from './features/auth/auth.slice'
 import cartReducer from './features/cart/cart.slice'
 import paginationReducer from './features/pagination/pagination.slice'
+// import storage from 'redux-persist/lib/storage'
+import {
+  persistStore,
+  // persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER
+} from 'redux-persist'
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -16,8 +27,23 @@ const rootReducer = combineReducers({
   pagination: paginationReducer
 })
 
-export const store = configureStore({
+// const persistConfig = {
+//   key: 'root',
+//   version: 1,
+//   storage,
+//   transforms: [CartTransform],
+//   whitelist: ['']
+// }
+// const persistedReducer = persistReducer(persistConfig, rootReducer)
+const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware, rtkErrorLogger)
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+      }
+    }).concat(api.middleware, rtkErrorLogger)
 })
+
+let persistor = persistStore(store)
+export { store, persistor }

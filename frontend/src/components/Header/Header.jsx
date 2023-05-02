@@ -5,8 +5,8 @@ import { BiMenu, BiSearch, BiCartAlt } from 'react-icons/bi'
 import UserItem from './components/UserItem'
 // const { SubCart } = React.lazy(() => import('../../features/cart'))
 import { SubCart } from '../../features/cart'
-import { useDispatch } from 'react-redux'
-import { setShowCart } from '../../features/cart/cart.slice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectTotalProductCount, setShowCart } from '../../features/cart/cart.slice'
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -30,10 +30,11 @@ let count = 1
 const Header = () => {
   const { pathname } = useLocation()
   const activeNav = leftNav.findIndex((e) => e.path === pathname)
-  const headerRef = useRef(null)
   const [active, setActive] = useState('header__menu__left')
+  const headerRef = useRef(null)
   const dispatch = useDispatch()
-  // console.log('countHeader::', count++);
+  const totalProductCount = useSelector(selectTotalProductCount)
+
   const toggleMenu = () => {
     setActive((prev) => {
       return prev === 'header__menu__left'
@@ -97,7 +98,11 @@ const Header = () => {
               onClick={() => dispatch(setShowCart(true))}
             >
               <BiCartAlt />
-              <span className='count__item'>99</span>
+              {totalProductCount >= 0 && (
+                <span className='count__item'>
+                  {totalProductCount > 99 ? '99+' : totalProductCount}
+                </span>
+              )}
               <SubCart />
             </div>
             <UserItem />

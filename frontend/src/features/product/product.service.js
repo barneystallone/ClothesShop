@@ -10,7 +10,7 @@ export const productApi = api.injectEndpoints({
         if (params?.c) {
           params.c = params.c.sort().join('|')
         }
-        console.log('params::', qs.stringify(params, { sort: alphabetSort }))
+        // console.log('params::', qs.stringify(params, { sort: alphabetSort }))
         return { url: `product?${qs.stringify(params, { sort: alphabetSort })}` }
       },
       keepUnusedDataFor: 60,

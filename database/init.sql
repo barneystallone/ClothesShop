@@ -114,7 +114,7 @@ begin
                     'inventory', (SELECT JSON_ARRAYAGG(
 						JSON_OBJECT(
 							'itemId', inventory.itemId,
-                            'pId', p.pId
+                            'pId', p.pId,
 							'sizeId',s.sizeId,
                             'sizeName', s.sizeName,
                             'quantity', inventory.quantity

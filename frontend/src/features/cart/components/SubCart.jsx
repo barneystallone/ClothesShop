@@ -9,30 +9,42 @@ const GoLogin = React.lazy(() =>
 const BiTrash = React.lazy(() =>
   import('react-icons/bi').then(({ BiTrash }) => ({ default: BiTrash }))
 )
-import QuantityInput from '../../../components/QuantityInput'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCartStatus, setShowCart } from '../cart.slice'
+import {
+  selectTotalCartPrice,
+  selectCartStatus,
+  selectListCartItem,
+  setShowCart
+} from '../cart.slice'
 import useModal from '../../../hook/useModal'
+import SubCartBody from './SubCartBody'
+import { numberToCurrency } from '../../../utils'
 const SubCart = () => {
+  const listCartItem = useSelector(selectListCartItem)
+  const totalCartPrice = useSelector(selectTotalCartPrice)
+  // console.log(listCartItem)
+
   const beforeCloseModalCb = useCallback((e) => {
     e?.target
       .closest('.overlay')
       .nextElementSibling.querySelector('.subCart')
       .classList.add('active')
   }, [])
+
   const { show: isShowCart, closeModal } = useModal(
     setShowCart,
     selectCartStatus,
     beforeCloseModalCb
   )
-  useEffect(() => {
-    return () => console.log('unmount')
-  }, [])
-  console.log('isShowCart', isShowCart)
-  const handleCloseModal = useCallback((e) => {
-    e.stopPropagation()
-    closeModal(e, false)
-  }, [])
+
+  const handleCloseModal = useCallback(
+    (e) => {
+      e.stopPropagation()
+      closeModal(e)
+    },
+    [closeModal]
+  )
+
   return (
     isShowCart && (
       <>
@@ -53,10 +65,10 @@ const SubCart = () => {
                   </div>
                 </div>
               </div>
-              <SubCartBody />
+              <SubCartBody listItem={listCartItem} />
               <div className='subCart__footer'>
                 <div className='subCart__footer__item  total-price-wrap'>
-                  Tổng cộng: <span>9.650.000đ</span>
+                  Tổng cộng: <span>{numberToCurrency(totalCartPrice)}</span>
                 </div>
                 <Button className='btn-xemGioHang'>Xem giỏ hàng </Button>
               </div>
@@ -67,125 +79,6 @@ const SubCart = () => {
     )
   )
 }
-
-const SizeColorGroup = () => {
-  return <div className='size-color__group'>Hồng / Freesize</div>
-}
-
-const SubCartBody = React.memo(() => {
-  return (
-    <div className='body-wrapper'>
-      <div className='subCart__body'>
-        <div className='subCart__body__item'>
-          <div className='cart-item cart-item--left'>
-            <div className='image-wrap'>
-              <img
-                src='https://res.cloudinary.com/dup598xiv/image/upload/v1681630027/clothesShop/product/tubbq39dphkhlww3zdto.jpg'
-                alt='ảnh sản phẩm'
-              />
-            </div>
-          </div>
-          <div className='cart-item cart-item--right'>
-            <div className='cart-item--right-top'>
-              <div className='item__name'> Áo Thun Nữ Cổ Tim Bamboo</div>
-              <div className='item__price'>199.000đ</div>
-              <SizeColorGroup />
-            </div>
-            <Suspense>
-              <BiTrash className='btn-delete' />
-            </Suspense>
-            <div className='cart-item--right-bot'>
-              <QuantityInput className='item-quantity' />
-              <div className='item__total__price '>
-                Tổng cộng: <span>9.650.000đ</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='subCart__body__item'>
-          <div className='cart-item cart-item--left'>
-            <div className='image-wrap'>
-              <img
-                src='https://res.cloudinary.com/dup598xiv/image/upload/v1681630027/clothesShop/product/tubbq39dphkhlww3zdto.jpg'
-                alt='ảnh sản phẩm'
-              />
-            </div>
-          </div>
-          <div className='cart-item cart-item--right'>
-            <div className='cart-item--right-top'>
-              <div className='item__name'> Áo Thun Nữ Cổ Tim Bamboo</div>
-              <div className='item__price'>199.000đ</div>
-              <SizeColorGroup />
-            </div>
-            <Suspense>
-              <BiTrash className='btn-delete' />
-            </Suspense>
-            <div className='cart-item--right-bot'>
-              <QuantityInput className='item-quantity' />
-              <div className='item__total__price '>
-                Tổng cộng: <span>9.650.000đ</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='subCart__body__item'>
-          <div className='cart-item cart-item--left'>
-            <div className='image-wrap'>
-              <img
-                src='https://res.cloudinary.com/dup598xiv/image/upload/v1681630027/clothesShop/product/tubbq39dphkhlww3zdto.jpg'
-                alt='ảnh sản phẩm'
-              />
-            </div>
-          </div>
-          <div className='cart-item cart-item--right'>
-            <div className='cart-item--right-top'>
-              <div className='item__name'> Áo Thun Nữ Cổ Tim Bamboo</div>
-              <div className='item__price'>199.000đ</div>
-              <SizeColorGroup />
-            </div>
-            <Suspense>
-              <BiTrash className='btn-delete' />
-            </Suspense>
-            <div className='cart-item--right-bot'>
-              <QuantityInput className='item-quantity' />
-              <div className='item__total__price '>
-                Tổng cộng: <span>9.650.000đ</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='subCart__body__item'>
-          <div className='cart-item cart-item--left'>
-            <div className='image-wrap'>
-              <img
-                src='https://res.cloudinary.com/dup598xiv/image/upload/v1681630027/clothesShop/product/tubbq39dphkhlww3zdto.jpg'
-                alt='ảnh sản phẩm'
-              />
-            </div>
-          </div>
-          <div className='cart-item cart-item--right'>
-            <div className='cart-item--right-top'>
-              <div className='item__name'> Áo Thun Nữ Cổ Tim Bamboo</div>
-              <div className='item__price'>199.000đ</div>
-              <SizeColorGroup />
-            </div>
-            <Suspense>
-              <BiTrash className='btn-delete' />
-            </Suspense>
-            <div className='cart-item--right-bot'>
-              <QuantityInput className='item-quantity' />
-              <div className='item__total__price '>
-                Tổng cộng: <span>9.650.000đ</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-})
-
-SubCartBody.displayName = 'SubCartBody'
 
 SubCart.propTypes = {}
 
