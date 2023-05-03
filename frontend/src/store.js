@@ -45,5 +45,5 @@ const store = configureStore({
     }).concat(api.middleware, rtkErrorLogger)
 })
 
-let persistor = persistStore(store)
+let persistor = persistStore(store, {})
 export { store, persistor }

@@ -23,8 +23,7 @@ import ProductViewSkeleton from './ProductViewSkeleton'
 import { handleLazyLoadSvgPromise } from '../../../utils'
 import { useDispatch } from 'react-redux'
 import { putCartItem } from '../../cart/cart.slice'
-import { useToggle } from '../../../hook'
-import { removeProductModalSlug } from '../product.slice'
+
 const BiCartAlt = React.lazy(() =>
   import('react-icons/bi').then((module) => ({ default: module.BiCartAlt }))
 )
