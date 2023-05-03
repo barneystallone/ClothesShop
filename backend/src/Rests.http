@@ -1,15 +1,7 @@
 @baseUrl=http://localhost:{{$dotenv PORT}}
 
 
-###
-# @name login
-POST  {{baseUrl}}/api/user/login
-Content-Type: application/json
 
-{
-   "email" :"abcd@gmail.com",
-    "password": "abcd"
-}
 ###
 @authToken = {{login.response.body.accessToken}}
 
@@ -40,8 +32,8 @@ POST  {{baseUrl}}/api/user/register
 Content-Type: application/json
 
 {
-   "email" :"11sa2s1ass112s2a2avass@gmail.com",
-    "password": "asdasdd"
+   "email" :"abcd@gmail.com",
+    "password": "abcd"
 }
 
 ###
@@ -70,3 +62,53 @@ GET {{baseUrl}}/api/product
 ###
 GET {{baseUrl}}/api/user
 Authorization: Beare {{authToken}}
+
+
+###
+# @name login
+POST  {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+   "email" :"abcd@gmail.com",
+    "password": "abcd"
+}
+
+### 
+PUT {{baseUrl}}/api/cart/
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "pId": "N6p3QrpMgzqKd",
+  "itemId": "N6i5hk4QUALg9",
+  "sizeId": "S004",
+  "sizeName": "FreeSize",
+  "quantity": 10
+}
+
+###
+PUT {{baseUrl}}/api/cart/item
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "pId": "N6p3QrpMgzqKd",
+  "itemId": "N6i5hk4QUALg9",
+  "sizeId": "Ss004",
+  "sizeName": "FreseSize",
+  "quantity": 12
+}
+###
+PATCH  {{baseUrl}}/api/cart/item
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "pId": "N6p3QrpMgzqKd",
+  "index": 1,
+  "itemId": "N6i5hk4QUALg9",
+  "sizeId": "Ss004",
+  "sizeName": "FreseSize",
+  "value": 13
+}

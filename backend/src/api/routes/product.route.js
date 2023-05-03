@@ -1,5 +1,5 @@
 const express = require('express')
-const { pool } = require('../databases/connect.mysql')
+// const { pool } = require('../databases/connect.mysql')
 const productController = require('../controllers/product.controller')
 const { uploader } = require('../middleware/uploader')
 const routes = express.Router()

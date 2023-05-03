@@ -6,9 +6,11 @@ const cookieParser = require('cookie-parser')
 const compression = require('compression')
 const app = express()
 const redis = require('./api/databases/connect.redis.v2')
-const { init } = require('./api/services/product.service')
+const { init: productInit } = require('./api/services/product.service')
+const { init: cartInit } = require('./api/services/cart.service')
 // console.log(process.env.REDIS_URL)
-init()
+productInit()
+cartInit()
 app.use(
   compression({
     level: 6,

@@ -6,21 +6,13 @@ const GoLogin = React.lazy(() =>
     default: ReactComponent
   }))
 )
-const BiTrash = React.lazy(() =>
-  import('react-icons/bi').then(({ BiTrash }) => ({ default: BiTrash }))
-)
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  selectTotalCartPrice,
-  selectCartStatus,
-  selectListCartItem,
-  setShowCart
-} from '../cart.slice'
+
+import { useSelector } from 'react-redux'
+import { selectTotalCartPrice, selectCartStatus, setShowCart } from '../cart.slice'
 import useModal from '../../../hook/useModal'
 import SubCartBody from './SubCartBody'
 import { numberToCurrency } from '../../../utils'
 const SubCart = () => {
-  const listCartItem = useSelector(selectListCartItem)
   const totalCartPrice = useSelector(selectTotalCartPrice)
   // console.log(listCartItem)
 
@@ -65,7 +57,7 @@ const SubCart = () => {
                   </div>
                 </div>
               </div>
-              <SubCartBody listItem={listCartItem} />
+              <SubCartBody />
               <div className='subCart__footer'>
                 <div className='subCart__footer__item  total-price-wrap'>
                   Tổng cộng: <span>{numberToCurrency(totalCartPrice)}</span>

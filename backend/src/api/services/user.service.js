@@ -4,7 +4,7 @@ const createError = require('http-errors')
 const { generateAccessToken, generateRefreshToken } = require('./jwt.service')
 
 var self = (module.exports = {
-  register: async ({ email, password }) => {
+  register: async ({ email, password, userId }) => {
     const isExist = await userDao.isExistsEmail(email)
     if (isExist) {
       throw createError.Conflict(`Email ${email} đã được đăng ký`)
@@ -12,7 +12,7 @@ var self = (module.exports = {
 
     const salt = await bcrypt.genSalt(10)
     password = await bcrypt.hash(password, salt)
-    const _user = await userDao.insertUser({ email, password })
+    const _user = await userDao.insertUser({ email, password, userId })
     console.log(_user)
     return _user
   },

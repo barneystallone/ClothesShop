@@ -22,17 +22,19 @@ var self = (module.exports = {
   },
 
   verifyToken: (req, res, next) => {
-    if (!req.headers['Authorization']) {
-      return next(createHttpError.Unauthorized())
+    // console.log(JSON.stringify(req.headers))
+    console.log(req.headers['authorization'])
+    if (!req.headers['authorization']) {
+      return next(createHttpError.Unauthorized('Phải đăng nhập để tiếp tục'))
     }
 
-    const token = req.headers['Authorization'].split(' ')[1]
+    const token = req.headers['authorization'].split(' ')[1]
     JWT.verify(token, ACCESS_KEY_SECRET, (err, payload) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {
-          return next(createHttpError(err.message))
+          return next(createHttpError.Forbidden(err.message))
         }
-        return next(createHttpError.Unauthorized())
+        return next(createHttpError.Unauthorized('Phải đăng nhập để tiếp tục'))
       }
 
       req.payload = payload // userId, roleName

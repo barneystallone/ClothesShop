@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { handleLazyLoadSvgPromise } from '../../utils'
 const MinusIcon = React.lazy(() =>
@@ -8,20 +8,31 @@ const PlusIcon = React.lazy(() =>
   handleLazyLoadSvgPromise(import('../../assets/images/plus.svg'))
 )
 
-const QuantityInput = React.forwardRef((props, ref) => {
-  const [quantity, setQuantity] = useState(props.initValue || 1)
+const QuantityInput = (props) => {
+  // const [quantity, setQuantity] = useState(props.initValue || 1)
 
-  const incr = (negative = false) => {
-    if ((Boolean(quantity) === false || quantity * 1 <= 1) && negative) return
-    setQuantity(quantity * 1 + (negative ? -1 : 1))
+  const incr = (incr = true) => {
+    const quantity = props.quantity
+    if ((Boolean(quantity) === false || quantity * 1 <= 1) && !incr) return
+    if (props?.onChange) {
+      return props.onChange(quantity * 1 + (incr ? 1 : -1))
+    }
   }
 
-  useEffect(() => {
-    if (props?.onChange) {
-      props.onChange(quantity * 1)
+  const handleChange = (e) => {
+    if (e.target.value === '') return
+    const s_number = e.target.value.replace(/^0*/g, '')
+    console.log(e.target.value)
+    if (s_number && s_number * 1 >= 1 && s_number < 1000) {
+      props.onChange(s_number)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quantity])
+  }
+  // useEffect(() => {
+  //   if (props?.onChange) {
+  //     props.onChange(quantity * 1)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [quantity])
 
   return (
     <Suspense fallback={<div>...</div>}>
@@ -30,15 +41,10 @@ const QuantityInput = React.forwardRef((props, ref) => {
           <MinusIcon className='icon minus-icon' />
         </div>
         <input
-          ref={ref}
           className='wrap-quantity__input color-blue'
           type='number'
-          value={quantity}
-          onChange={(e) => {
-            if (e.target.value === '') return
-            const s_number = e.target.value.replace(/^0*/g, '')
-            if (s_number && s_number * 1 >= 1 && s_number < 1000) setQuantity(s_number)
-          }}
+          value={props.quantity?.toString() || 1}
+          onChange={handleChange}
         />
         <div className='wrap-quantity__btn btn-plus' onClick={() => incr()}>
           <PlusIcon className='icon plus-icon' />
@@ -46,13 +52,12 @@ const QuantityInput = React.forwardRef((props, ref) => {
       </div>
     </Suspense>
   )
-})
-QuantityInput.displayName = 'QuantityInput'
+}
 
 QuantityInput.propTypes = {
   className: PropTypes.string,
-  initValue: PropTypes.number,
-  onChange: PropTypes.func
+  onChange: PropTypes.func.isRequired,
+  quantity: PropTypes.number.isRequired
 }
 
 export default QuantityInput

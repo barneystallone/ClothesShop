@@ -28,7 +28,7 @@ create table role (
 
 drop table if exists  user;
 create table user (
-	id int not null auto_increment primary key ,
+	id varchar(15) not null primary key ,
     email varchar(254) ,
     password varchar(60),
     role_id int  default 1 references role(id)

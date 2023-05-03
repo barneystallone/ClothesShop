@@ -51,9 +51,11 @@ const ProductView = (props) => {
   const swiperRef = useRef(null)
   const [selectItem, setSelectItem] = useState(null)
   const [activeThumb, setActiveThumb] = useState(0)
+  const [quantity, setQuantity] = useState(1)
   const { product } = props
   const dispatch = useDispatch()
   const quantityRef = useRef(null)
+
   // const [onChangeCartBadge, toggleCartAnimation] = useToggle()
 
   const slideTo = useCallback((index) => {
@@ -220,7 +222,11 @@ const ProductView = (props) => {
                 />
               )}
 
-              <QuantityInput className='section-quantity' ref={quantityRef} />
+              <QuantityInput
+                className='section-quantity'
+                quantity={quantity}
+                onChange={(quantity) => setQuantity(quantity * 1)}
+              />
             </div>
             <Button
               animate={true}
