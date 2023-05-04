@@ -99,9 +99,9 @@ Content-Type: application/json
 {
   "pId": "N6p3QrpMgzqKd",
   "itemId": "N6i5hk4QUALg9",
-  "sizeId": "S004",
+  "sizeId": "S0s04",
   "sizeName": "FreseSize",
-  "quantity": -12,
+  "quantity": 12,
   "index":1 
 }
 ###
@@ -114,6 +114,6 @@ Content-Type: application/json
   "index": 0,
   "itemId": "N6i5hk4QUALg9",
   "sizeId": "S004",
-  "sizeName": "FreseSize",
+  "sizeName": "FreeSize",
   "quantity": 13
 }

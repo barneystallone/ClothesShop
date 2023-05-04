@@ -13,7 +13,6 @@ const ProductImagesSlider = React.forwardRef((props, ref) => {
     if (props?.onSlideChange) {
       props.onSlideChange(swiper.realIndex)
     }
-    console.log(swiper.realIndex)
   }
 
   return (

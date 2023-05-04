@@ -48,9 +48,9 @@ var that = (module.exports = {
   }),
   getItemByIndex: asyncHandler(async (req, res, next) => {
     const { userId } = req.payload
-    const { itemId, sizeId, value, quantity, index } = req.body
+    const { itemId, sizeId, value, quantity, index, pId, sizeName } = req.body
 
-    const result = await cartService.updateItem({ index, itemId, sizeId, value, userId, quantity }) //add
+    const result = await cartService.updateItem({ index, itemId, sizeId, value, userId, quantity, pId, sizeName }) //add
     res.status(200).json(result)
   }),
 })

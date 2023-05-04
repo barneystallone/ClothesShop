@@ -1,9 +1,10 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useCallback } from 'react'
 import QuantityInput from '../../../components/QuantityInput'
 import { selectCurrentToken } from '../../auth/auth.slice'
 import { useDispatch, useSelector } from 'react-redux'
 import { numberToCurrency } from '../../../utils'
 import { selectListCartItem, setCartItemQuantity } from '../cart.slice'
+import { setProductModalSlug } from '../../product/product.slice'
 const BiTrash = React.lazy(() =>
   import('react-icons/bi').then(({ BiTrash }) => ({ default: BiTrash }))
 )
@@ -20,6 +21,26 @@ const SubCartBody = (props) => {
     }
   }
 
+  const handleClick = useCallback(
+    (slug, sizeId, itemId, quantity, index) => (e) => {
+      console.table({ slug, sizeId, itemId })
+      // const initialItem = {
+      e.stopPropagation()
+      e.preventDefault()
+      dispatch(
+        setProductModalSlug({
+          slug,
+          initialItem: {
+            sizeId,
+            itemId,
+            quantity,
+            index // Thứ tự trong cart
+          }
+        })
+      )
+    },
+    [dispatch]
+  )
   return (
     <div className='body-wrapper'>
       <div className='subCart__body'>
@@ -34,7 +55,16 @@ const SubCartBody = (props) => {
               <div className='cart-item--right-top'>
                 <div className='item__name'> {item.title}</div>
                 <div className='item__price'>{numberToCurrency(item.price)}đ</div>
-                <div className='size-color__group'>
+                <div
+                  className='size-color__group'
+                  onClick={handleClick(
+                    item.slug,
+                    item.sizeId,
+                    item.itemId,
+                    item.quantity,
+                    index
+                  )}
+                >
                   {item.colorName} / {item.sizeName}
                 </div>
               </div>

@@ -20,11 +20,26 @@ export const cartSlice = createSlice({
         (item) =>
           item.itemId === action.payload.itemId && item.sizeId === action.payload.sizeId
       )
-      console.log(action.payload)
-      console.log(foundIndex)
       foundIndex >= 0
         ? (state.listItem[foundIndex].quantity += action.payload.quantity)
         : state.listItem.push(action.payload)
+    },
+    updateCartItem: (state, action) => {
+      const { index, ...itemPayload } = action.payload //
+      const foundIndex = state.listItem.findIndex(
+        (item) =>
+          item.itemId === action.payload.itemId && item.sizeId === action.payload.sizeId
+      )
+      if (foundIndex === index) {
+        state.listItem[foundIndex] = itemPayload
+        return
+      }
+      if (foundIndex >= 0) {
+        state.listItem[foundIndex].quantity += itemPayload.quantity
+        state.listItem.splice(index, 1)
+        return
+      }
+      state.listItem[index] = itemPayload
     },
     setCartItemQuantity: (state, action) => {
       state.listItem[action.payload.index].quantity = action.payload.quantity
@@ -59,7 +74,8 @@ const cartPersistConfig = {
   blacklist: ['showCart'] // thêm listItem vào whitelist
 }
 
-export const { setShowCart, putCartItem, setCartItemQuantity } = cartSlice.actions
+export const { setShowCart, putCartItem, setCartItemQuantity, updateCartItem } =
+  cartSlice.actions
 export default persistReducer(cartPersistConfig, cartSlice.reducer)
 
 export const selectCartStatus = (state) => state.cart.showCart

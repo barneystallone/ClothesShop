@@ -1,10 +1,11 @@
-import React, { useCallback, Suspense } from 'react'
+import React, { useCallback, Suspense, useMemo } from 'react'
 import ProductView from './ProductView'
 import { useSelector } from 'react-redux'
 import {
-  removeProductModalSlug,
+  closeProductModal,
   selectShowModalStatus,
-  selectProductModalSlug
+  selectProductModalSlug,
+  selectProductModalType
 } from '../product.slice'
 import { useModal } from '../../../hook'
 import { useGetProductQuery } from '../product.service'
@@ -15,16 +16,23 @@ const CloseIcon = React.lazy(() =>
 
 const ProductModal = () => {
   const productSlug = useSelector(selectProductModalSlug)
+  const isTypeUpdateModal = useSelector(selectProductModalType)
 
   const beforeCloseModalCb = useCallback((e) => {
     e?.target.closest('.product-view__modal').classList.add('active')
   }, [])
 
   const { show, closeModal } = useModal(
-    removeProductModalSlug,
+    closeProductModal,
     selectShowModalStatus,
     beforeCloseModalCb
   )
+
+  // khi tắt bật mới đổi
+  const title = useMemo(() => {
+    return isTypeUpdateModal ? 'Cập nhật giỏ hàng' : 'Thêm vào giỏ hàng'
+  }, [show])
+
   const { data, isFetching } = useGetProductQuery(productSlug, {
     skip: !productSlug
   })
@@ -33,7 +41,7 @@ const ProductModal = () => {
     <div className='product-view__modal' onClick={closeModal}>
       <div className='product-view__modal__content' onClick={(e) => e.stopPropagation()}>
         <div className='product-view__modal__content__header'>
-          <span className='title'>Thêm vào giỏ hàng</span>
+          <span className='title'>{title}</span>
           <Suspense fallback={<div>...</div>}>
             <div className='icon-wrap' onClick={closeModal}>
               <CloseIcon />
@@ -45,6 +53,7 @@ const ProductModal = () => {
           product={data?.product}
           modal
           closeModal={closeModal}
+          textContentBtnUpdate={title}
         />
       </div>
     </div>

@@ -35,16 +35,17 @@ var that = (module.exports = {
     const isExists = await redisDao.isExistsItem(data)
     console.log('isExists', isExists)
     if (isExists) {
-      const updatePromise = redisDao.updateItemQuantity({ userId, itemId, sizeId, quantity })
-      const getItemPromise = redisDao.getItemByIndex({ userId, index })
-      const [updateStatus, result] = await Promise.all([updatePromise, getItemPromise])
-      if (!(result.itemId === itemId && result.sizeId === sizeId)) {
-        const removeStatus = await redisDao.removeItem({ index, userId })
+      const _item = await redisDao.getItemByIndex({ userId, index })
+      // const [updateStatus, result] = await Promise.all([updatePromise, getItemPromise])
+      if (!(_item.itemId === itemId && _item.sizeId === sizeId)) {
+        const updatePromise = redisDao.updateItemQuantity({ userId, itemId, sizeId, quantity })
+        const removeItemPromise = redisDao.removeItem({ index, userId })
+        const [updateStatus, removeStatus] = await Promise.all([updatePromise, removeItemPromise])
         return { updateStatus, removeStatus }
       }
-      return { updateStatus }
+      // return { updateStatus }
     }
-    return redisDao.updateItem({ itemId, pId, sizeId, quantity, userId, sizeName, index })
+    return redisDao.updateItemByIndex({ itemId, pId, sizeId, quantity, userId, sizeName, index })
   },
   updateItemQuantity: async (data) => {
     return redisDao.updateItemQuantity(data)
