@@ -37,7 +37,7 @@ const QuantityInput = (props) => {
   return (
     <Suspense fallback={<div>...</div>}>
       <div className={`${props.className} wrap-quantity`}>
-        <div className='wrap-quantity__btn btn-minus ' onClick={() => incr(true)}>
+        <div className='wrap-quantity__btn btn-minus ' onClick={() => incr(false)}>
           <MinusIcon className='icon minus-icon' />
         </div>
         <input

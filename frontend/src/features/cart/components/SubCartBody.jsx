@@ -14,8 +14,9 @@ const SubCartBody = (props) => {
   const dispatch = useDispatch()
 
   const onQuantityInputChange = (index) => (quantity) => {
+    dispatch(setCartItemQuantity({ index, quantity: quantity * 1 }))
     if (!token) {
-      return dispatch(setCartItemQuantity({ index, quantity: quantity * 1 }))
+      return
     }
   }
 

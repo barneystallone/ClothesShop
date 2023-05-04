@@ -75,6 +75,10 @@ Content-Type: application/json
 }
 
 ### 
+GET {{baseUrl}}/api/cart/
+Authorization: Beaer {{authToken}}
+
+### 
 PUT {{baseUrl}}/api/cart/
 Authorization: Beaer {{authToken}}
 Content-Type: application/json
@@ -95,9 +99,10 @@ Content-Type: application/json
 {
   "pId": "N6p3QrpMgzqKd",
   "itemId": "N6i5hk4QUALg9",
-  "sizeId": "Ss004",
+  "sizeId": "S004",
   "sizeName": "FreseSize",
-  "quantity": 12
+  "quantity": -12,
+  "index":1 
 }
 ###
 PATCH  {{baseUrl}}/api/cart/item
@@ -106,9 +111,9 @@ Content-Type: application/json
 
 {
   "pId": "N6p3QrpMgzqKd",
-  "index": 1,
+  "index": 0,
   "itemId": "N6i5hk4QUALg9",
-  "sizeId": "Ss004",
+  "sizeId": "S004",
   "sizeName": "FreseSize",
-  "value": 13
+  "quantity": 13
 }

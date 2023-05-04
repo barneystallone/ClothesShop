@@ -11,6 +11,7 @@ module.exports = {
       removeItem: async (data) => impl.removeItem(data),
       getCart: async (userId) => impl.getCart(userId),
       setCart: async (data) => impl.setCart(data),
+      getItemByIndex: async (data) => impl.getItemByIndex(data),
     }
     return db
   },

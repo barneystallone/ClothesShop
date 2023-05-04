@@ -51,11 +51,11 @@ const ProductView = (props) => {
   const swiperRef = useRef(null)
   const [selectItem, setSelectItem] = useState(null)
   const [activeThumb, setActiveThumb] = useState(0)
-  const [quantity, setQuantity] = useState(1)
+  const [quantityToAdd, setQuantityToAdd] = useState(1)
   const { product } = props
   const dispatch = useDispatch()
   const quantityRef = useRef(null)
-
+  console.log('quantityToAdd::', quantityToAdd)
   // const [onChangeCartBadge, toggleCartAnimation] = useToggle()
 
   const slideTo = useCallback((index) => {
@@ -63,16 +63,7 @@ const ProductView = (props) => {
     console.log(swiperRef.current?.swiper)
   }, [])
 
-  const handleSlideChange = useCallback((index) => {
-    setActiveThumb(index)
-  }, [])
-
-  const handleSelectSize = useCallback((item) => {
-    setSelectItem(item)
-  }, [])
-
   const listProductItem = useMemo(() => {
-    setSelectItem(product?.collections[activeThumb].inventory[0])
     return product?.collections[activeThumb].inventory.reduce(
       (result, item) => result.concat(item),
       []
@@ -97,6 +88,14 @@ const ProductView = (props) => {
     [slideTo]
   )
 
+  const handleSlideChange = useCallback((index) => {
+    setActiveThumb(index)
+  }, [])
+
+  const handleSelectSize = useCallback((item) => {
+    setSelectItem(item)
+  }, [])
+
   const handleClickAddToCart = useCallback(
     (e, item) => {
       // eslint-disable-next-line no-unused-vars
@@ -105,11 +104,10 @@ const ProductView = (props) => {
 
       // eslint-disable-next-line no-unused-vars
       const { inventory, itemId, ...rest2 } = product.collections[activeThumb]
-      console.log()
       const payload = {
-        ...rest,
+        ...rest, //
         ...rest2, // ...rest2 === colorName, colorCode, thumbUrl, url
-        quantity: quantityRef.current.value * 1,
+        quantity: quantityToAdd * 1,
         slug,
         title,
         price
@@ -128,24 +126,20 @@ const ProductView = (props) => {
         cartElement.classList.remove('active')
       }, 600)
     },
-    [activeThumb, product, dispatch]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeThumb, product, dispatch, quantityToAdd, props.modal, props.closeModal]
   )
-  // useEffect(() => {
-
-  //   }
-  //   // return () => {
-  //   //   if (cartElement.classList.contains('active')) {
-  //   //     cartElement.classList.remove('active')
-  //   //   }
-  //   //   clearTimeout(delay)
-  //   // }
-  // }, [onChangeCartBadge])
 
   useEffect(() => {
     if (quantityRef && quantityRef.current?.value) {
       quantityRef.current.value = '1'
     }
   }, [product])
+
+  useEffect(() => {
+    setSelectItem(product?.collections[activeThumb].inventory[0])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, activeThumb])
 
   return product && !props.loading ? (
     <div className='product__wrap'>
@@ -224,8 +218,11 @@ const ProductView = (props) => {
 
               <QuantityInput
                 className='section-quantity'
-                quantity={quantity}
-                onChange={(quantity) => setQuantity(quantity * 1)}
+                quantity={quantityToAdd}
+                onChange={(quantity) => {
+                  console.log(quantity)
+                  setQuantityToAdd(quantity * 1)
+                }}
               />
             </div>
             <Button

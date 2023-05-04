@@ -33,24 +33,6 @@ var self = (module.exports = {
         '$.collections[*].thumbUrl', 'as', 'thumbUrl',
         'LIMIT', offset, limit
       ))
-    //   .then(([total, ...rest]) => {
-    //     //prettier-ignore
-    //     return {
-    //       total,
-    //       products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
-    //         return arr?.reduce((product, key, index) => {
-    //           if (index % 2 === 0) {
-    //             if(key === ('url' || 'thumbUrl')) {
-    //               product[key] = JSON.parse(arr[index + 1])
-    //               return product
-    //             }
-    //             product[key] = JSON.parse(arr[index + 1])[0]
-    //           }
-    //           return product
-    //         }, {})
-    //       }),
-    //     }
-    // })
   },
 
   // EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 "product:*"
@@ -78,7 +60,6 @@ var self = (module.exports = {
       '$.collections[*].thumbUrl', 'as', 'thumbUrl',
       'LIMIT', offset, limit)
     )
-    // const categories = listId.map((item) => item).join('|')
   },
 
   getProductsHandler: (promise) => {
@@ -100,14 +81,6 @@ var self = (module.exports = {
         }),
       }
     })
-    // return promise.then(([count, ...prodKeysAndValues]) => {
-    //   let products = prodKeysAndValues
-    //     .filter((_, index) => index % 2 !== 0)
-    //     .map((productArray) => {
-    //       return JSON.parse(productArray[1])
-    //     })
-    //   return { count, products }
-    // })
   },
 
   findBySlug: async (slug) => {
@@ -120,9 +93,6 @@ var self = (module.exports = {
         })
       return { count, product: productWrap[0] }
     })
-    // return await self.getProductsHandler(redis.call('FT.SEARCH', SEARCH_INDEX, query)).then(({ _, products }) => ({
-    //   product: products[0],
-    // }))
   },
 
   getRelatedProducts: async (slug) => {
@@ -130,26 +100,6 @@ var self = (module.exports = {
     const limit = 5
 
     return self.getProductsHandler(redis.getRelatedProducts(0, _slug, limit))
-    // .then(([_, ...rest]) => {
-    //   // console.log([_ ,...rest ])
-    //   //prettier-ignore
-    //   return {
-    //     products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
-    //       // console.log('arr::',arr);
-    //         return arr?.reduce((product, key, index) => {
-    //           if (index % 2 === 0) {
-    //             if(key === 'img') {
-    //               product[key] = JSON.parse(arr[index + 1])
-    //               return product
-    //             }
-    //             product[key] = arr[index + 1]
-    //           }
-    //           return product
-    //         }, {})
-    //       }),
-    //   }
-    // })
-    // const res = await redis.call('EVAL', scripts, 0, _slug).then((res) => res.map((arr) => JSON.parse(arr[1])))
   },
   init: async () => {
     let indices = await redis.call('FT._list')
@@ -172,27 +122,7 @@ var self = (module.exports = {
         '$.title','as', 'title', 'TEXT', 'SORTABLE',
         '$.pId','as','pId', 'TAG', 'SORTABLE',
         '$.sold','as','sold','NUMERIC', 'SORTABLE',
+        '$.collections[*].itemId','as','itemId','TAG', 'SORTABLE',
     )
   },
 })
-
-// local filteredResults = {}
-// for i, val in ipairs(results) do
-// if i % 2 ~= 0 then
-//   table.insert(filteredResults, val)
-// end
-// end
-// return filteredResults
-
-// function randomSelect(arr, count)
-//           local results ={}
-//           local rand
-//           for i=1, count do
-//             rand = math.random(#arr/2)*2
-//             table.insert(results,arr[rand])
-//             table.insert(results,arr[rand+1])
-//             table.remove(arr,rand)
-//             table.remove(arr,rand+1)
-//           end
-//           return results
-//         end

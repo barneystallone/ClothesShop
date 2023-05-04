@@ -64,9 +64,7 @@ var self = (module.exports = {
     })
   },
   verifyRefreshToken: (req, res, next) => {
-    console.log(req)
     const { refreshToken } = req.cookies
-    console.log({ refreshToken })
     if (!refreshToken) {
       return next(createHttpError.Unauthorized())
     }

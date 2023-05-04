@@ -1,7 +1,9 @@
 const redis = require('../../../databases/connect.redis.v2')
+const { getItemInfoScript } = require('./scripts/getCartItemInfo')
 const SEARCH_INDEX = 'carts'
 const PREFIX = 'cart:'
 
+// const getItemInfoScript = `local collection = "$.collections[?(@.itemId=="N6i5hk4QUALg9")]";local result = redis.call("ft.search" ,"products", "@itemId:{N6i5hk4QUALg9}" ,"return", 7,"title" ,"price" ,"slug" , "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")].url", collection..".thumbUrl",collection..".colorName",collection..".colorCode")[3]; return result`
 // const temp = {pId,itemId,sizeId,sizeName,quantity,
 //   url,
 //   thumbUrl,
@@ -11,13 +13,45 @@ const PREFIX = 'cart:'
 //   title,
 //   price,
 // }
+
+// eval 'local collection = "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")]";local result = redis.call("ft.search" ,"products", "@pId:{N6p3QrpMgzqKd}" ,"return", 7,"title" ,"price" ,"slug" , "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")].url", collection..".thumbUrl",collection..".colorName",collection..".colorCode")[3]; return result' 0
+// eval 'return redis.call("ft.search" ,"products", "@pId:{N6p3QrpMgzqKd}" ,"return", 4 ,"title" ,"price" ,"slug" , "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")][\"url\",\"thumbUrl\",\"colorCode\",\"colorName\"]")' 0
 // eval 'return cjson.decode(redis.call("FT.SEARCH", "carts", "@userId:{"..ARGV[1].."}" ,"return", 1, "$.products[*].pId", "DIALECT",3 )[3][2])' 0 "N6_nPuq6oSnY9DO"
 // eval 'local result = cjson.decode(redis.call("FT.SEARCH", "carts", "@userId:{"..ARGV[1].."}", "return", 1, "$.products[*].pId", "DIALECT", 3)[3][2]) for i, v in ipairs(result) do result[i] = "product:"..v end return result' 0 "N6_nPuq6oSnY9DO"
 // eval 'local result = cjson.decode(redis.call("FT.SEARCH", "carts", "@userId:{"..ARGV[1].."}", "return", 1, "$.products[*].pId", "DIALECT", 3)[3][2]) for i, v in ipairs(result) do result[i] = "product:"..v end return redis.call("JSON.MGET", unpack(result), "$" )' 0 "N6_nPuq6oSnY9DO"
 var that = (module.exports = {
   getCart: async (userId) => {
-    redis.call('JSON.GET', PREFIX.concat(userId))
-    return
+    const pipeline = redis.pipeline()
+    const listItem = await redis
+      .call('JSON.GET', PREFIX.concat(userId), '$.products')
+      .then((result) => JSON.parse(result)[0])
+
+    listItem
+      .reduce((results, item) => {
+        return results.concat(item.itemId)
+      }, [])
+      .forEach((itemId) => pipeline.getItemInfo(0, itemId))
+
+    const listItemInfo = await pipeline.exec().then((arr) => {
+      return arr.map(([_, foundItem], index) => {
+        // foundItem === [ 'title', 'Váy Suông Dáng Dài Cổ Yếm Đuôi Cá',...] =\
+        // Nên sẽ đưa về dạng object {title:  'Váy Suông Dáng Dài Cổ Yếm Đuôi Cá', ...}
+        return {
+          ...listItem[index],
+          ...foundItem.reduce((item, key, index) => {
+            if (index % 2 === 0) {
+              item[key] = foundItem[index + 1]
+            }
+            return item
+          }, {}),
+        }
+      })
+    })
+
+    return listItemInfo
+  },
+  getItemByIndex: async ({ userId, index }) => {
+    return JSON.parse(await redis.call('JSON.GET', PREFIX.concat(userId), `$.products[${index}]`))[0]
   },
 
   /**
@@ -45,21 +79,48 @@ var that = (module.exports = {
       .then((res) => res[0])
   },
 
-  updateItem: async (data) => {
-    const { itemId, pId, sizeId, quantity, userId, sizeName } = data
+  // updateItem: async (data) => {
+  //   const { itemId, pId, sizeId, quantity, userId, sizeName, index } = data
+  //   // prettier-ignore
+  //   const updatePromise =  redis.call(
+  //     'JSON.SET', PREFIX.concat(userId), `$.products[?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")]`,
+  //     JSON.stringify({ itemId: `${itemId}`, pId, sizeId, quantity, sizeName })
+  //   )
+  //   if (index) {
+  //     const getCartItemIndexPromise = redis
+  //       .call('JSON.GET', PREFIX.concat(userId), `$.products[${index}]`)
+  //       .then((res) => JSON.parse(res)[0])
+  //     const [updateStatus, getCartResult] = await Promise.all([updatePromise, getCartItemIndexPromise])
+  //     console.log(getCartResult)
+  //     return [updateStatus, getCartResult]
+  //   }
+  //   return updatePromise
+  // },
+  updateItemByIndex: async (data) => {
+    const { itemId, pId, sizeId, quantity, userId, sizeName, index } = data
     // prettier-ignore
     return redis.call(
-      'JSON.SET', PREFIX.concat(userId), `$.products[?(@.itemId=="${itemId}"||@.sizeId=="${sizeId}")]`,
+      'JSON.SET', PREFIX.concat(userId), `$.products[${index}]`,
       JSON.stringify({ itemId: `${itemId}`, pId, sizeId, quantity, sizeName })
     )
   },
 
-  updateItemQuantity: async ({ userId, index, value, quantity }) => {
-    console.log({ userId, index, value, quantity })
-    if (quantity) {
-      return redis.call('JSON.SET', PREFIX.concat(userId), `$.products[${index * 1}].quantity`, quantity * 1)
-    }
-    return redis.call('JSON.NUMINCRBY', PREFIX.concat(userId), `$.products[${index * 1}].quantity`, value * 1)
+  updateItemQuantity: async ({ userId, itemId, sizeId, quantity }) => {
+    // console.log({ userId, index, value, quantity })
+    // if (quantity) {
+    //   return redis.call(
+    //     'JSON.SET',
+    //     PREFIX.concat(userId),
+    //     `$.products[?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")].quantity`,
+    //     quantity * 1
+    //   )
+    // }
+    return redis.call(
+      'JSON.NUMINCRBY',
+      PREFIX.concat(userId),
+      `$.products[?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")].quantity`,
+      quantity * 1
+    )
   },
 
   removeItem: async ({ index, userId }) => {
@@ -70,6 +131,9 @@ var that = (module.exports = {
     if (indices.includes(SEARCH_INDEX)) {
       await redis.call('FT.DROPINDEX', SEARCH_INDEX)
     }
+    redis.defineCommand('getItemInfo', {
+      lua: getItemInfoScript(),
+    })
     // prettier-ignore
     await redis.call(
       'FT.CREATE', SEARCH_INDEX,
