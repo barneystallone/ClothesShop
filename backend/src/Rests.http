@@ -1,36 +1,44 @@
 @baseUrl=http://localhost:{{$dotenv PORT}}
 
 
-###
-# @name login
-POST  {{baseUrl}}/api/user/login
-Content-Type: application/json
 
-{
-   "email" :"11sa2s1ass112s2a2avass@gmail.com",
-    "password": "asdasdd"
-}
 ###
 @authToken = {{login.response.body.accessToken}}
 
+###
+GET {{baseUrl}}/api/product?c=c08%7Cc09%7Cc20%7Cc30&page=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODA0NDg2OTEsImV4cCI6MTY4MDQ0ODc1MX0.bMYu_fIqG45CEJVo0DGcg-9WT1rFuL4gwlWsmcHV1DQ
 
-GET {{baseUrl}}/api/product
+###
+GET {{baseUrl}}/api/product?c=c10|c30|c15|c14&page=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODA0NDg2OTEsImV4cCI6MTY4MDQ0ODc1MX0.bMYu_fIqG45CEJVo0DGcg-9WT1rFuL4gwlWsmcHV1DQ
+###
+GET {{baseUrl}}/api/product?page=3
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODA0NDg2OTEsImV4cCI6MTY4MDQ0ODc1MX0.bMYu_fIqG45CEJVo0DGcg-9WT1rFuL4gwlWsmcHV1DQ
 ###
 GET {{baseUrl}}/api/category
 
+###
+GET {{baseUrl}}/api/product/ao-thun-nu-croptop-in-hinh-con-gai
+###
+GET {{baseUrl}}/api/product/related/ao-thun-nu-tay-ngan-in-chu-m    
+###
+GET {{baseUrl}}/api/product/related/vay-suong-dang-dai-co-yem-djuoi-ca   
+###
+GET {{baseUrl}}/api/product/related/quan-suong-gan-tam-ong-rong
 
 ###
 POST  {{baseUrl}}/api/user/register
 Content-Type: application/json
 
 {
-   "email" :"11sa2s1ass112s2a2avass@gmail.com",
-    "password": "asdasdd"
+   "email" :"abcd@gmail.com",
+    "password": "abcd"
 }
 
 ###
-POST  {{baseUrl}}/api/user/refresh-token
+# không test được vì set cookie secure là true 
+GET  {{baseUrl}}/api/user/refresh-token
 # Cookie: 
 
 
@@ -54,3 +62,66 @@ GET {{baseUrl}}/api/product
 ###
 GET {{baseUrl}}/api/user
 Authorization: Beare {{authToken}}
+
+
+###
+# @name login
+POST  {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+  "email" :"abcd@gmail.com",
+  "password": "abcd"
+}
+
+### 
+GET {{baseUrl}}/api/cart/
+Authorization: Beaer {{authToken}}
+
+###
+PUT {{baseUrl}}/api/cart/item
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "pId": "N6p3QrpMgzqKd",
+  "itemId": "N6i5hk4QUALg9",
+  "sizeId": "S004",
+  "sizeName": "FreseSize",
+  "quantity": 12
+}
+
+###
+PATCH  {{baseUrl}}/api/cart/item
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "pId": "N6p3QrpMgzqKd",
+  "index": 1,
+  "itemId": "N6i5hk4QUALg9",
+  "sizeId": "S004",
+  "sizeName": "FreeSize",
+  "quantity": 13
+}
+
+###
+PATCH  {{baseUrl}}/api/cart/item-quantity
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+
+  "index": 0,
+  "quantity": -13
+}
+###
+PUT  {{baseUrl}}/api/cart/item-quantity
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+
+  "index": 0,
+  "quantity": -13
+}

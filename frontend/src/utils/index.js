@@ -1,7 +1,10 @@
-const numberToCurrency = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+const numberToCurrency = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
-const handlePromise = (promise) => {
-  return promise.then((data) => [undefined, data]).catch((err) => [err, undefined])
+const handleLazyLoadSvgPromise = (promise) => {
+  return promise.then((module) => ({ default: module.ReactComponent }))
 }
 
-export { numberToCurrency, handlePromise }
+const typeOf = (any) => {
+  return Object.prototype.toString.call(any).slice(8, -1)
+}
+export { numberToCurrency, handleLazyLoadSvgPromise, typeOf }

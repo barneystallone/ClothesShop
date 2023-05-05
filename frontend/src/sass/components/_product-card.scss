@@ -77,6 +77,8 @@
       top: 0;
       left: 50%;
       transform: translate(-50%);
+      min-width: 100%;
+      max-width: 120%;
       height: 100%;
 
       &:nth-child(1) {
@@ -128,7 +130,7 @@
       z-index: 50;
       cursor: pointer;
       border-radius: 4px;
-      box-shadow: $box-shadow;
+      box-shadow: rgba(20, 20, 20, 0.3) 0px 6px 20px;
       // background-color: red;
       overflow: hidden;
       border-radius: 100%;

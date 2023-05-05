@@ -8,6 +8,8 @@
 
   &-filter {
     width: 20%;
+    position: sticky;
+    top: 100px;
 
     @include tablet {
       width: 0;

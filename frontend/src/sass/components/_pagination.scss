@@ -1,0 +1,76 @@
+.pagination {
+  @include flex(center, flex-end);
+  padding: 1rem 0;
+  user-select: none;
+  gap: 0 1rem;
+  font-size: 1.5rem;
+  color: $txt-second-color;
+  &__info {
+    font-size: 1.2rem;
+  }
+  &__list {
+    @include flex(center, center);
+    height: 60px;
+
+    // background-color: red;
+
+    &__item {
+      cursor: pointer;
+      text-align: center;
+      line-height: 30px;
+      height: 30px;
+      width: 30px;
+
+      &.number {
+        background-color: white;
+        font-weight: 500;
+        border-radius: 100%;
+
+        & + & {
+          margin-left: 10px;
+        }
+        &:hover,
+        &.active {
+          color: $main-bg;
+          transition: all 0.15s ease-in-out;
+          background-color: $txt-main-color;
+        }
+      }
+
+      &.btn-group {
+        width: 44px;
+        @include flex(center, space-between);
+        .btn {
+          @include flex(center, center);
+          svg {
+            width: 18px;
+            height: 18px;
+            transform: scale(1.3);
+            path {
+              fill: $txt-second-color;
+            }
+          }
+          &:hover {
+            transform: scale(1.2);
+            path {
+              fill: $txt-main-color;
+            }
+          }
+        }
+      }
+
+      &.dots {
+        font-size: 1.2rem;
+        font-weight: bold;
+        height: unset;
+        width: unset;
+        margin: 10px;
+        &:hover {
+          transform: scale(1.1);
+          color: $txt-main-color;
+        }
+      }
+      // display: inline-block;
+    }
+  }
+}

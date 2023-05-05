@@ -6,7 +6,7 @@ import Grid from '../../../components/Grid'
 import SubCategoryFilter from './SubCategoryFilter'
 import { useGetCategoriesQuery } from '../../../features/category/category.service'
 
-const CategoryFilter = (props) => {
+const CategoryFilter = () => {
   // const { data: categories, isLoading } = useGetCategoriesQuery(undefined, { skip: true });
 
   const { data: categories, isLoading } = useGetCategoriesQuery()
@@ -15,7 +15,12 @@ const CategoryFilter = (props) => {
     <FilterLeft title='Danh mục'>
       <Grid col={1} gap={10}>
         {isLoading ? (
-          <Skeleton count={4} height={20} style={{ marginBottom: '10px' }} />
+          <Skeleton
+            count={4}
+            duration={0.6}
+            height={20}
+            style={{ marginBottom: '10px' }}
+          />
         ) : (
           categories?.map((item, index) => <SubCategoryFilter key={index} item={item} />)
         )}
@@ -24,4 +29,4 @@ const CategoryFilter = (props) => {
   )
 }
 
-export default CategoryFilter
+export default React.memo(CategoryFilter)

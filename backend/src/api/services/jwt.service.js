@@ -1,6 +1,6 @@
 const createHttpError = require('http-errors')
 const JWT = require('jsonwebtoken')
-const redisClient = require('../databases/connect.redis')
+const redisClient = require('../databases/connect.redis.v2')
 const { ACCESS_KEY_SECRET, REFRESH_KEY_SECRET } = process.env
 
 var self = (module.exports = {
@@ -22,17 +22,19 @@ var self = (module.exports = {
   },
 
   verifyToken: (req, res, next) => {
+    // console.log(JSON.stringify(req.headers))
+    console.log(req.headers['authorization'])
     if (!req.headers['authorization']) {
-      return next(createHttpError.Unauthorized())
+      return next(createHttpError.Unauthorized('Phải đăng nhập để tiếp tục'))
     }
 
     const token = req.headers['authorization'].split(' ')[1]
     JWT.verify(token, ACCESS_KEY_SECRET, (err, payload) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {
-          return next(createHttpError(err.message))
+          return next(createHttpError.Forbidden(err.message))
         }
-        return next(createHttpError.Unauthorized())
+        return next(createHttpError.Unauthorized('Phải đăng nhập để tiếp tục'))
       }
 
       req.payload = payload // userId, roleName
@@ -54,7 +56,7 @@ var self = (module.exports = {
       JWT.sign(payload, secretKey, options, (err, token) => {
         if (err) reject(err)
         redisClient
-          .set(`refreshToken:${userId}`, token, { EX: 30 * 24 * 3600 })
+          .set(`refreshToken:${userId}`, token, 'EX', 30 * 24 * 3600)
           .catch((err) => reject(createHttpError.InternalServerError()))
 
         resolve(token)
@@ -63,14 +65,13 @@ var self = (module.exports = {
   },
   verifyRefreshToken: (req, res, next) => {
     const { refreshToken } = req.cookies
-    console.log({ refreshToken })
     if (!refreshToken) {
       return next(createHttpError.Unauthorized())
     }
 
     JWT.verify(refreshToken, REFRESH_KEY_SECRET, (err, payload) => {
       if (err) {
-        return next(createHttpError('Token không hợp lệ'))
+        return next(createHttpError.Forbidden('Token không hợp lệ'))
       }
       redisClient
         .get(`refreshToken:${payload.userId}`)
@@ -79,11 +80,9 @@ var self = (module.exports = {
             req.payload = payload
             return next()
           }
-          return next(createHttpError.Unauthorized('Token không khớp'))
+          return next(createHttpError.Forbidden('Token không khớp'))
         })
         .catch((err) => next(createHttpError.InternalServerError('Error:::Redis server')))
-      // req.payload = payload; // userId, roleName
-      // next();
     })
   },
 

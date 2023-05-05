@@ -1,7 +1,14 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
-import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg'
-import { ReactComponent as SubtractIcon } from '../../../assets/images/subtract.svg'
+
+import { handleLazyLoadSvgPromise } from '../../../utils'
+const CloseIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/close.svg'))
+)
+const SubtractIcon = React.lazy(() =>
+  handleLazyLoadSvgPromise(import('../../../assets/images/subtract.svg'))
+)
+
 import CheckBox from '../../../components/Checkbox'
 const SubCategoryFilter = (props) => {
   const [show, setShow] = useState(false)
@@ -24,9 +31,15 @@ const SubCategoryFilter = (props) => {
     <div className='accordion'>
       <div className='accordion__title '>
         <CheckBox label={item.category_name} />
-        <span className='right__icon' onClick={handleClick}>
-          {show ? <SubtractIcon className='right__icon__svg' /> : <CloseIcon className={`right__icon__svg rotate`} />}
-        </span>
+        <Suspense fallback={<div>...</div>}>
+          <span className='right__icon' onClick={handleClick}>
+            {show ? (
+              <SubtractIcon className='right__icon__svg' />
+            ) : (
+              <CloseIcon className={`right__icon__svg rotate`} />
+            )}
+          </span>
+        </Suspense>
       </div>
       <div className={`accordion__content`}>
         <div ref={ref}>

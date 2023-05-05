@@ -1,0 +1,128 @@
+const redis = require('../../../databases/connect.redis.v2')
+const { getRelatedProductsScript } = require('./scripts/getRelatedProducts')
+const SEARCH_INDEX = 'products'
+const PREFIX = 'product:'
+var self = (module.exports = {
+  create: async ({ pId, title, slug, description, price, category_id }) => {
+    // prettier-ignore
+    return await redis.call(
+      'JSON.SET', `${PREFIX}${pId}`,'$',
+      JSON.stringify({
+        pId,
+        title,
+        slug,
+        description,
+        price,
+        category_id,
+        img: []
+      })
+    )
+  },
+  // uploadImg: async ({ pId, url, thumbUrl }) => {
+  //   // prettier-ignore
+  //   return await redis.call(
+  //       'JSON.ARRAPPEND', `${PREFIX}${pId}`, '$.img',
+  //       JSON.stringify({ url, thumbUrl }))
+  // },
+  getProducts: async ({ limit = 20, offset = 0 }) => {
+    //prettier-ignore
+    return self.getProductsHandler(redis
+      .call(
+        'FT.SEARCH', SEARCH_INDEX, '*', 'DIALECT', 3, 'RETURN', 11, 
+        'pId', 'title', 'price', 'slug', 'sold', '$.collections[*].url', 'as', 'url',
+        '$.collections[*].thumbUrl', 'as', 'thumbUrl',
+        'LIMIT', offset, limit
+      ))
+  },
+
+  // EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 "product:*"
+  putProducts: async (data) => {
+    const pipeline = redis.pipeline()
+
+    pipeline.call('EVAL', "return redis.call('del', unpack(redis.call('keys', ARGV[1])))", 0, 'product:*')
+    data.forEach((item) => {
+      pipeline.call('JSON.SET', `product:${item.pId}`, '$', JSON.stringify(item))
+    })
+
+    return await pipeline.exec()
+  },
+
+  /**
+   * @example ft.search products '@category_id:{c10\\|c30\\|c15\\|c14}' DIALECT 3 RETURN 11
+   * pId title price slug sold $.collections[*].url as url $.collections[*].thumbUrl as thumbUrl LIMIT 0 10
+   */
+  getProductsByCategoryIDs: async ({ strListId, limit = 20, offset = 0 }) => {
+    // prettier-ignore
+    return self.getProductsHandler(
+      redis.call(
+      'FT.SEARCH', SEARCH_INDEX, `@category_id:{${strListId}}`, 'DIALECT', 3, 'RETURN', 11, 
+      'pId', 'title', 'price', 'slug', 'sold', '$.collections[*].url', 'as', 'url',
+      '$.collections[*].thumbUrl', 'as', 'thumbUrl',
+      'LIMIT', offset, limit)
+    )
+  },
+
+  getProductsHandler: (promise) => {
+    return promise.then(([total, ...rest]) => {
+      //prettier-ignore
+      return {
+        total,
+        products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
+          return arr?.reduce((product, key, index) => {
+            if (index % 2 === 0) {
+              if(key === 'url' || key === 'thumbUrl') {
+                product[key] = JSON.parse(arr[index + 1])
+                return product
+              }
+              product[key] = JSON.parse(arr[index + 1])[0]
+            }
+            return product
+          }, {})
+        }),
+      }
+    })
+  },
+
+  findBySlug: async (slug) => {
+    const query = `@slug:{${slug.replace(/-/g, '\\-')}}`
+    return await redis.call('FT.SEARCH', SEARCH_INDEX, query).then(([count, ...prodKeysAndValues]) => {
+      let productWrap = prodKeysAndValues
+        .filter((_, index) => index % 2 !== 0)
+        .map((productArray) => {
+          return JSON.parse(productArray[1])
+        })
+      return { count, product: productWrap[0] }
+    })
+  },
+
+  getRelatedProducts: async (slug) => {
+    const _slug = slug.replace(/-/g, '\\-')
+    const limit = 5
+
+    return self.getProductsHandler(redis.getRelatedProducts(0, _slug, limit))
+  },
+  init: async () => {
+    let indices = await redis.call('FT._list')
+    if (indices.includes(SEARCH_INDEX)) {
+      await redis.call('FT.DROPINDEX', SEARCH_INDEX)
+    }
+    redis.defineCommand('getRelatedProducts', {
+      lua: getRelatedProductsScript(),
+    })
+    // prettier-ignore
+    await redis.call(
+      'FT.CREATE', SEARCH_INDEX,
+      'ON', 'JSON',
+      'PREFIX', 1, PREFIX,
+      'SCHEMA',
+        '$.slug','as','slug', 'TAG',
+        '$.price','as','price', 'NUMERIC', 'SORTABLE',
+        '$.description','as','description', 'TEXT',
+        '$.category_id','as','category_id', 'TAG',
+        '$.title','as', 'title', 'TEXT', 'SORTABLE',
+        '$.pId','as','pId', 'TAG', 'SORTABLE',
+        '$.sold','as','sold','NUMERIC', 'SORTABLE',
+        '$.collections[*].itemId','as','itemId','TAG', 'SORTABLE',
+    )
+  },
+})

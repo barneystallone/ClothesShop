@@ -9,6 +9,7 @@ let redisClient
   })
   redisClient.on('connect', () => console.log(`Redis::: connected`))
   redisClient.on('error', (error) => console.error(`Redis::: ${error}`))
+
   await redisClient.connect()
 })()
 

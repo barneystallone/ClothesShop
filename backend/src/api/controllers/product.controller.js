@@ -33,14 +33,53 @@ var self = (module.exports = {
   }),
 
   getAllProduct: asyncHandler(async (req, res, next) => {
-    const results = await productService.getAllProducts()
+    const { c: strListId, page } = req.query
+    if (strListId) {
+      const results = await productService.getProductsByCategoryIDs({
+        strListId,
+        page: page ?? 1,
+      })
+      return res.status(200).json(results)
+    }
+
+    const results = await productService.getProducts(page)
     res.status(200).json(results)
+    // res.status(200).json(results)
     // const s_results = JSON.stringify(results)
     // res.status(200).json(s_results.repeat(50))
   }),
+  findBySlug: asyncHandler(async (req, res, next) => {
+    const { slug } = req.params
+    const result = await productService.findBySlug(slug)
 
-  // ipload image , insert 1 item của sản phẩm
-  // 1 sp có nhiều item
+    res.status(200).json({
+      ...result,
+      meta: {
+        slug,
+      },
+    })
+
+    //
+  }),
+  getRelatedProducts: asyncHandler(async (req, res, next) => {
+    const { slug } = req.params
+    try {
+      const result = await productService.getRelatedProducts(slug)
+      res.status(200).json({
+        ...result,
+        meta: {
+          slug,
+        },
+      })
+    } catch (error) {
+      if (error?.message.includes('number 0 is not iterable')) {
+        next(createHttpError(404, 'NotFound'))
+      }
+
+      next(createHttpError(error))
+    }
+  }),
+  // upload image , insert item cho sản phẩm
   upload: asyncHandler(async (req, res, next) => {
     const { img, thumbImg } = req.files
     const { pId } = req.params

@@ -21,7 +21,7 @@ module.exports = {
       slug: Joi.string().max(60).required(),
       description: Joi.string().required(),
       price: Joi.number().required(),
-      category_id: Joi.number().required().min(2),
+      category_id: Joi.string().required().max(4),
       // resetToken: ,
     })
 
