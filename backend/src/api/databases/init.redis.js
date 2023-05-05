@@ -1,18 +1,41 @@
-const redis = require("redis");
+const redis = require('redis')
 const { redis: redisConfig } = require('../../config/db.config')
-let redisClient;
 
-(async () => {
-    redisClient = redis.createClient({
-        password: redisConfig.PASSWORD,
-        socket: redisConfig.SOCKET
-    });
+let redisClient
+;(async () => {
+  redisClient = redis.createClient({
+    password: redisConfig.PASSWORD,
+    socket: redisConfig.SOCKET,
+  })
+  redisClient.on('connect', () => console.log(`Redis::: connected`))
+  redisClient.on('error', (error) => console.error(`Redis::: ${error}`))
 
-    redisClient.on("connect", () => console.log(`Redis::: connected`));
+  await redisClient.connect()
+})()
 
-    redisClient.on("error", (error) => console.error(`Redis::: ${error}`));
+var self = (module.exports = {
+  getNewClient: () => {
+    const redisClient = redis.createClient({
+      password: redisConfig.PASSWORD,
+      socket: redisConfig.SOCKET,
+    })
+    self.getConnection(redisClient)
 
-    await redisClient.connect();
-})();
+    return redisClient
+  },
 
-module.exports = redisClient
+  getConnection: async (redisClient) => {
+    redisClient.on('connect', () => console.log(`Redis::: connected`))
+    redisClient.on('error', (error) => console.error(`Redis::: ${error}`))
+    await redisClient.connect()
+  },
+
+  getClient: () => {
+    return redisClient
+  },
+})
+
+// https://github.com/redis/node-redis/blob/master/README.md#redis-commands
+// Build in func
+//  check status redisClient.isOpen,
+//  exists, set, get,...

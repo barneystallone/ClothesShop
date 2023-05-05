@@ -1,0 +1,42 @@
+.wrap-quantity {
+  @include flex(center, flex-start);
+  $height: 32px;
+
+  &__btn {
+    width: calc($height - 2px);
+    height: $height;
+    border: 1px solid $txt-second-color;
+    user-select: none;
+    background-color: #fff;
+
+    @include flex(center, center);
+
+    & svg {
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+
+    &:hover {
+      background-color: $main-color;
+      transition: all 0.3s ease;
+      border-width: 0;
+      color: #fff;
+    }
+
+    &.btn-minus {
+      border-radius: 100% 0 0 100%;
+    }
+    &.btn-plus {
+      border-radius: 0 100% 100% 0;
+    }
+  }
+
+  &__input {
+    height: $height;
+    border: 1px solid $txt-second-color;
+    outline: none;
+    border-width: 1px 0;
+    text-align: center;
+    max-width: 60px;
+  }
+}

@@ -1,0 +1,52 @@
+.filter-left {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  box-shadow: $box-shadow;
+
+  &__title {
+    @include flex(center, space-between);
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-bottom: 16px;
+  }
+
+  &__content {
+    color: $txt-second-color;
+    overflow: hidden;
+    transition: height 0.3s ease;
+
+    &__item {
+      padding-bottom: 13px;
+    }
+
+    // &.active {
+
+    // }
+  }
+
+  &__icon {
+    padding: 4px 12px 4px 10px;
+    position: relative;
+    right: -1rem;
+
+    &__svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      opacity: 0.8;
+
+      transition: color 0.1s ease-in-out, rotate 0.3s ease;
+
+      &.rotate {
+        rotate: 135deg;
+      }
+    }
+
+    &:hover {
+      .filter-left__icon__svg {
+        color: $main-color !important;
+      }
+    }
+  }
+}
