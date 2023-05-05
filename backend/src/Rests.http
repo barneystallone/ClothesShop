@@ -70,26 +70,13 @@ POST  {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-   "email" :"abcd@gmail.com",
-    "password": "abcd"
+  "email" :"abcd@gmail.com",
+  "password": "abcd"
 }
 
 ### 
 GET {{baseUrl}}/api/cart/
 Authorization: Beaer {{authToken}}
-
-### 
-PUT {{baseUrl}}/api/cart/
-Authorization: Beaer {{authToken}}
-Content-Type: application/json
-
-{
-  "pId": "N6p3QrpMgzqKd",
-  "itemId": "N6i5hk4QUALg9",
-  "sizeId": "S004",
-  "sizeName": "FreeSize",
-  "quantity": 10
-}
 
 ###
 PUT {{baseUrl}}/api/cart/item
@@ -99,11 +86,11 @@ Content-Type: application/json
 {
   "pId": "N6p3QrpMgzqKd",
   "itemId": "N6i5hk4QUALg9",
-  "sizeId": "S0s04",
+  "sizeId": "S004",
   "sizeName": "FreseSize",
-  "quantity": 12,
-  "index":1 
+  "quantity": 12
 }
+
 ###
 PATCH  {{baseUrl}}/api/cart/item
 Authorization: Beaer {{authToken}}
@@ -111,9 +98,30 @@ Content-Type: application/json
 
 {
   "pId": "N6p3QrpMgzqKd",
-  "index": 0,
+  "index": 1,
   "itemId": "N6i5hk4QUALg9",
   "sizeId": "S004",
   "sizeName": "FreeSize",
   "quantity": 13
+}
+
+###
+PATCH  {{baseUrl}}/api/cart/item-quantity
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+
+  "index": 0,
+  "quantity": -13
+}
+###
+PUT  {{baseUrl}}/api/cart/item-quantity
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+
+  "index": 0,
+  "quantity": -13
 }

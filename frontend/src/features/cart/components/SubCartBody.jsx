@@ -1,30 +1,40 @@
-import React, { Suspense, useCallback } from 'react'
+import React, { Suspense, useCallback, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import QuantityInput from '../../../components/QuantityInput'
 import { selectCurrentToken } from '../../auth/auth.slice'
 import { useDispatch, useSelector } from 'react-redux'
 import { numberToCurrency } from '../../../utils'
 import { selectListCartItem, setCartItemQuantity } from '../cart.slice'
 import { setProductModalSlug } from '../../product/product.slice'
+import { usePutItemQuantityMutation } from '../cart.service'
+import { Link } from 'react-router-dom'
 const BiTrash = React.lazy(() =>
   import('react-icons/bi').then(({ BiTrash }) => ({ default: BiTrash }))
 )
 
+let count = 1
+
 const SubCartBody = (props) => {
   const token = useSelector(selectCurrentToken)
-  const listCartItem = useSelector(selectListCartItem)
+  const { listCartItem } = props
   const dispatch = useDispatch()
+  const [putQuantity] = usePutItemQuantityMutation()
 
-  const onQuantityInputChange = (index) => (quantity) => {
-    dispatch(setCartItemQuantity({ index, quantity: quantity * 1 }))
-    if (!token) {
-      return
-    }
-  }
+  const onQuantityInputChange = useCallback(
+    (index) => (quantity) => {
+      dispatch(setCartItemQuantity({ index, quantity: quantity * 1 }))
+    },
+    [dispatch]
+  )
+  const onQuantityChangeSync = useCallback(
+    (index, sizeId, itemId) => (quantity) => {
+      putQuantity({ index, quantity: quantity * 1, sizeId, itemId })
+    },
+    [putQuantity]
+  )
 
   const handleClick = useCallback(
     (slug, sizeId, itemId, quantity, index) => (e) => {
-      console.table({ slug, sizeId, itemId })
-      // const initialItem = {
       e.stopPropagation()
       e.preventDefault()
       dispatch(
@@ -41,6 +51,7 @@ const SubCartBody = (props) => {
     },
     [dispatch]
   )
+
   return (
     <div className='body-wrapper'>
       <div className='subCart__body'>
@@ -53,7 +64,14 @@ const SubCartBody = (props) => {
             </div>
             <div className='cart-item cart-item--right'>
               <div className='cart-item--right-top'>
-                <div className='item__name'> {item.title}</div>
+                <Link to={`/product/${item.slug}`}>
+                  <div className='item__name'>
+                    {' '}
+                    {item.title.length > 36
+                      ? item.title.substring(0, 33).concat('...')
+                      : item.title}
+                  </div>
+                </Link>
                 <div className='item__price'>{numberToCurrency(item.price)}đ</div>
                 <div
                   className='size-color__group'
@@ -76,7 +94,9 @@ const SubCartBody = (props) => {
                   className='item-quantity'
                   quantity={item.quantity}
                   onChange={onQuantityInputChange(index)}
-                  // onClick={onQuantityInputChange(index)}
+                  onChangeSyncDb={
+                    token ? onQuantityChangeSync(index, item.sizeId, item.itemId) : null
+                  }
                 />
                 <div className='item__total__price '>
                   Tổng cộng: <span>{numberToCurrency(item.quantity * item.price)}đ</span>
@@ -89,5 +109,7 @@ const SubCartBody = (props) => {
     </div>
   )
 }
-
+SubCartBody.propTypes = {
+  listCartItem: PropTypes.arrayOf(PropTypes.object).isRequired
+}
 export default React.memo(SubCartBody)

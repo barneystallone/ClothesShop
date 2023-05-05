@@ -23,6 +23,8 @@ import { handleLazyLoadSvgPromise } from '../../../utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { putCartItem, updateCartItem } from '../../cart/cart.slice'
 import { selectInitialItem } from '../product.slice'
+import { usePatchItemMutation, usePutItemMutation } from '../../cart/cart.service'
+import { selectCurrentToken } from '../../auth/auth.slice'
 
 const BiCartAlt = React.lazy(() =>
   import('react-icons/bi').then((module) => ({ default: module.BiCartAlt }))
@@ -58,6 +60,10 @@ const ProductView = (props) => {
   const [quantityToAdd, setQuantityToAdd] = useState(1)
   const { product } = props
   const dispatch = useDispatch()
+  const [putItem] = usePutItemMutation()
+  const [patchItem] = usePatchItemMutation()
+
+  const token = useSelector(selectCurrentToken)
   // const [onChangeCartBadge, toggleCartAnimation] = useToggle()
 
   const slideTo = useCallback((index) => {
@@ -106,7 +112,7 @@ const ProductView = (props) => {
       // eslint-disable-next-line no-unused-vars
       const { inventory, itemId, ...rest2 } = product.collections[activeThumb]
       const payload = {
-        ...rest, //
+        ...rest, // {  sizeId, itemId, sizeName, pId }
         ...rest2, // ...rest2 === colorName, colorCode, thumbUrl, url
         quantity: quantityToAdd * 1,
         slug,
@@ -115,23 +121,35 @@ const ProductView = (props) => {
       }
       // update sản phẩm trong subcart-> updateCart
       if (initialSelectItem) {
-        payload.index = initialSelectItem.index
-        dispatch(updateCartItem(payload))
+        // console.log(rest)
+        // dispatch(updateCartItem({ ...payload, index: initialSelectItem.index }))
+        token
+          ? patchItem({
+              ...rest,
+              quantity: quantityToAdd * 1,
+              index: initialSelectItem.index
+            })
+          : dispatch(updateCartItem({ ...payload, index: initialSelectItem.index }))
       } else {
-        dispatch(putCartItem(payload))
+        token
+          ? putItem({
+              quantity: quantityToAdd * 1,
+              ...rest
+            })
+          : dispatch(putCartItem(payload))
       }
-      // sync to backend
       props.modal && props.closeModal && props.closeModal(e, false)
+      if (!initialSelectItem) {
+        //set animation
+        clearTimeout(delay)
 
-      //set animation
-      clearTimeout(delay)
+        const cartElement = document.querySelector('.cart-wrap.header__menu__item')
 
-      const cartElement = document.querySelector('.cart-wrap.header__menu__item')
-
-      cartElement.classList.add('active')
-      setTimeout(() => {
-        cartElement.classList.remove('active')
-      }, 600)
+        cartElement.classList.add('active')
+        setTimeout(() => {
+          cartElement.classList.remove('active')
+        }, 600)
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [activeThumb, product, dispatch, quantityToAdd, props.modal, props.closeModal]
@@ -156,7 +174,7 @@ const ProductView = (props) => {
         setActiveThumb(colorIndex)
         setSelectItem(product.collections[colorIndex].inventory[sizeIndex])
         slideTo(colorIndex)
-      }, 500)
+      }, 400)
     }
     return () => clearTimeout(wait)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,7 +257,6 @@ const ProductView = (props) => {
                 className='section-quantity'
                 quantity={quantityToAdd}
                 onChange={(quantity) => {
-                  console.log(quantity)
                   setQuantityToAdd(quantity * 1)
                 }}
               />
@@ -295,7 +312,6 @@ const SelectSize = React.memo((props) => {
   const handleClick = (item) => {
     if (props.onClick) {
       props.onClick(item)
-      console.log(item)
     }
   }
   return (

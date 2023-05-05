@@ -73,6 +73,10 @@ $cartBodyMaxHeight: 380px;
           padding: $paddingCartTopRightBtn;
           transform: rotate(-90deg) translate(5px);
           animation: floating 2s ease-in-out infinite;
+
+          &.login {
+            animation: floating-horizon 2s ease-in-out infinite;
+          }
         }
 
         svg {
@@ -142,11 +146,17 @@ $cartBodyMaxHeight: 380px;
             .item__name {
               font-size: 1.2rem;
               font-weight: 500;
+              margin-bottom: 4px;
+              &:hover {
+                text-decoration: underline;
+                color: $txt-main-color;
+              }
               // line-height: 2rem;
             }
             .item__price {
               font-weight: 500;
               color: $yellow-color;
+              margin-bottom: 4px;
             }
           }
           .btn-delete {
@@ -209,9 +219,12 @@ $cartBodyMaxHeight: 380px;
 }
 
 .size-color__group {
+  user-select: none;
+  cursor: pointer;
   color: #363636;
   background: #f5f5f5;
   padding: 0 12px;
+  margin-left: -4px;
   line-height: 2rem;
   border-radius: 13px;
   width: fit-content;

@@ -25,7 +25,7 @@ const ProductDetail = () => {
   // const relatedProducts = productData.getProducts(5)
   return (
     data?.product && (
-      <Helmet title={data?.title}>
+      <Helmet title={data?.product.title}>
         <Section>
           <SectionBody>
             <Suspense fallback=''>

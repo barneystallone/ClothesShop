@@ -9,6 +9,7 @@ import {
 import { useRefreshQuery } from '../../../features/auth/auth.service'
 import { BiUser } from 'react-icons/bi'
 import { persistor } from '../../../store'
+import { useGetCartQuery } from '../../../features/cart/cart.service'
 const UserItem = React.memo(() => {
   const dispatch = useDispatch()
 
@@ -18,7 +19,11 @@ const UserItem = React.memo(() => {
 
   const token = useSelector(selectCurrentToken)
 
-  const { data, isSuccess, isLoading } = useRefreshQuery(undefined, {
+  const {
+    data: credentialData,
+    isSuccess,
+    isLoading
+  } = useRefreshQuery(undefined, {
     skip: !!token
   })
 
@@ -30,12 +35,12 @@ const UserItem = React.memo(() => {
     if (!isLoading) {
       setLoading(false)
       if (isSuccess) {
-        dispatch(setCredentials(data))
+        dispatch(setCredentials(credentialData))
         persistor.pause()
         persistor.purge()
       }
     }
-  }, [isLoading, dispatch, isSuccess, data])
+  }, [isLoading, dispatch, isSuccess, credentialData])
 
   return loading ? (
     <Fragment></Fragment>

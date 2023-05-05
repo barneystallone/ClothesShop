@@ -8,8 +8,16 @@ var that = (module.exports = {
   getCart: async (userId) => {
     return redisDao.getCart(userId)
   },
-  setCart: async (data) => {
-    return redisDao.setCart(data)
+
+  /**
+   *  Đồng bộ giỏ hàng
+   */
+  syncCartToDB: async (data, userId) => {
+    const arrPromise = data.reduce((arr, item, index) => {
+      arr[index] = that.setCartItem({ ...item, userId })
+      return arr
+    }, [])
+    return Promise.all(arrPromise)
   },
 
   /**
@@ -17,10 +25,10 @@ var that = (module.exports = {
    *  Không tồn tại => thêm mới sản phẩm
    */
   setCartItem: async (data) => {
+    // data -> { itemId, pId, sizeId, quantity, userId, sizeName }
     const isExists = await redisDao.isExistsItem(data)
     if (isExists) {
-      return redisDao.updateItemQuantity(data)
-      // return redisDao.updateItem(data)
+      return redisDao.patchItemQuantity(data)
     }
     return redisDao.addItem(data)
   },
@@ -33,22 +41,22 @@ var that = (module.exports = {
   updateItem: async (data) => {
     const { itemId, pId, sizeId, quantity, userId, sizeName, index } = data
     const isExists = await redisDao.isExistsItem(data)
-    console.log('isExists', isExists)
     if (isExists) {
       const _item = await redisDao.getItemByIndex({ userId, index })
-      // const [updateStatus, result] = await Promise.all([updatePromise, getItemPromise])
       if (!(_item.itemId === itemId && _item.sizeId === sizeId)) {
-        const updatePromise = redisDao.updateItemQuantity({ userId, itemId, sizeId, quantity })
+        const updatePromise = redisDao.patchItemQuantity({ userId, itemId, sizeId, quantity })
         const removeItemPromise = redisDao.removeItem({ index, userId })
         const [updateStatus, removeStatus] = await Promise.all([updatePromise, removeItemPromise])
         return { updateStatus, removeStatus }
       }
-      // return { updateStatus }
     }
     return redisDao.updateItemByIndex({ itemId, pId, sizeId, quantity, userId, sizeName, index })
   },
-  updateItemQuantity: async (data) => {
-    return redisDao.updateItemQuantity(data)
+  patchItemQuantity: async (data) => {
+    return redisDao.patchItemQuantity(data)
+  },
+  putItemQuantity: async (data) => {
+    return redisDao.putItemQuantity(data)
   },
 
   getItemByIndex: async (data) => {

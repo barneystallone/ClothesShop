@@ -25,7 +25,7 @@ export const productApi = api.injectEndpoints({
     getProduct: build.query({
       query: (slug) => `product/${slug}`,
       providesTags: (result) => [{ type: 'Products', id: result.pId }],
-      keepUnusedDataFor: 20
+      keepUnusedDataFor: 30
     }),
     getRelatedProducts: build.query({
       query: (slug) => `product/related/${slug}`,

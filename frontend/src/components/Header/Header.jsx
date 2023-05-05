@@ -6,7 +6,7 @@ import UserItem from './components/UserItem'
 // const { SubCart } = React.lazy(() => import('../../features/cart'))
 import { SubCart } from '../../features/cart'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectTotalProductCount, setShowCart } from '../../features/cart/cart.slice'
+import { selectTotalItemQuantity, setShowCart } from '../../features/cart/cart.slice'
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -33,7 +33,7 @@ const Header = () => {
   const [active, setActive] = useState('header__menu__left')
   const headerRef = useRef(null)
   const dispatch = useDispatch()
-  const totalProductCount = useSelector(selectTotalProductCount)
+  const totalProductCount = useSelector(selectTotalItemQuantity)
 
   const toggleMenu = () => {
     setActive((prev) => {

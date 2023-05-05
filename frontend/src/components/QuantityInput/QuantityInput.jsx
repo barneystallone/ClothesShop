@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { handleLazyLoadSvgPromise } from '../../utils'
 const MinusIcon = React.lazy(() =>
@@ -8,31 +8,50 @@ const PlusIcon = React.lazy(() =>
   handleLazyLoadSvgPromise(import('../../assets/images/plus.svg'))
 )
 
+let delay
 const QuantityInput = (props) => {
-  // const [quantity, setQuantity] = useState(props.initValue || 1)
+  const [isFetching, setIsFetching] = useState(false)
+  const isUnmountedRef = useRef(null)
 
   const incr = (incr = true) => {
     const quantity = props.quantity
     if ((Boolean(quantity) === false || quantity * 1 <= 1) && !incr) return
-    if (props?.onChange) {
-      return props.onChange(quantity * 1 + (incr ? 1 : -1))
-    }
+    setIsFetching(true)
+    return props.onChange(quantity * 1 + (incr ? 1 : -1))
   }
 
   const handleChange = (e) => {
     if (e.target.value === '') return
     const s_number = e.target.value.replace(/^0*/g, '')
-    console.log(e.target.value)
     if (s_number && s_number * 1 >= 1 && s_number < 1000) {
+      setIsFetching(true)
       props.onChange(s_number)
     }
   }
-  // useEffect(() => {
-  //   if (props?.onChange) {
-  //     props.onChange(quantity * 1)
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [quantity])
+
+  useEffect(() => {
+    isUnmountedRef.current = false
+    return () => {
+      isUnmountedRef.current = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (props.onChangeSyncDb && isFetching) {
+      delay = setTimeout(() => {
+        props.onChangeSyncDb(props.quantity)
+        setIsFetching(false)
+      }, 1000)
+    }
+
+    return () => {
+      clearTimeout(delay)
+      if (isUnmountedRef.current && isFetching && props.onChangeSyncDb) {
+        props.onChangeSyncDb(props.quantity)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.quantity])
 
   return (
     <Suspense fallback={<div>...</div>}>
@@ -57,6 +76,7 @@ const QuantityInput = (props) => {
 QuantityInput.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onChangeSyncDb: PropTypes.func,
   quantity: PropTypes.number.isRequired
 }
 

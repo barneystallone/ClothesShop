@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { isForbiddenError } from './utils/type-predicate'
+import { setCurrentToken } from './features/auth/auth.slice'
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
@@ -19,7 +20,11 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   // console.log(result)
   const error = result?.error
   if (error && isForbiddenError(error)) {
-    console.log('error::', error?.status)
+    const refreshResult = await baseQuery('user/refresh-token', api, extraOptions)
+    if (refreshResult.data && 'accessToken' in refreshResult.data) {
+      api.dispatch(setCurrentToken(refreshResult.data))
+      result = await baseQuery(args, api, extraOptions)
+    }
   }
   return result
 }
@@ -27,7 +32,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Categories', 'Products'],
+  tagTypes: ['Categories', 'Products', 'Cart'],
 
   endpoints: () => ({})
 })

@@ -13,7 +13,6 @@ const PREFIX = 'cart:'
 //   title,
 //   price,
 // }
-
 // eval 'local collection = "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")]";local result = redis.call("ft.search" ,"products", "@pId:{N6p3QrpMgzqKd}" ,"return", 7,"title" ,"price" ,"slug" , "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")].url", collection..".thumbUrl",collection..".colorName",collection..".colorCode")[3]; return result' 0
 // eval 'return redis.call("ft.search" ,"products", "@pId:{N6p3QrpMgzqKd}" ,"return", 4 ,"title" ,"price" ,"slug" , "$.collections[?(@.itemId==\"N6i5hk4QUALg9\")][\"url\",\"thumbUrl\",\"colorCode\",\"colorName\"]")' 0
 // eval 'return cjson.decode(redis.call("FT.SEARCH", "carts", "@userId:{"..ARGV[1].."}" ,"return", 1, "$.products[*].pId", "DIALECT",3 )[3][2])' 0 "N6_nPuq6oSnY9DO"
@@ -56,7 +55,6 @@ var that = (module.exports = {
 
   /**
    * Thêm mới sản phẩm vào list product, tạo mới key nêu chưa tồn tại trong redis
-   * @returns
    */
   addItem: async ({ itemId, pId, sizeId, quantity, userId, sizeName }) => {
     const pipeline = redis.pipeline()
@@ -105,22 +103,14 @@ var that = (module.exports = {
     )
   },
 
-  updateItemQuantity: async ({ userId, itemId, sizeId, quantity }) => {
-    // console.log({ userId, index, value, quantity })
-    // if (quantity) {
-    //   return redis.call(
-    //     'JSON.SET',
-    //     PREFIX.concat(userId),
-    //     `$.products[?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")].quantity`,
-    //     quantity * 1
-    //   )
-    // }
-    return redis.call(
-      'JSON.NUMINCRBY',
-      PREFIX.concat(userId),
-      `$.products[?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")].quantity`,
-      quantity * 1
-    )
+  patchItemQuantity: async ({ userId, itemId, sizeId, quantity, index }) => {
+    index = index ?? `?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")`
+    return redis.call('JSON.NUMINCRBY', PREFIX.concat(userId), `$.products[${index}].quantity`, quantity * 1)
+  },
+
+  putItemQuantity: async ({ userId, index, quantity }) => {
+    console.log(typeof index)
+    return redis.call('JSON.SET', PREFIX.concat(userId), `$.products[${index * 1}].quantity`, quantity * 1)
   },
 
   removeItem: async ({ index, userId }) => {
