@@ -70,7 +70,7 @@ var self = (module.exports = {
       httpOnly: true,
       secure: true, // chạy web ->  true, postman: flase
       path: '/',
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 30,
     })
   },

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
 import { typeOf } from '../../utils'
@@ -97,20 +97,23 @@ export const selectCartStatus = (state) => state.cart.showCart
 export const selectListCartItem = (state) => state.cart.listItem
 export const selectItemCount = (state) => state.cart.listItem.length
 
-export const selectTotalItemQuantity = (state) => {
-  return state.cart.listItem.reduce((totalCount, item) => totalCount + item.quantity, 0)
-}
+// export const selectTotalItemQuantity = (state) => {
+//   return state.cart.listItem.reduce((totalCount, item) => totalCount + item.quantity, 0)
+// }
 
-export const selectTotalCartPrice = (state) => {
-  return state.cart.listItem.reduce(
-    (totalPrice, item) => totalPrice + item.quantity * item.price,
-    0
-  )
-}
+// export const selectTotalCartPrice = (state) => {
+//   return state.cart.listItem.reduce(
+//     (totalPrice, item) => totalPrice + item.quantity * item.price,
+//     0
+//   )
+// }
+export const selectTotalCartPrice = createSelector([selectListCartItem], (listItem) => {
+  return listItem.reduce((totalPrice, item) => totalPrice + item.quantity * item.price, 0)
+})
 
-// export const selectTotalProductCount = createSelector(
-//   [selectListCartItem],
-//   (listItem) => {
-//     return listItem.reduce((totalCount, item) => totalCount + item.quantity, 0)
-//   }
-// )
+export const selectTotalItemQuantity = createSelector(
+  [selectListCartItem],
+  (listItem) => {
+    return listItem.reduce((totalCount, item) => totalCount + item.quantity, 0)
+  }
+)

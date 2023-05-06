@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import qs from 'qs'
+
 import { useGetProductsQuery } from '../../features/product/product.service'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -15,29 +17,90 @@ import FilterLeft from './components/FilterLeft'
 import CategoryFilter from './components/CategoryFilter'
 import Grid from '../../components/Grid'
 import Pagination from '../../features/pagination'
+import { useSearchParams } from 'react-router-dom'
+import {
+  initCategoryFilters,
+  selectAllCategoryFilters
+} from '../../features/product/product.slice'
+import { useGetCategoriesQuery } from '../../features/category/category.service'
 
 let count = 1
 //Nên dùng React-window để render list
 const ShowProductList = () => {
   // console.log(count++)
-  // const [searchParams, setSeachParams] = useSearchParams()
   // const dispatch = useDispatch()
-  // const searchParamsObj = useMemo(() => {
-  //   const params = {}
-  //   searchParams.forEach((value, key) => (params[key] = value))
-  //   return params
-  // }, [searchParams])
+
+  const allCateFilters = useSelector(selectAllCategoryFilters)
+  const [searchParams, setSeachParams] = useSearchParams()
+  const [isSyncParamToStore, setSyncParamToStore] = useState(false)
+  const {
+    data: categories,
+    isLoading: isCateLoading,
+    isSuccess
+  } = useGetCategoriesQuery()
   const [loading, setLoading] = useState(false)
   const activePage = useSelector(selectActivePage)
   const dispatch = useDispatch()
   const { data, isFetching, isLoading } = useGetProductsQuery(
-    { page: activePage },
+    { page: activePage, c: allCateFilters },
     {
       skip: !activePage,
       pollingInterval: 1000 * 2 * 60
     }
   )
-  React.useEffect(() => {
+  const { page, c } = useMemo(() => qs.parse(searchParams.toString()), [])
+
+  useEffect(() => {
+    if (isSuccess && categories && !isSyncParamToStore) {
+      const initArray = Array.from({ length: categories.length }, () => [])
+      if (c) {
+        const filterArray = c.split('|')
+        // console.log(filterArray)
+        const extractSubCateId = categories.map((parent) =>
+          parent.sub_category.map((i) => i.id)
+        )
+        // console.log('extractSubCate', extractSubCateId)
+        const position = filterArray.map((filterItem) => {
+          for (let i = 0; i < extractSubCateId.length; i++) {
+            if (extractSubCateId[i].indexOf(filterItem) !== -1) {
+              return i
+            }
+          }
+          return -1 // không tìm thấy
+        })
+        filterArray.forEach((item, index) => {
+          initArray[position[index]].push(item)
+        })
+        console.log('initArray', initArray)
+      }
+      dispatch(initCategoryFilters(initArray))
+      setSyncParamToStore(true)
+    }
+  }, [categories, isSuccess, dispatch, isSyncParamToStore, c])
+
+  useEffect(() => {
+    if (page && !Number(page)) {
+      searchParams.delete('page')
+      setSeachParams(searchParams)
+    }
+    dispatch(setActivePage(page * 1 || 1))
+
+    return () => {
+      dispatch(setActivePage(1))
+      dispatch(setTotalPage(1))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (allCateFilters && allCateFilters?.length) {
+      searchParams.set('c', allCateFilters.join('|'))
+      searchParams.set('page', 1)
+      dispatch(setActivePage(1))
+      setSeachParams(searchParams)
+    }
+  }, [allCateFilters, dispatch])
+
+  useEffect(() => {
     window.scrollTo({
       top: 70,
       left: 0,
@@ -46,15 +109,14 @@ const ShowProductList = () => {
   }, [loading, isLoading])
 
   useEffect(() => {
-    return () => {
-      dispatch(setActivePage(1))
-      dispatch(setTotalPage(1))
-    }
-  }, [])
-  useEffect(() => {
     const pages = Math.ceil(data?.total / data?.itemPerPage) || 1
+    if (data && activePage > pages) {
+      dispatch(setActivePage(1))
+      searchParams.set('page', 1)
+      setSeachParams(searchParams)
+    }
     dispatch(setTotalPage(pages))
-  }, [data, dispatch])
+  }, [data, dispatch, activePage, setSeachParams, searchParams])
 
   useEffect(() => {
     let delay
@@ -70,7 +132,7 @@ const ShowProductList = () => {
     <Helmet title='Sản phẩm'>
       <div className='product'>
         <div className='product-filter'>
-          <CategoryFilter />
+          <CategoryFilter categories={categories} isLoading={isCateLoading} />
           <FilterLeft title='Kích cỡ'>
             <Grid col={2} mdCol={1} gap={6}>
               {size.map((item, index) => (
