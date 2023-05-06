@@ -34,10 +34,12 @@ const LoginSignUpModal = () => {
     return promise
       .unwrap()
       .then((payload) => {
-        dispatch(setCredentials(payload))
+        if (successMessage === LOGIN_SUCCESS_MSG) {
+          dispatch(setCredentials(payload))
+          persistor.pause()
+          persistor.purge()
+        }
         dispatch(setShowModalStatus(false))
-        persistor.pause()
-        persistor.purge()
         toast.success(successMessage)
       })
       .catch(() => {})

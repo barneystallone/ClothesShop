@@ -33,6 +33,7 @@ const ShowProductList = () => {
   const allCateFilters = useSelector(selectAllCategoryFilters)
   const [searchParams, setSeachParams] = useSearchParams()
   const [isSyncParamToStore, setSyncParamToStore] = useState(false)
+  const [isSyncPageParam, setSyncPageParam] = useState(false)
   const {
     data: categories,
     isLoading: isCateLoading,
@@ -84,6 +85,7 @@ const ShowProductList = () => {
       setSeachParams(searchParams)
     }
     dispatch(setActivePage(page * 1 || 1))
+    setSyncPageParam(true)
 
     return () => {
       dispatch(setActivePage(1))
@@ -94,8 +96,11 @@ const ShowProductList = () => {
   useEffect(() => {
     if (allCateFilters && allCateFilters?.length) {
       searchParams.set('c', allCateFilters.join('|'))
-      searchParams.set('page', 1)
-      dispatch(setActivePage(1))
+      if (isSyncPageParam === true && isSyncParamToStore === true) {
+        console.log(isSyncPageParam)
+        searchParams.set('page', 1)
+        dispatch(setActivePage(1))
+      }
       setSeachParams(searchParams)
     }
   }, [allCateFilters, dispatch])
