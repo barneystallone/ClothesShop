@@ -44,12 +44,7 @@ const usePagination = () => {
   }, [totalPage])
 
   useEffect(() => {
-    const searchPageParams = searchParams.get('page')
-    if (searchPageParams !== null && !Number(searchPageParams)) {
-      searchParams.delete('page')
-      setSeachParams(searchParams)
-    }
-    dispatch(setActivePage(Number(searchPageParams) || 1))
+    // dispatch(setActivePage(Number(searchPageParams) || 1))
     // setRangeOnChangePage(Number(searchPageParams))
   }, [])
 

@@ -26,14 +26,14 @@ var self = (module.exports = {
   getProductsByCategoryIDs: async (params) => {
     const { page, ...rest } = params
     const _offset = ((page ?? 1) - 1) * itemPerPage
-    const { count, products } = await redisProductDao.getProductsByCategoryIDs({
+    const { total, products } = await redisProductDao.getProductsByCategoryIDs({
       ...rest,
       offset: _offset,
       limit: itemPerPage,
     })
 
     return {
-      total: count,
+      total,
       products,
       itemPerPage,
       meta: {

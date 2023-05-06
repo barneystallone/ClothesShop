@@ -5,13 +5,15 @@ const alphabetSort = (a, b) => a.localeCompare(b)
 export const productApi = api.injectEndpoints({
   endpoints: (build) => ({
     getProducts: build.query({
-      // params : {page, categoryFilter:c}
+      // params : {page, c} c -> categoryFilter
       query: (params) => {
-        if (params?.c) {
-          params.c = params.c.sort().join('|')
+        console.log(params)
+        let newParams = { ...params }
+        if (params?.c && params?.c.length) {
+          newParams.c = params.c.join('|')
         }
         // console.log('params::', qs.stringify(params, { sort: alphabetSort }))
-        return { url: `product?${qs.stringify(params, { sort: alphabetSort })}` }
+        return { url: `product?${qs.stringify(newParams, { sort: alphabetSort })}` }
       },
       keepUnusedDataFor: 60,
       providesTags: (results) =>
