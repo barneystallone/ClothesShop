@@ -33,15 +33,7 @@ const ProductImagesSlider = React.forwardRef((props, ref) => {
       >
         {props.images?.map((item, index) => (
           <SwiperSlide key={index} className='wrapper-img'>
-            <img
-              loading='lazy'
-              src={item}
-              alt=''
-              // onClick={() => {
-              //   const swiper = document.querySelector('.swiper ').swiper
-              //   swiper.update(null)
-              // }}
-            />
+            <img loading='lazy' src={item} alt='' />
           </SwiperSlide>
         ))}
       </Swiper>

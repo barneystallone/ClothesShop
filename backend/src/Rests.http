@@ -6,7 +6,7 @@
 @authToken = {{login.response.body.accessToken}}
 
 ###
-GET {{baseUrl}}/api/product?c=c08%7Cc09%7Cc20%7Cc30&page=1
+GET {{baseUrl}}/api/product?c=c08%7Cc09%7Cc20%7Cc30&page=123a
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODA0NDg2OTEsImV4cCI6MTY4MDQ0ODc1MX0.bMYu_fIqG45CEJVo0DGcg-9WT1rFuL4gwlWsmcHV1DQ
 
 ###
@@ -39,21 +39,18 @@ Content-Type: application/json
 ###
 # không test được vì set cookie secure là true 
 GET  {{baseUrl}}/api/user/refresh-token
-# Cookie: 
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9RbzFTSXQ3Q3ZranYiLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzEwNjcsImV4cCI6MTY4NjAyMzA2N30.4S1TfCqccOuHl2lGA6tJkL4qa3747OXtVSz0hmlC__Y
 
 
-###
-POST  {{baseUrl}}/api/user/create
 
 ### PRODUCT
-POST {{baseUrl}}/api/product/create
+POST {{baseUrl}}/api/product/
 Content-Type: application/json
 
 {
-    "title": "qu" ,
     "description"  : "aaaaaaaaaaa",
     "price": 135150 ,
-    "category_id": 2 
+    "category_id": "c08" 
 }
 
 ### 
@@ -76,7 +73,7 @@ Content-Type: application/json
 
 ### 
 GET {{baseUrl}}/api/cart/
-Authorization: Beaer {{authToken}}
+# Authorization: Beaer {{authToken}}
 
 ###
 PUT {{baseUrl}}/api/cart/item
@@ -115,6 +112,10 @@ Content-Type: application/json
   "index": 0,
   "quantity": -13
 }
+
+
+
+
 ###
 PUT  {{baseUrl}}/api/cart/item-quantity
 Authorization: Beaer {{authToken}}
@@ -124,4 +125,23 @@ Content-Type: application/json
 
   "index": 0,
   "quantity": -13
+}
+
+
+###
+# @name login
+POST  {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+  "email" :"abcd2@gmail.com",
+  "password": "abcd2"
+}
+###
+DELETE  {{baseUrl}}/api/cart/item
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "index": 2
 }

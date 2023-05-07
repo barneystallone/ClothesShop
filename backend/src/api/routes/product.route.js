@@ -5,9 +5,9 @@ const { uploader } = require('../middleware/uploader')
 const routes = express.Router()
 
 routes.get('/', productController.getAllProduct)
+routes.post('/', productController.insertProduct) // autuploadImagesh admin
 routes.get('/:slug', productController.findBySlug)
 routes.get('/related/:slug', productController.getRelatedProducts)
-routes.post('/create', productController.insertProduct) // autuploadImagesh admin
 routes.post('/upload/:pId', uploader.fields([{ name: 'img' }, { name: 'thumbImg' }]), productController.upload) // auth admin
 
 module.exports = routes

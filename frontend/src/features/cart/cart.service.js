@@ -49,6 +49,16 @@ const cartApi = api.injectEndpoints({
       }
     }),
 
+    deleteItem: builder.mutation({
+      query: ({ index, itemId, sizeId }) => ({
+        url: 'cart/item',
+        method: 'DELETE',
+        body: { index }
+      }),
+      invalidatesTags: (result, err, { sizeId, itemId }) => {
+        return [{ type: 'Cart', id: { sizeId, itemId } }]
+      }
+    }),
     syncCartToDB: builder.mutation({
       query: (listItem) => ({
         url: 'cart/sync',
@@ -65,5 +75,6 @@ export const {
   usePutItemMutation,
   usePutItemQuantityMutation,
   usePatchItemMutation,
+  useDeleteItemMutation,
   useSyncCartToDBMutation
 } = cartApi

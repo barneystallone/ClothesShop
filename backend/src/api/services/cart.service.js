@@ -58,8 +58,7 @@ var that = (module.exports = {
   putItemQuantity: async (data) => {
     return redisDao.putItemQuantity(data)
   },
-
-  getItemByIndex: async (data) => {
-    return redisDao.getItemByIndex(data)
+  removeItem: async (data) => {
+    return redisDao.removeItem(data)
   },
 })

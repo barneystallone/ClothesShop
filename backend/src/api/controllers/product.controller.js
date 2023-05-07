@@ -8,7 +8,7 @@ const nanoid = require('../utils/nanoid')
 var self = (module.exports = {
   insertProduct: asyncHandler(async (req, res, next) => {
     if (!req.body.title) {
-      next(createHttpError('product title is require'))
+      next(createHttpError.BadRequest('Product title is required'))
     }
 
     const options = {
@@ -19,13 +19,12 @@ var self = (module.exports = {
 
     const { error } = productValidate(req.body)
     if (error) {
-      next(createHttpError(error.details[0].message))
+      next(createHttpError.BadRequest(error.details[0].message))
     }
     req.body.pId = 'N6p' + (await nanoid(10))
     const affectedRows = await productService.insertProduct(req.body)
     if (affectedRows) {
       return res.status(200).json({
-        status: 'success',
         insertedId: req.body.pId,
       })
     }
@@ -51,7 +50,9 @@ var self = (module.exports = {
   findBySlug: asyncHandler(async (req, res, next) => {
     const { slug } = req.params
     const result = await productService.findBySlug(slug)
-
+    if (result.count === 0) {
+      next(createHttpError.NotFound())
+    }
     res.status(200).json({
       ...result,
       meta: {
@@ -85,7 +86,7 @@ var self = (module.exports = {
     const { pId } = req.params
     const { colorName, colorCode } = req.body
     const payload = { pId, colorName, colorCode, img, thumbImg }
-    const affectedRows = await productService.upload(payload)
-    affectedRows ? res.json(affectedRows) : next(createHttpError('Lỗi insert item'))
+    const data = await productService.upload(payload)
+    res.json(data)
   }),
 })

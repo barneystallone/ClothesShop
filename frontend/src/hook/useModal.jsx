@@ -32,40 +32,6 @@ const useModal = (closeModalAction, showStatusSelector, callback, delay = 200) =
     show,
     closeModal
   }
-  // const closeModal = (e, payload) => {
-  //     setEvent(e);
-  //     setPayload(payload);
-
-  //     setShow(false);
-  // }
-  // // useEffect(() => {
-  // //     console.log('show:::', show);
-  // //     setShow(isShow);
-  // // }, [isShow])
-
-  // useEffect(() => {
-  //     console.log("isShow::",isShow);
-  //     if (!show && isShow) {
-  //         console.log('effect:::', show);
-  //         // Animation
-  //         if (callback) {
-  //             callback && callback(event);
-  //             const id = setTimeout(() => {
-  //                 dispatch(closeModalAction(payload))
-  //             }, delay)
-
-  //             return () => clearTimeout(id)
-  //         } else {
-  //             dispatch(closeModalAction(payload));
-  //             // dispatch(closeModalAction());
-  //         }
-  //     }
-  // }, [show])
-
-  // return {
-  //     isShow,
-  //     closeModal,
-  // };
 }
 
 export default useModal

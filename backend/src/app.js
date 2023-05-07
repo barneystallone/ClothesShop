@@ -1,16 +1,29 @@
 const createError = require('http-errors')
 const express = require('express')
+const app = express()
+const fs = require('fs')
+
 const cors = require('cors')
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
 const compression = require('compression')
-const app = express()
+const swaggerUI = require('swagger-ui-express')
+const YAML = require('js-yaml')
 const redis = require('./api/databases/connect.redis.v2')
 const { init: productInit } = require('./api/services/product.service')
 const { init: cartInit } = require('./api/services/cart.service')
-// console.log(process.env.REDIS_URL)
+
 productInit()
 cartInit()
+
+const options = {
+  customSiteTitle: 'Fashion API UI',
+  customCss: '.swagger-ui .topbar { display: none }',
+}
+const specs = YAML.load(fs.readFileSync('./src/api.yaml', 'utf8'))
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs, options))
+
 app.use(
   compression({
     level: 6,
@@ -24,7 +37,7 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: [/https?:\/\/localhost:3000/, /https?:\/\/127.0.0.1:3000/],
+    origin: [/https?:\/\/localhost:3000/, /https?:\/\/127.0.0.1:3000/, /https?:\/\/localhost:8080/],
   })
 )
 

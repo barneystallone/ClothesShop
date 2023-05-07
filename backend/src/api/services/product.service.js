@@ -26,14 +26,14 @@ var self = (module.exports = {
   getProductsByCategoryIDs: async (params) => {
     const { page, ...rest } = params
     const _offset = ((page ?? 1) - 1) * itemPerPage
-    const { count, products } = await redisProductDao.getProductsByCategoryIDs({
+    const { total, products } = await redisProductDao.getProductsByCategoryIDs({
       ...rest,
       offset: _offset,
       limit: itemPerPage,
     })
 
     return {
-      total: count,
+      total,
       products,
       itemPerPage,
       meta: {
@@ -65,7 +65,7 @@ var self = (module.exports = {
   upload: async ({ pId, colorName, colorCode, img, thumbImg }) => {
     const _isExistsItem = await productDao.isExistsItem({ pId, colorCode })
     if (_isExistsItem) {
-      throw createHttpError.Conflict('Item đã tồn tại')
+      throw createHttpError.Conflict(`Màu ${colorName}(${colorCode}) đã tồn tại`)
     }
     const _arrPromise = [img, thumbImg].map(
       (file) =>
@@ -96,7 +96,8 @@ var self = (module.exports = {
     //       console.trace('redis err::', e.message)
     //     })
     // }
-    return await productDao.uploadImg(item)
+    productDao.uploadImg(item).then((res) => console.log(res))
+    return { url, thumbUrl }
   },
   findBySlug: async (slug) => {
     return await redisProductDao.findBySlug(slug)
