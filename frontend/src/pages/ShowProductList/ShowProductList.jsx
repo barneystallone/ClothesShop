@@ -51,6 +51,7 @@ const ShowProductList = () => {
   )
   const { page, c } = useMemo(() => qs.parse(searchParams.toString()), [])
 
+  //============- Map filter params vào store khi load xong category
   useEffect(() => {
     if (isSuccess && categories && !isSyncParamToStore) {
       const initArray = Array.from({ length: categories.length }, () => [])
@@ -93,6 +94,7 @@ const ShowProductList = () => {
     }
   }, [])
 
+  //=========== Set searchParams khi người dùng thay đổi filter
   useEffect(() => {
     if (allCateFilters && allCateFilters?.length) {
       searchParams.set('c', allCateFilters.join('|'))
@@ -113,6 +115,7 @@ const ShowProductList = () => {
     })
   }, [loading, isLoading])
 
+  //============== Pagination
   useEffect(() => {
     const pages = Math.ceil(data?.total / data?.itemPerPage) || 1
     if (data && activePage > pages) {
@@ -123,6 +126,7 @@ const ShowProductList = () => {
     dispatch(setTotalPage(pages))
   }, [data, dispatch, activePage, setSeachParams, searchParams])
 
+  //============== Animation loading
   useEffect(() => {
     let delay
     setLoading(true)

@@ -9,5 +9,6 @@ routes.put('/item', [verifyToken], cartController.setCartItem)
 routes.patch('/item', [verifyToken], cartController.setCartItem)
 routes.put('/item-quantity', [verifyToken], cartController.updateItemQuantity)
 routes.patch('/item-quantity', [verifyToken], cartController.updateItemQuantity)
+routes.delete('/item', [verifyToken], cartController.removeItem)
 
 module.exports = routes

@@ -4,9 +4,9 @@ import QuantityInput from '../../../components/QuantityInput'
 import { selectCurrentToken } from '../../auth/auth.slice'
 import { useDispatch, useSelector } from 'react-redux'
 import { numberToCurrency } from '../../../utils'
-import { selectListCartItem, setCartItemQuantity } from '../cart.slice'
+import { removeCartItem, selectListCartItem, setCartItemQuantity } from '../cart.slice'
 import { setProductModalSlug } from '../../product/product.slice'
-import { usePutItemQuantityMutation } from '../cart.service'
+import { useDeleteItemMutation, usePutItemQuantityMutation } from '../cart.service'
 import { Link } from 'react-router-dom'
 const BiTrash = React.lazy(() =>
   import('react-icons/bi').then(({ BiTrash }) => ({ default: BiTrash }))
@@ -19,6 +19,7 @@ const SubCartBody = (props) => {
   const { listCartItem } = props
   const dispatch = useDispatch()
   const [putQuantity] = usePutItemQuantityMutation()
+  const [deleteItem] = useDeleteItemMutation()
 
   const onQuantityInputChange = useCallback(
     (index) => (quantity) => {
@@ -33,6 +34,7 @@ const SubCartBody = (props) => {
     [putQuantity]
   )
 
+  //=========== Hiện modal update cart Item khi click size/color
   const handleClick = useCallback(
     (slug, sizeId, itemId, quantity, index) => (e) => {
       e.stopPropagation()
@@ -50,6 +52,17 @@ const SubCartBody = (props) => {
       )
     },
     [dispatch]
+  )
+
+  //============= Xóa cart Item
+  const handleDelete = useCallback(
+    (index, itemId, sizeId) => (e) => {
+      if (token) {
+        deleteItem({ index, itemId, sizeId })
+      }
+      dispatch(removeCartItem({ index }))
+    },
+    [token, dispatch]
   )
 
   return (
@@ -87,7 +100,10 @@ const SubCartBody = (props) => {
                 </div>
               </div>
               <Suspense>
-                <BiTrash className='btn-delete' />
+                <BiTrash
+                  className='btn-delete'
+                  onClick={handleDelete(index, item.itemId, item.sizeId)}
+                />
               </Suspense>
               <div className='cart-item--right-bot'>
                 <QuantityInput

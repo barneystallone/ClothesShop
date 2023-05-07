@@ -38,18 +38,10 @@ var that = (module.exports = {
     const result = await cartService.putItemQuantity({ userId, index, quantity })
     return res.status(200).json(result)
   }),
-  getItemByIndex: asyncHandler(async (req, res, next) => {}),
-  // setCart: asyncHandler(async (req, res, next) => {
-  //   const { userId } = req.payload
-  //   const { itemId, pId, sizeId, quantity, sizeName } = req.body
-  //   const result = await cartService.setCart({ itemId, pId, sizeId, quantity, userId, sizeName })
-  //   res.status(200).json(result)
-  // }),
-  // patchCartItem: asyncHandler(async (req, res, next) => {
-  //   const { userId } = req.payload
-  //   const { itemId, sizeId, value, quantity, index, pId, sizeName } = req.body
-
-  //   const result = await cartService.updateItem({ index, itemId, sizeId, value, userId, quantity, pId, sizeName }) //add
-  //   res.status(200).json(result)
-  // }),
+  removeItem: asyncHandler(async (req, res, next) => {
+    const { userId } = req.payload
+    const { index } = req.body
+    const result = await cartService.removeItem({ index, userId })
+    return res.status(200).json(result)
+  }),
 })

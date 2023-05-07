@@ -82,7 +82,7 @@ var that = (module.exports = {
   },
 
   removeItem: async ({ index, userId }) => {
-    return redis.call('JSON.ARRPOP', PREFIX.concat(userId), '$.products', index * 1)
+    return JSON.parse(await redis.call('JSON.ARRPOP', PREFIX.concat(userId), '$.products', index * 1))
   },
   init: async () => {
     let indices = await redis.call('FT._list')

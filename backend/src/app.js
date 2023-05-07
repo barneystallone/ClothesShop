@@ -16,9 +16,12 @@ const { init: cartInit } = require('./api/services/cart.service')
 productInit()
 cartInit()
 
+const options = {
+  customCss: '.swagger-ui .topbar { display: none }',
+}
 const specs = YAML.load(fs.readFileSync('./src/api.yaml', 'utf8'))
 
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs))
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs, options))
 
 app.use(
   compression({

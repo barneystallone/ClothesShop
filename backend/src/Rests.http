@@ -115,6 +115,10 @@ Content-Type: application/json
   "index": 0,
   "quantity": -13
 }
+
+
+
+
 ###
 PUT  {{baseUrl}}/api/cart/item-quantity
 Authorization: Beaer {{authToken}}
@@ -124,4 +128,23 @@ Content-Type: application/json
 
   "index": 0,
   "quantity": -13
+}
+
+
+###
+# @name login
+POST  {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+  "email" :"abcd2@gmail.com",
+  "password": "abcd2"
+}
+###
+DELETE  {{baseUrl}}/api/cart/item
+Authorization: Beaer {{authToken}}
+Content-Type: application/json
+
+{
+  "index": 2
 }
