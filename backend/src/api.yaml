@@ -13,6 +13,8 @@ tags:
     description: API Xác thực phân quyền người dùng
   - name: Product
     description: API Sản phẩm
+  - name: Cart
+    description: API Quản lý giỏ hàng - Verify JWT token
 
 paths:
   /api/category:
@@ -322,9 +324,63 @@ paths:
                     type: string
               example:
                 message: OFFSET exceeds maximum of 10000
+    post:
+      summary: Tạo sản phẩm mới
+      tags: [Product]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+                category_id:
+                  type: string
+            example:
+              title: Áo Thun Gân Croptop Trễ Vai
+              description: description
+              price: 135150
+              category_id: c08
+      responses:
+        200:
+          description: Thêm sản phẩm thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  insertedId:
+                    type: string
+                    example: N6pSohKch6OlX
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product title is required
+        500:
+          description: Lỗi Database hoặc Server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ER_DUP_ENTRY
   /api/product/{slug}:
     get:
-      description: Lấy ra chi tiết sản phẩm thông qua slug
+      summary: Lấy ra chi tiết sản phẩm thông qua slug
       tags: [Product]
       parameters:
         - name: slug
@@ -387,7 +443,7 @@ paths:
                     example: Not Found
   /api/product/related/{slug}:
     get:
-      description: Lấy ra 5 sản phẩm liên quan (Lấy ngẫu nhiên cùng categoryId hoặc bán chạy)
+      summary: Lấy ra 5 sản phẩm liên quan (Lấy ngẫu nhiên cùng categoryId hoặc bán chạy)
       tags: [Product]
       parameters:
         - name: slug
@@ -485,61 +541,7 @@ paths:
                   message:
                     type: string
                     example: NotFound
-  /api/product/:
-    post:
-      summary: Tạo sản phẩm mới
-      tags: [Product]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                price:
-                  type: integer
-                category_id:
-                  type: string
-            example:
-              title: Áo Thun Gân Croptop Trễ Vai
-              description: description
-              price: 135150
-              category_id: c08
-      responses:
-        200:
-          description: Thêm sản phẩm thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  insertedId:
-                    type: string
-                    example: N6pSohKch6OlX
-        400:
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Product title is required
-        500:
-          description: Lỗi Database hoặc Server
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: ER_DUP_ENTRY
+
   /api/product/upload/{pId}:
     post:
       summary: Thêm màu, upload ảnh cho item sản phẩm lên cloud
@@ -611,6 +613,150 @@ paths:
                     type: string
               example:
                 message: Chỉ hỗ trợ định dạng image
+  /api/cart/:
+    get:
+      summary: Trả về danh sách sản phẩm trong giỏ hàng của người dùng (userId lấy từ JWT token)
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
+  /api/cart/item:
+    put:
+      summary: Thêm mới 1 sản phẩm vào giỏ hàng hoặc update số lượng của sản phẩm đó nếu đã tồn tài  trong giỏ hàng
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
+    patch:
+      summary: Update 1 sản phẩm (size, màu, ảnh) đã có trong giỏ hàng,...
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
+    delete:
+      summary: Xóa 1 sản phẩm có trong giỏ hàng
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
+  /api/cart/item-quantity:
+    put:
+      summary: Đặt lại số lượng của sản phẩm
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
+    patch:
+      summary: Tăng giảm số lượng của sản phẩm
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
+  /api/cart/sync:
+    put:
+      summary: Đồng bộ giỏ hàng với giỏ hàng cũ (trong database) với giỏ hàng trước khi đăng nhập
+      tags: [Cart]
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Thành công
+        403:
+          description: JWT Access Token hết hạn
+          content:
+            application/json:
+              example:
+                message: jwt expired
+        404:
+          description: invalid JWT hoặc người dùng chưa đăng nhập
+          content:
+            application/json:
+              example:
+                message: Phải đăng nhập để tiếp tục
 
 components:
   securitySchemes:
@@ -789,10 +935,3 @@ components:
           items:
             type: string
             description: Đường dẫn ảnh thu nhỏ cho các màu
-
-    # Product
-#       url:https://res.cloudinary.com/dup598xiv/image/upload/v1681658238/clothesShop/product/otxsioafkeqpihejy9gs.jpg
-# itemId:N6iOnRejNbo2i
-# thumbUrl:https://res.cloudinary.com/dup598xiv/image/upload/v1681658238/clothesShop/product/jedizvwxjqhgiu8mxeh2.jpg
-# colorCode:#000000
-# colorName:Đen

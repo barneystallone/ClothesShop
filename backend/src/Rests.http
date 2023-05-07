@@ -73,7 +73,7 @@ Content-Type: application/json
 
 ### 
 GET {{baseUrl}}/api/cart/
-Authorization: Beaer {{authToken}}
+# Authorization: Beaer {{authToken}}
 
 ###
 PUT {{baseUrl}}/api/cart/item
