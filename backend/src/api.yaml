@@ -1,0 +1,311 @@
+openapi: 3.0.0
+info:
+  title: Fashion API
+  version: 1.0.0
+  description: API Shop thời trang Nhóm 6
+servers:
+  - url: http://localhost:8080
+    description: Development server
+tags:
+  - name: Category
+    description: API Quản lý Danh mục
+  - name: User
+    description: API Xác thực, phân quyền người dùng
+
+paths:
+  /api/category:
+    get:
+      summary: Trả về tất cả danh mục hiện có trong db
+      tags: [Category]
+      responses:
+        200:
+          description: Danh sách các danh mục sản phẩm
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+  /api/user/login:
+    post:
+      summary: Xác thực tài khoản, trả về accessToken, gắn refreshToken vào cookie
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: abcd@gmail.com
+              password: abcd
+      responses:
+        200:
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: 'refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4c...;Max-Age=2592;Path=/;'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                    userEmail:
+                      type: string
+                    accessToken:
+                      type: string
+              example:
+                userId: N6_nPuq6oSnY9DO
+                userEmail: abcd@gmail.com
+                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4cCI6MTY4MzQzMDI4NX0.5ZaB2WjJQLVFoK5I2OPm9z5vOFqtPi_S__J-zxYZ0IE
+        400:
+          description: Trả Validation error khi validate dữ liệu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mô tả validation error
+              example:
+                message: '"email" with value "abcd@gmails.com" fails to match the required pattern: /gmail.com$/'
+        404:
+          description: Lỗi không tìm thấy tên tài khoản (email) hoặc sai mật khẩu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Sai tên đăng nhập hoặc mật khẩu
+  /api/user/register:
+    post:
+      summary: Đăng ký tài khoản, trả về thông báo thành công hoặc lỗi
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              email: abcd123@gmail.com
+              password: abcd123
+      responses:
+        200:
+          description: Trả về userId, accessToken, userEmail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affectedRows:
+                    type: number
+              example:
+                affectedRows: 1
+        400:
+          description: Trả Validation error khi validate dữ liệu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mô tả validation error
+              example:
+                message: '"email" with value "abcd@gmails.com" fails to match the required pattern: /gmail.com$/'
+        409:
+          description: Lỗi trùng tên đăng nhập (email)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Email abcd@gmail.com đã được đăng ký
+  /api/user/refresh-token:
+    get:
+      summary: Refresh JWT Token
+      tags: [User]
+      parameters:
+        - name: refreshToken
+          in: cookie
+          description: Cookie phải bao gồm refreshToken
+          required: true
+          schema:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4cCI6MTY4MzQzMDI4NX0.5ZaB2WjJQLVFoK5I2OPm9z5vOFqtPi_S__J-zxYZ0IE
+      responses:
+        200:
+          description: Trả về accessToken mới đồng thời lưu refreshToken vào cookie
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4c...;Max-Age=2592;Path=/;
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+              example:
+                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4cCI6MTY4MzQzMDI4NX0.5ZaB2WjJQLVFoK5I2OPm9z5vOFqtPi_S__J-zxYZ0IE
+        401:
+          description: Người dùng chưa đăng nhập (không tìm thấy refreshToken trong cookie)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: 'Unauthorized'
+        403:
+          description: refreshToken không hợp lệ hoặc không tìm thấy (không khớp với danh sách refrehsToken trong database)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: 'Token không khớp'
+  /api/user/refresh:
+    get:
+      summary: Reauth lấy lại thông tin người dùng.
+      tags: [User]
+      parameters:
+        - name: refreshToken
+          in: cookie
+          description: Cookie phải bao gồm refreshToken
+          required: true
+          schema:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4cCI6MTY4MzQzMDI4NX0.5ZaB2WjJQLVFoK5I2OPm9z5vOFqtPi_S__J-zxYZ0IE
+      responses:
+        200:
+          description: Tương tự như refresh-token nhưng sẽ trả về thêm 2 trường userId, userEmail
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4c...;Max-Age=2592;Path=/;
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  userId:
+                    type: string
+                  userEmail:
+                    type: string
+              example:
+                userId: N6_nPuq6oSnY9DO
+                userEmail: abcd@gmail.com
+                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4cCI6MTY4MzQzMDI4NX0.5ZaB2WjJQLVFoK5I2OPm9z5vOFqtPi_S__J-zxYZ0IE
+        401:
+          description: Người dùng chưa đăng nhập (không tìm thấy refreshToken trong cookie)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: 'Unauthorized'
+        403:
+          description: refreshToken không hợp lệ hoặc không tìm thấy (không khớp với danh sách refrehsToken trong database)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: 'Token không khớp'
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: Nhập JWT token Ở đây
+    RefreshToken:
+      type: apiKey
+      name: refreshToken
+      in: cookie
+      description: Refresh token để cập nhật access token.
+
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        userId:
+          type: string
+          description: auto-generate id bởi nanoid
+        email:
+          type: string
+          description: Email người dùng
+        password:
+          type: string
+          description: Password
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        sub_category:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              category_name:
+                type: string
+              category_slug:
+                type: string
+          example:
+            - id: 'c26'
+              category_name: 'Set Quần'
+              category_slug: 'set-quan'
+            - id: 'c27'
+              category_name: 'Set Váy'
+              category_slug: 'set-vay'
+        category_name:
+          type: string
+        category_slug:
+          type: string
+      example:
+        id: 'c05'
+        sub_category:
+          - id: 'c26'
+            category_name: 'Set Quần'
+            category_slug: 'set-quan'
+          - id: 'c27'
+            category_name: 'Set Váy'
+            category_slug: 'set-vay'
+        category_name: 'Set'
+        category_slug: 'set'

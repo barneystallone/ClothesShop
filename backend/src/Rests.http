@@ -39,7 +39,7 @@ Content-Type: application/json
 ###
 # không test được vì set cookie secure là true 
 GET  {{baseUrl}}/api/user/refresh-token
-# Cookie: 
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9RbzFTSXQ3Q3ZranYiLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzEwNjcsImV4cCI6MTY4NjAyMzA2N30.4S1TfCqccOuHl2lGA6tJkL4qa3747OXtVSz0hmlC__Y
 
 
 ###

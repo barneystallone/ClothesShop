@@ -9,7 +9,6 @@ import {
 import { useRefreshQuery } from '../../../features/auth/auth.service'
 import { BiUser } from 'react-icons/bi'
 import { persistor } from '../../../store'
-import { useGetCartQuery } from '../../../features/cart/cart.service'
 const UserItem = React.memo(() => {
   const dispatch = useDispatch()
 

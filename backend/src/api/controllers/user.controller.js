@@ -16,7 +16,6 @@ var self = (module.exports = {
     const affectedRows = await userService.register({ email, password, userId })
 
     res.status(200).json({
-      status: 'Success',
       affectedRows,
     })
   }),
