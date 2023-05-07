@@ -8,9 +8,11 @@ servers:
     description: Development server
 tags:
   - name: Category
-    description: API Quản lý Danh mục
+    description: API Danh mục
   - name: User
-    description: API Xác thực, phân quyền người dùng
+    description: API Xác thực phân quyền người dùng
+  - name: Product
+    description: API Sản phẩm
 
 paths:
   /api/category:
@@ -28,7 +30,7 @@ paths:
                   $ref: '#/components/schemas/Category'
   /api/user/login:
     post:
-      summary: Xác thực tài khoản, trả về accessToken, gắn refreshToken vào cookie
+      summary: Xác thực tài khoản trả về accessToken gắn refreshToken vào cookie
       tags: [User]
       requestBody:
         required: true
@@ -74,7 +76,7 @@ paths:
                     type: string
                     description: Mô tả validation error
               example:
-                message: '"email" with value "abcd@gmails.com" fails to match the required pattern: /gmail.com$/'
+                message: 'email with value abcd@gmails.com fails to match the required pattern: /gmail.com$/'
         404:
           description: Lỗi không tìm thấy tên tài khoản (email) hoặc sai mật khẩu
           content:
@@ -88,7 +90,7 @@ paths:
                 message: Sai tên đăng nhập hoặc mật khẩu
   /api/user/register:
     post:
-      summary: Đăng ký tài khoản, trả về thông báo thành công hoặc lỗi
+      summary: Đăng ký tài khoản trả về thông báo thành công hoặc lỗi
       tags: [User]
       requestBody:
         required: true
@@ -101,14 +103,14 @@ paths:
               password: abcd123
       responses:
         200:
-          description: Trả về userId, accessToken, userEmail
+          description: Trả về userId accessToken userEmail
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   affectedRows:
-                    type: number
+                    type: integer
               example:
                 affectedRows: 1
         400:
@@ -122,7 +124,7 @@ paths:
                     type: string
                     description: Mô tả validation error
               example:
-                message: '"email" with value "abcd@gmails.com" fails to match the required pattern: /gmail.com$/'
+                message: 'email with value abcd@gmails.com fails to match the required pattern: /gmail.com$/'
         409:
           description: Lỗi trùng tên đăng nhập (email)
           content:
@@ -199,7 +201,7 @@ paths:
             example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJONl9uUHVxNm9Tblk5RE8iLCJyb2xlTmFtZSI6IlVzZXIiLCJpYXQiOjE2ODM0MzAyMjUsImV4cCI6MTY4MzQzMDI4NX0.5ZaB2WjJQLVFoK5I2OPm9z5vOFqtPi_S__J-zxYZ0IE
       responses:
         200:
-          description: Tương tự như refresh-token nhưng sẽ trả về thêm 2 trường userId, userEmail
+          description: Tương tự như refresh-token nhưng sẽ trả về thêm 2 trường userId userEmail
           headers:
             Set-Cookie:
               schema:
@@ -242,6 +244,374 @@ paths:
                     type: string
               example:
                 message: 'Token không khớp'
+  /api/product:
+    get:
+      summary: lấy ra danh sách sản phẩm (phân trang lọc theo danh mục...)
+      tags: [Product]
+      parameters:
+        - name: c
+          in: query
+          schema:
+            type: string
+            example: c08|c09|c10|c11
+        - name: page
+          in: query
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Danh sách sản phẩm được trả về
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: Kết quả tổng các sản phẩm được tìm thấy
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductOverview'
+                  itemPerPage:
+                    type: integer
+                    description: Số sản phẩm trên một trang
+                  meta:
+                    type: object
+                    properties:
+                      page:
+                        type: string
+                        example: '1'
+                        description: Số trang mà client gửi tới
+
+              example:
+                total: 13
+                products:
+                  - pId: N6pMf3yRU65KD
+                    title: Quần Caro Ống Rộng Cạp Chun
+                    price: 99000
+                    slug: quan-caro-ong-rong-cap-chun
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653107/clothesShop/product/ninuooqh9pma4gxr8bjy.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653152/clothesShop/product/tdlvjxdok0awtfjqpbcl.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653101/clothesShop/product/iajvdfskie1sjsu1zyzl.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653150/clothesShop/product/wzn6ru3zc2ur6clynqct.jpg
+                  - pId: N6pV1fYxqRt2I
+                    title: Quần Suông Gân Tăm Ống Rộng
+                    price: 143650
+                    slug: quan-suong-gan-tam-ong-rong
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653298/clothesShop/product/yrixfsrstao40tit5zs9.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653345/clothesShop/product/pzii2iwwemahx96oplsh.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653301/clothesShop/product/sldpb2jrabc3tfvgkew5.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681653344/clothesShop/product/y4kof7yx3ac7eoduqr4m.jpg
+
+        500:
+          description: Các lỗi liên quan đến database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: OFFSET exceeds maximum of 10000
+  /api/product/{slug}:
+    get:
+      description: Lấy ra chi tiết sản phẩm thông qua slug
+      tags: [Product]
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+            example: ao-thun-nu-tay-ngan-in-chu-m
+      responses:
+        200:
+          description: Trả về data của sản phẩm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  product:
+                    $ref: '#/components/schemas/Product'
+                  meta:
+                    type: object
+                    properties:
+                      slug:
+                        type: string
+                        description: Slug mà client gửi tới
+
+              example:
+                count: 1
+                product:
+                  pId: N6p3wA2mQwwQ9
+                  title: Áo Thun Nữ Tay Ngắn In Chữ M
+                  slug: ao-thun-nu-tay-ngan-in-chu-m
+                  price: 135150
+                  sold: 0
+                  category_id: c15
+                  collections:
+                    - url: https://res.cloudinary.com/dup598xiv/image/upload/v1681637066/clothesShop/product/ejwf32jboppmatqnkyki.jpg
+                      itemId: N6iabTn7bz0QH
+                      thumbUrl: https://res.cloudinary.com/dup598xiv/image/upload/v1681637065/clothesShop/product/r9wob6x37ybo4nrll9n1.jpg
+                      colorCode: '#000000'
+                      colorName: Đen
+                      inventory:
+                        pId: N6p3wA2mQwwQ9
+                        itemId: N6iQ1OGWQNSBS
+                        sizeId: S004
+                        quantity: 200
+                        sizeName: FreeSize
+                meta:
+                  slug: ao-thun-nu-tay-ngan-in-chu-m
+        404:
+          description: Không tìm thấy sản phẩm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+  /api/product/related/{slug}:
+    get:
+      description: Lấy ra 5 sản phẩm liên quan (Lấy ngẫu nhiên cùng categoryId hoặc bán chạy)
+      tags: [Product]
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+            example: ao-thun-nu-tay-ngan-in-chu-m
+      responses:
+        200:
+          description: Trả về danh sách 5 sản phẩm liên quan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductOverview'
+                  meta:
+                    type: object
+                    properties:
+                      slug:
+                        type: string
+                        description: Slug mà client gửi tới
+
+              example:
+                total: 8
+                products:
+                  - pId: N6plKXTK8tUmk
+                    title: Áo Thun Nữ Tay Ngắn In Hình Bông Hoa
+                    price: 109650
+                    slug: ao-thun-nu-tay-ngan-in-hinh-bong-hoa
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681656966/clothesShop/product/qabxjn716dn19nxxpiiq.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681656935/clothesShop/product/bjvwud33f2sf5r1cxc84.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681656962/clothesShop/product/ph9rl2sao41zynmcqfgr.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681656932/clothesShop/product/yo6otlsvbyk1y5wvsob7.jpg
+                  - pId: N6pgzv9hxU2Vf
+                    title: Áo Thun Nữ Lai Bầu Do It For You
+                    price: 118150
+                    slug: ao-thun-nu-lai-bau-do-it-for-you
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637703/clothesShop/product/m0kwg9kwptmnpv1ctbdc.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637645/clothesShop/product/mjz9tpsffqhcupcbwbbd.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637702/clothesShop/product/bucdgeqmjusovpvttmen.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637644/clothesShop/product/pbha6z8kz2tyvcht9anq.jpg
+                  - pId: N6ppFqPEvyFtP
+                    title: Áo Thun Nữ In Chữ You Are Loved
+                    price: 135150
+                    slug: ao-thun-nu-in-chu-you-are-loved
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637777/clothesShop/product/c3kwddq4diuzrz0c8kjb.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637776/clothesShop/product/ekaxjgazjxpafah1ect4.jpg
+                  - pId: N6pwsHiEuKVF5
+                    title: Áo Thun Nữ Tay Ngắn In Chữ Take It Easy
+                    price: 135150
+                    slug: ao-thun-nu-tay-ngan-in-chu-take-it-easy
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637406/clothesShop/product/ys8ysllpjfksup67isfz.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637370/clothesShop/product/t6hnux336euqv1hyo4o0.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637405/clothesShop/product/v1zjehigtazqicfbqnat.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681637370/clothesShop/product/ftdrsqjobfd7azoobkzd.jpg
+                  - pId: N6pi5Hhq59UhA
+                    title: Áo Thun Nữ Tay Ngắn Bông Hoa
+                    price: 135150
+                    slug: ao-thun-nu-tay-ngan-bong-hoa
+                    sold: 0
+                    url:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681636974/clothesShop/product/h9a9is1ivqdpj0aph7fm.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681636934/clothesShop/product/sownytjwlccex8sbtwwl.jpg
+                    thumbUrl:
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681636973/clothesShop/product/mfwlqhbz2kncf3fckxpq.jpg
+                      - https://res.cloudinary.com/dup598xiv/image/upload/v1681636934/clothesShop/product/howxfu8udofd56oasn7y.jpg
+                meta:
+                  slug: ao-thun-nu-tay-ngan-in-chu-m
+        404:
+          description: Lỗi không tìm thấy sản phẩm theo slug
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: NotFound
+  /api/product/:
+    post:
+      summary: Tạo sản phẩm mới
+      tags: [Product]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+                category_id:
+                  type: string
+            example:
+              title: Áo Thun Gân Croptop Trễ Vai
+              description: description
+              price: 135150
+              category_id: c08
+      responses:
+        200:
+          description: Thêm sản phẩm thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  insertedId:
+                    type: string
+                    example: N6pSohKch6OlX
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product title is required
+        500:
+          description: Lỗi Database hoặc Server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ER_DUP_ENTRY
+  /api/product/upload/{pId}:
+    post:
+      summary: Thêm màu, upload ảnh cho item sản phẩm lên cloud
+      tags: [Product]
+      parameters:
+        - name: pId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: N6pWygoyNLBvF
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - colorName
+                - colorCode
+                - img
+                - thumbImg
+              properties:
+                colorName:
+                  type: string
+                  example: Đỏ
+                colorCode:
+                  type: string
+                  example: '#dc143c'
+                img:
+                  type: string
+                  format: binary
+                thumbImg:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Upload ảnh thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: https://res.cloudinary.com/dup598xiv/image/upload/v1681657603/clothesShop/product/okkmy37xhma8gwgmbsqd.jpg
+                  thumbUrl:
+                    type: string
+                    example: https://res.cloudinary.com/dup598xiv/image/upload/v1681657602/clothesShop/product/ytuhojw6816rq8ku3sip.jpg
+        409:
+          description: Không thể thêm trùng 1 màu cho 1 sản phẩm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Màu Đỏ(#dc143c) đã tồn tại
+        500:
+          description: Lỗi Server như database, định dạng ảnh,...
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Chỉ hỗ trợ định dạng image
+
 components:
   securitySchemes:
     Bearer:
@@ -254,8 +624,42 @@ components:
       name: refreshToken
       in: cookie
       description: Refresh token để cập nhật access token.
-
   schemas:
+    Product:
+      type: object
+      required:
+        - pId
+        - title
+        - slug
+        - category_id
+        - price
+        - solde
+      properties:
+        pId:
+          type: string
+          description: ID của sản phẩm
+        title:
+          type: string
+          description: Tên sản phẩm
+        slug:
+          type: string
+          description: Chuỗi định danh dẫn đến sản phẩm
+        price:
+          type: integer
+          description: Giá của sản phẩm
+        sold:
+          type: integer
+          description: Số lượng sản phẩm đã bán
+        category_id:
+          type: string
+          description: ID của danh mục của sản phẩm
+        description:
+          type: string
+          description: Text/Html mô tả sản phẩm
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
     User:
       type: object
       required:
@@ -309,3 +713,86 @@ components:
             category_slug: 'set-vay'
         category_name: 'Set'
         category_slug: 'set'
+    Item:
+      type: object
+      required:
+        - itemId
+        - pId
+      properties:
+        url:
+          type: string
+          description: Đường dẫn đến ảnh đại diện sản phẩm
+        pId:
+          type: string
+          description: id của sản phẩm
+        itemId:
+          type: string
+          description: ID của sản phẩm con tương ứng với ảnh auto-generate bởi nanoid
+        thumbUrl:
+          type: string
+          description: Đường dẫn đến ảnh thu nhỏ của sản phẩm
+        colorCode:
+          type: string
+          description: Mã màu của sản phẩm
+        colorName:
+          type: string
+          description: Tên màu của sản phẩm
+        inventory:
+          type: array
+          items:
+            type: object
+            properties:
+              pId:
+                type: string
+
+              itemId:
+                type: string
+
+              sizeId:
+                type: string
+
+              quantity:
+                type: integer
+              sizeName:
+                type: string
+            example:
+              pId: 'N6pKynvRYTeXt'
+              itemId: 'N6iOnRejNbo2i'
+              sizeId: 'S001'
+              quantity: 200
+              sizeName: 'S'
+    ProductOverview:
+      type: object
+      properties:
+        pId:
+          type: string
+          description: ID của sản phẩm
+        title:
+          type: string
+          description: Tên sản phẩm
+        slug:
+          type: string
+          description: Chuỗi định danh dẫn đến sản phẩm
+        price:
+          type: integer
+          description: Giá của sản phẩm
+        sold:
+          type: integer
+          description: Số lượng sản phẩm đã bán
+        url:
+          type: array
+          items:
+            type: string
+            description: Đường dẫn ảnh đại diện cho các màu
+        thumbUrl:
+          type: array
+          items:
+            type: string
+            description: Đường dẫn ảnh thu nhỏ cho các màu
+
+    # Product
+#       url:https://res.cloudinary.com/dup598xiv/image/upload/v1681658238/clothesShop/product/otxsioafkeqpihejy9gs.jpg
+# itemId:N6iOnRejNbo2i
+# thumbUrl:https://res.cloudinary.com/dup598xiv/image/upload/v1681658238/clothesShop/product/jedizvwxjqhgiu8mxeh2.jpg
+# colorCode:#000000
+# colorName:Đen

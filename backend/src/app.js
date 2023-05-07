@@ -17,6 +17,7 @@ productInit()
 cartInit()
 
 const options = {
+  customSiteTitle: 'Fashion API UI',
   customCss: '.swagger-ui .topbar { display: none }',
 }
 const specs = YAML.load(fs.readFileSync('./src/api.yaml', 'utf8'))
