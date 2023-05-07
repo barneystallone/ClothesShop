@@ -33,6 +33,8 @@ const SubCart = () => {
   })
   const [syncCart] = useSyncCartToDBMutation()
   const itemCount = useSelector(selectItemCount)
+
+  // Cart, syncCartDb
   useEffect(() => {
     if (token) {
       if (listCartItem.length > 0 && !isSync) {
@@ -51,6 +53,7 @@ const SubCart = () => {
     }
   }, [cartData, dispatch, isSuccess])
 
+  // Modal & Animation
   const beforeCloseModalCb = useCallback((e) => {
     e?.target
       .closest('.overlay')

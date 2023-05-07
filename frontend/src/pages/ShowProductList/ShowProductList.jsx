@@ -33,6 +33,7 @@ const ShowProductList = () => {
   const allCateFilters = useSelector(selectAllCategoryFilters)
   const [searchParams, setSeachParams] = useSearchParams()
   const [isSyncParamToStore, setSyncParamToStore] = useState(false)
+  const [isSyncPageParam, setSyncPageParam] = useState(false)
   const {
     data: categories,
     isLoading: isCateLoading,
@@ -50,6 +51,7 @@ const ShowProductList = () => {
   )
   const { page, c } = useMemo(() => qs.parse(searchParams.toString()), [])
 
+  //============- Map filter params vào store khi load xong category
   useEffect(() => {
     if (isSuccess && categories && !isSyncParamToStore) {
       const initArray = Array.from({ length: categories.length }, () => [])
@@ -84,6 +86,7 @@ const ShowProductList = () => {
       setSeachParams(searchParams)
     }
     dispatch(setActivePage(page * 1 || 1))
+    setSyncPageParam(true)
 
     return () => {
       dispatch(setActivePage(1))
@@ -91,11 +94,15 @@ const ShowProductList = () => {
     }
   }, [])
 
+  //=========== Set searchParams khi người dùng thay đổi filter
   useEffect(() => {
     if (allCateFilters && allCateFilters?.length) {
       searchParams.set('c', allCateFilters.join('|'))
-      searchParams.set('page', 1)
-      dispatch(setActivePage(1))
+      if (isSyncPageParam === true && isSyncParamToStore === true) {
+        console.log(isSyncPageParam)
+        searchParams.set('page', 1)
+        dispatch(setActivePage(1))
+      }
       setSeachParams(searchParams)
     }
   }, [allCateFilters, dispatch])
@@ -108,6 +115,7 @@ const ShowProductList = () => {
     })
   }, [loading, isLoading])
 
+  //============== Pagination
   useEffect(() => {
     const pages = Math.ceil(data?.total / data?.itemPerPage) || 1
     if (data && activePage > pages) {
@@ -118,6 +126,7 @@ const ShowProductList = () => {
     dispatch(setTotalPage(pages))
   }, [data, dispatch, activePage, setSeachParams, searchParams])
 
+  //============== Animation loading
   useEffect(() => {
     let delay
     setLoading(true)

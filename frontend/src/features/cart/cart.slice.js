@@ -48,6 +48,15 @@ export const cartSlice = createSlice({
       state.listItem[action.payload.index].quantity += action.payload.quantity
     },
 
+    removeCartItem: (state, action) => {
+      const { index, itemId, sizeId } = action.payload
+      if (typeOf(index) === 'Number') {
+        state.listItem.splice(index, 1)
+        return
+      }
+      console.log('Expected type Number, validation err::', typeOf(index))
+    },
+
     setCart: (state, action) => {
       if (typeOf(action.payload) === 'Array') {
         state.listItem = action.payload
@@ -89,6 +98,7 @@ export const {
   putCartItem,
   incrCartItemQuantity,
   setCartItemQuantity,
+  removeCartItem,
   updateCartItem
 } = cartSlice.actions
 export default persistReducer(cartPersistConfig, cartSlice.reducer)
@@ -97,16 +107,6 @@ export const selectCartStatus = (state) => state.cart.showCart
 export const selectListCartItem = (state) => state.cart.listItem
 export const selectItemCount = (state) => state.cart.listItem.length
 
-// export const selectTotalItemQuantity = (state) => {
-//   return state.cart.listItem.reduce((totalCount, item) => totalCount + item.quantity, 0)
-// }
-
-// export const selectTotalCartPrice = (state) => {
-//   return state.cart.listItem.reduce(
-//     (totalPrice, item) => totalPrice + item.quantity * item.price,
-//     0
-//   )
-// }
 export const selectTotalCartPrice = createSelector([selectListCartItem], (listItem) => {
   return listItem.reduce((totalPrice, item) => totalPrice + item.quantity * item.price, 0)
 })

@@ -6,7 +6,7 @@ export const rtkErrorLogger = (api) => (next) => (action) => {
   // console.log('api', api.getState())
   if (isRejectedWithValue(action) && isPayloadError(action.payload)) {
     console.log(action.payload)
-    if (action.payload.status === 404 || action.payload.status === 400) {
+    if (action.payload.status === 404 || action.payload.status === 409) {
       toast.error(action.payload.data.message)
     }
   }
