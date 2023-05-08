@@ -21,4 +21,4 @@ cd frontend
 npm i
 ```
 
-> :warning: Sau khi cài cách này, thì ta phải chạy lệnh npm run dev cho từng thư mục trên
+> :warning: Sau khi cài cách này, thì ta phải chạy lệnh `npm run dev` cho từng thư mục trên
