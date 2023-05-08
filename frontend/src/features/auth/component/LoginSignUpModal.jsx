@@ -30,6 +30,7 @@ const LoginSignUpModal = () => {
   const [register] = useRegisterMutation()
   const dispatch = useDispatch()
 
+  //==========
   const handleAuthPromise = useCallback((promise, successMessage) => {
     return promise
       .unwrap()
@@ -45,6 +46,13 @@ const LoginSignUpModal = () => {
       .catch(() => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  //========= Bấm nút đăng ký , đăng nhập --> Gửi request lên server
+  /**
+   * Khi submit (NO validation errror) -> Gửi request lên server (hàm login) với data là data
+   * Đọc api document
+   * handleAuthPromise: -> Lời hứa khi mà có phản hồi từ server -> Thành công ? then : catch
+   */
   const onLoginSubmit = useCallback(
     (data) => {
       handleAuthPromise(login(data), LOGIN_SUCCESS_MSG)
@@ -69,6 +77,7 @@ const LoginSignUpModal = () => {
         ? `${loginRef.current.offsetHeight}px`
         : `${registerRef.current.offsetHeight}px`)
   }, [signUpHeightChange, loginHeightChange, showLogin])
+
   return show ? (
     <div className='login-signup__modal' onClick={closeModal}>
       <div className='login-signup__modal__wrap'>
@@ -82,18 +91,18 @@ const LoginSignUpModal = () => {
             <LoginForm
               ref={loginRef}
               onSubmit={onLoginSubmit}
-              updateHeight={updateLoginHeight}
               resolver={joiResolver(loginSchema)}
-              navigate={toggleFormLogin}
               showLogin={showLogin}
+              updateHeight={updateLoginHeight}
+              navigate={toggleFormLogin}
             />
             <SignUpForm
               ref={registerRef}
               onSubmit={onSignUpSubmit}
-              updateHeight={updateSignUpHeight}
               resolver={joiResolver(registerSchema)}
-              navigate={toggleFormLogin}
               showLogin={showLogin}
+              updateHeight={updateSignUpHeight}
+              navigate={toggleFormLogin}
             />
           </div>
         </div>

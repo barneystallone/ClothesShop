@@ -34,14 +34,18 @@ const ShowProductList = () => {
   const [searchParams, setSeachParams] = useSearchParams()
   const [isSyncParamToStore, setSyncParamToStore] = useState(false)
   const [isSyncPageParam, setSyncPageParam] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const activePage = useSelector(selectActivePage) // Theo dõi cái biến này, nếu có dispatch mà thay đổi dữ liệu thì nó cũng cập nhật
+  const dispatch = useDispatch()
+
+  //----- useGetCategoriesQuery() => Gửi request lên server lấy ra danh sách danh mục
   const {
     data: categories,
     isLoading: isCateLoading,
     isSuccess
   } = useGetCategoriesQuery()
-  const [loading, setLoading] = useState(false)
-  const activePage = useSelector(selectActivePage)
-  const dispatch = useDispatch()
+
+  //----- useGetProductsQuery() => Gửi request(yêu cầu) lên server lấy ra danh sách danh mục
   const { data, isFetching, isLoading } = useGetProductsQuery(
     { page: activePage, c: allCateFilters },
     {
@@ -49,6 +53,7 @@ const ShowProductList = () => {
       pollingInterval: 1000 * 2 * 60
     }
   )
+
   const { page, c } = useMemo(() => qs.parse(searchParams.toString()), [])
 
   //============- Map filter params vào store khi load xong category

@@ -26,18 +26,26 @@ export const productApi = api.injectEndpoints({
     }),
     getProduct: build.query({
       query: (slug) => `product/${slug}`,
-      providesTags: (result) => [{ type: 'Products', id: result.pId }],
+      providesTags: (result, error, args) =>
+        result
+          ? [{ type: 'Products', id: result.pId }]
+          : error?.status === 'FETCH_ERROR'
+          ? ['FETCH_ERROR']
+          : ['UNKNOWN_ERROR'],
+
       keepUnusedDataFor: 30
     }),
     getRelatedProducts: build.query({
       query: (slug) => `product/related/${slug}`,
-      providesTags: (results) =>
+      providesTags: (results, error, args) =>
         results
           ? [
               ...results.products.map(({ pId }) => ({ type: 'Products', pId })),
               { type: 'Products', id: 'LIST' }
             ]
-          : [{ type: 'Products', id: 'LIST' }],
+          : error?.status === 'FETCH_ERROR'
+          ? ['FETCH_ERROR']
+          : ['UNKNOWN_ERROR'],
       keepUnusedDataFor: 30
     })
   })

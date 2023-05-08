@@ -846,7 +846,9 @@ values
 ('N6iRY1mkgc4fs','S002',200),
 ('N6iRY1mkgc4fs','S003',200);
 
-
+-- random quantity
+UPDATE inventory
+SET quantity = FLOOR(RAND() * 126) + 40
 
 
 
