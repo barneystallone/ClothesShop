@@ -28,9 +28,14 @@ var that = (module.exports = {
     // data -> { itemId, pId, sizeId, quantity, userId, sizeName }
     const isExists = await redisDao.isExistsItem(data)
     if (isExists) {
-      return redisDao.patchItemQuantity(data)
+      return { quantity: await redisDao.patchItemQuantity(data), meta: data }
     }
-    return redisDao.addItem(data)
+    return {
+      totalItem: await redisDao.addItem(data),
+      meta: {
+        ...data,
+      },
+    }
   },
 
   /**

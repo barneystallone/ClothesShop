@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const compression = require('compression')
 const swaggerUI = require('swagger-ui-express')
 const YAML = require('js-yaml')
-const redis = require('./api/databases/connect.redis.v2')
+// const redis = require('./api/databases/connect.redis.v2')
 const { init: productInit } = require('./api/services/product.service')
 const { init: cartInit } = require('./api/services/cart.service')
 

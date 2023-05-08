@@ -640,6 +640,29 @@ paths:
       tags: [Cart]
       security:
         - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                pId:
+                  type: string
+                sizeId:
+                  type: string
+                sizeName:
+                  type: string
+                quantity:
+                  type: integer
+            example:
+              itemId: N6i4lD8DEoA9Y
+              pId: N6pRjqdrqWUK2
+              sizeId: S004
+              quantity: 1
+              sizeName: FreeSize
       responses:
         200:
           description: Thành công
@@ -935,3 +958,28 @@ components:
           items:
             type: string
             description: Đường dẫn ảnh thu nhỏ cho các màu
+    CartItem:
+      type: object
+      required:
+        - itemId
+        - pId
+        - sizeId
+        - sizeName
+        - quantity
+      properties:
+        itemId:
+          type: string
+        pId:
+          type: string
+        sizeId:
+          type: string
+        sizeName:
+          type: string
+        quantity:
+          type: integer
+      example:
+        itemId: N6i4lD8DEoA9Y
+        pId: N6pRjqdrqWUK2
+        sizeId: S004
+        quantity: 1
+        sizeName: FreeSize

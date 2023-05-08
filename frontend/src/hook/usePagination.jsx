@@ -55,6 +55,7 @@ const usePagination = () => {
       if (Number(searchParams.get('page')) !== page) {
         searchParams.set('page', page)
         setSeachParams(searchParams)
+
         dispatch(setActivePage(page))
 
         setRangeOnChangePage(page)
