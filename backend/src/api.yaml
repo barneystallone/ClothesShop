@@ -683,6 +683,32 @@ paths:
       tags: [Cart]
       security:
         - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                index:
+                  type: integer
+                itemId:
+                  type: string
+                pId:
+                  type: string
+                sizeId:
+                  type: string
+                sizeName:
+                  type: string
+                quantity:
+                  type: integer
+            example:
+              index: 1
+              itemId: N6i4lD8DEoA9Y
+              pId: N6pRjqdrqWUK2
+              sizeId: S004
+              quantity: 1
+              sizeName: FreeSize
       responses:
         200:
           description: Thành công
@@ -701,6 +727,16 @@ paths:
     delete:
       summary: Xóa 1 sản phẩm có trong giỏ hàng
       tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                index:
+                  type: integer
+                  example: 1
       security:
         - Bearer: []
       responses:
@@ -724,6 +760,19 @@ paths:
       tags: [Cart]
       security:
         - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                index:
+                  type: integer
+                  example: 1
+                quantity:
+                  type: integer
+                  example: 16
       responses:
         200:
           description: Thành công
@@ -740,10 +789,23 @@ paths:
               example:
                 message: Phải đăng nhập để tiếp tục
     patch:
-      summary: Tăng giảm số lượng của sản phẩm
+      summary: Tăng giảm số lượng của sản phẩm thêm/bớt 1 lượng quantity
       tags: [Cart]
       security:
         - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                index:
+                  type: integer
+                  example: 1
+                quantity:
+                  type: integer
+                  example: 2
       responses:
         200:
           description: Thành công
