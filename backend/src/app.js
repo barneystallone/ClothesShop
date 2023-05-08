@@ -37,7 +37,13 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: [/https?:\/\/localhost:3000/, /https?:\/\/127.0.0.1:3000/, /https?:\/\/localhost:8080/],
+    origin: [
+      /https?:\/\/localhost:3000/,
+      /https?:\/\/127.0.0.1:3000/,
+      /https?:\/\/localhost:8080/,
+      process.env.CLIENT_URL,
+    ],
+    // origin: [/https?:\/\/localhost:3000/, /https?:\/\/127.0.0.1:3000/, /https?:\/\/localhost:8080/],
   })
 )
 

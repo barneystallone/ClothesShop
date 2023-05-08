@@ -1,17 +1,42 @@
-version: "3"
+version: '3'
 services:
-   db:
-      container_name: db
-      image: mysql
-      ports:
-         - "3307:3306"
-      environment:
-         - MYSQL_ROOT_PASSWORD=admin
-         - MYSQL_DATABASE=clothesShop
+  db:
+    container_name: db
+    image: mysql
+    ports:
+      - '3307:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=clothesShop
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d:rw
+      - data:/var/lib/mysql
+    networks:
+      - clothesShopNet
 
-      volumes:
-         - ./database:/docker-entrypoint-initdb.d:rw
-         - data:/var/lib/mysql
+  backend:
+    build: ./backend
+    restart: always
+    environment:
+      - MYSQL_HOST=db
+      - CLIENT_URL=http://localhost
+    ports:
+      - 8080:8080
+    networks:
+      - clothesShopNet
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+    networks:
+      - clothesShopNet
+
+networks:
+  clothesShopNet:
 
 volumes:
-   data:
+  data:
