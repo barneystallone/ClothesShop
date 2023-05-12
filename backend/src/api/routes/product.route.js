@@ -5,6 +5,8 @@ const { uploader } = require('../middleware/uploader')
 const routes = express.Router()
 
 routes.get('/', productController.getAllProduct)
+routes.get('/search', productController.searchProduct)
+routes.get('/suggest', productController.getAutoSuggest)
 routes.post('/', productController.insertProduct) // autuploadImagesh admin
 routes.get('/:slug', productController.findBySlug)
 routes.get('/related/:slug', productController.getRelatedProducts)

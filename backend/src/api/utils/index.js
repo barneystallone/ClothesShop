@@ -5,6 +5,14 @@ module.exports = {
   handlerPromise: (promise) => {
     return promise.then((data) => [undefined, data]).catch((err) => [err, undefined])
   },
+  capitalizeWords: (str) => {
+    return str
+      .split('\\s+')
+      .map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      })
+      .join(' ')
+  },
 
   userValidate: (data) => {
     const userSchema = Joi.object({
@@ -14,6 +22,19 @@ module.exports = {
     })
 
     return userSchema.validate(data)
+  },
+  searchKeywordValidate: (data) => {
+    const searchSchema = Joi.object({
+      keyword: Joi.string()
+        .trim()
+        .min(2)
+        .pattern(new RegExp(/^[\p{L}\d\s]+$/u))
+        .required(),
+      page: Joi.number().min(1),
+      // resetToken: ,
+    })
+
+    return searchSchema.validate(data)
   },
   productValidate: (data) => {
     const productSchema = Joi.object({
