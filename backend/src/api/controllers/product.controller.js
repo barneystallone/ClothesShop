@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
 const { asyncHandler } = require('../middleware')
 const slugify = require('slugify')
-const { productValidate } = require('../utils')
+const { productValidate, searchKeywordValidate } = require('../utils')
 const productService = require('../services/product.service')
 const nanoid = require('../utils/nanoid')
 
@@ -88,5 +88,31 @@ var self = (module.exports = {
     const payload = { pId, colorName, colorCode, img, thumbImg }
     const data = await productService.upload(payload)
     res.json(data)
+  }),
+  /**
+   * page === undefind || null => Lấy ra auto-suggest và các sản phẩm tìm thấy theo keyword
+   * page === 1 => Lấy ra danh sách product tìm kiếm theo keyword
+   */
+  searchProduct: asyncHandler(async (req, res, next) => {
+    const { error } = searchKeywordValidate(req.query)
+    if (error) {
+      return next(createHttpError.BadRequest(error.details[0].message))
+    }
+    const { keyword, page } = req.query
+    if (page >= 0) {
+      const result = await productService.getSearchProducts({ keyword: keyword.trim(), page })
+      return res.status(200).json({ ...result, meta: { keyword, page } })
+    }
+    const result = await productService.getSearchProducts({ keyword: keyword.trim() })
+    res.status(200).json({ ...result, meta: { keyword } })
+  }),
+  getAutoSuggest: asyncHandler(async (req, res, next) => {
+    const { error } = searchKeywordValidate(req.query)
+    if (error) {
+      return next(createHttpError.BadRequest(error.details[0].message))
+    }
+    const { keyword } = req.query
+    const result = await productService.getAutoSuggest({ keyword: keyword.trim() })
+    res.status(200).json({ listSuggest: result, meta: { keyword } })
   }),
 })
