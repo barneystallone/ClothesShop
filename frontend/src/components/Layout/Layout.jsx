@@ -4,7 +4,7 @@ import Header from '../Header'
 import Footer from '../Footer'
 import { ProductModal } from '../../features/product'
 import { LoginSignUpModal } from '../../features/auth'
-
+import { SearchModal } from '../../features/search'
 const Layout = () => {
   return (
     <>
@@ -17,6 +17,7 @@ const Layout = () => {
       <Footer />
       <ProductModal />
       <LoginSignUpModal />
+      <SearchModal />
     </>
   )
 }

@@ -1,0 +1,82 @@
+$search-modal-height: 500px;
+$search-top-width: 680px;
+$search-top-height: 40px;
+$search-top-backgroundColor: #f2f2f2;
+$search-top-icon-fontSize: 22px;
+.overlay {
+  $overlay-bg: rgba(
+    $color: #000,
+    $alpha: 0.5
+  );
+  z-index: 9999;
+  position: fixed;
+  width: 100%;
+  max-height: 100%;
+  inset: 0 0 auto 0;
+  background-color: $overlay-bg;
+
+  .search {
+    padding: 10px 30px;
+    max-height: 100%;
+    height: $search-modal-height;
+    @include mobile {
+      height: 100%;
+    }
+    background-color: white;
+
+    &__top {
+      margin: 0 auto 15px;
+      @include flex(center, center);
+      padding: 0 10px;
+      height: $search-top-height;
+      width: $search-top-width;
+      background-color: $search-top-backgroundColor;
+      border-radius: 5px;
+
+      &__icon {
+        height: $search-top-height;
+        font-size: 22px;
+        line-height: calc(#{$search-top-height} + 6px);
+        path {
+          fill: $txt-second-color;
+        }
+      }
+      &__input {
+        flex-grow: 1;
+        height: 100%;
+        outline: none;
+        padding: 8px;
+        border: none;
+        background-color: $search-top-backgroundColor;
+        width: $search-top-width;
+        font-size: 16px;
+        color: #000;
+      }
+    }
+    &__result {
+      @include flex(flex-start, space-between);
+      font-size: 16px;
+      &__suggest {
+        flex-basis: 40%;
+        &__section {
+          margin-top: 20px;
+          .item-group {
+            font-size: 18px;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+            color: rgba($color: #000, $alpha: 0.8);
+            // padding-top: 4px;
+            @include flex(center, flex-start);
+            gap: 0 6px;
+            &__icon {
+              font-size: 24px;
+              height: 32px;
+              width: 32px;
+              padding: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
