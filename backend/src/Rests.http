@@ -6,9 +6,9 @@
 @authToken = {{login.response.body.accessToken}}
 
 ###
-GET {{baseUrl}}/api/product/search?keyword=quầ
+GET {{baseUrl}}/api/product/search?keyword=Váy
 ###
-GET {{baseUrl}}/api/product/suggest?keyword=quần   s
+GET {{baseUrl}}/api/product/suggest?keyword=bo
 
 
 ###

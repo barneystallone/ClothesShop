@@ -107,11 +107,10 @@ var self = (module.exports = {
     res.status(200).json({ ...result, meta: { keyword } })
   }),
   getAutoSuggest: asyncHandler(async (req, res, next) => {
-    const { error } = searchKeywordValidate(req.query)
-    if (error) {
-      return next(createHttpError.BadRequest(error.details[0].message))
-    }
     const { keyword } = req.query
+    if (!keyword) {
+      return next(createHttpError.BadRequest('Keyword is required'))
+    }
     const result = await productService.getAutoSuggest({ keyword: keyword.trim() })
     res.status(200).json({ listSuggest: result, meta: { keyword } })
   }),

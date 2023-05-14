@@ -103,13 +103,14 @@ var self = (module.exports = {
     })
   },
 
-  getSearchProducts: async ({ keyword, limit = 6, offset = 0 }) => {
+  getSearchProducts: async ({ keyword, limit = 10, offset = 0 }) => {
     // prettier-ignore
     return self.getProductsHandler(redis.call(
-      'FT.SEARCH', SEARCH_INDEX, `@title:'${keyword}|${keyword.concat('*')}'`,
-      'RETURN', 7,
-      'pId', 'title', 'price', 'slug', 'sold', 'url','thumbUrl',
+      'FT.SEARCH', SEARCH_INDEX, `@title:${keyword}|${keyword.concat('*')}`,
+      'RETURN', 5,
+      'pId', 'title', 'price', 'slug', 'url',
       'HIGHLIGHT', 'FIELDS','1' ,'title',
+      'DIALECT', 2,
       'LIMIT', offset, limit
     ),  false)
   },

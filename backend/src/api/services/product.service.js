@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
 const nanoid = require('../utils/nanoid')
 const cloudinaryModel = require('../models/cloudinary.model')
-const { capitalizeWords } = require('../utils')
+// const { capitalizeWords } = require('../utils')
 const productDao = require('../daos/product.dao').getDB('mysql')
 const redisProductDao = require('../daos/product.dao').getDB('redis')
 
@@ -60,12 +60,12 @@ var self = (module.exports = {
   getSearchProducts: async ({ keyword, page }) => {
     if (page >= 0) {
       return redisProductDao.getSearchProducts({
-        keyword: capitalizeWords(keyword),
+        keyword: keyword,
         limit: itemPerPage,
         offset: itemPerPage * (page - 1),
       })
     }
-    return redisProductDao.getSearchProducts({ keyword: capitalizeWords(keyword) })
+    return redisProductDao.getSearchProducts({ keyword: keyword })
   },
 
   getProducts: async (page) => {
