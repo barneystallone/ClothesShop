@@ -4,14 +4,17 @@ import Grid from '../../../components/Grid'
 import { useLazySearchProductsQuery } from '../product.service'
 import { numberToCurrency } from '../../../utils'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectCapitalizeKeyword } from '../product.slice'
 const SearchProductList = (props) => {
-  const { capitalKeyword, onClickItem } = props
+  const capitalKeyword = useSelector(selectCapitalizeKeyword)
+  const { onClickItem } = props
   const [trigger, { data }] = useLazySearchProductsQuery()
 
   useEffect(() => {
     let controller
     if (capitalKeyword.length >= 2) {
-      controller = trigger({ keyword: capitalKeyword })
+      controller = trigger({ keyword: capitalKeyword }, true)
     }
 
     return () => {
@@ -63,8 +66,7 @@ const SearchProductList = (props) => {
 }
 
 SearchProductList.propTypes = {
-  capitalKeyword: PropTypes.string.isRequired,
   onClickItem: PropTypes.func
 }
 
-export default React.memo(SearchProductList)
+export default SearchProductList

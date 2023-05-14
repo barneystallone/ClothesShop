@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { useSearchAutoSuggestQuery } from '../product.service'
 
 import { BiSearchAlt } from 'react-icons/bi'
+import { useSelector } from 'react-redux'
+import { selectCapitalizeKeyword } from '../product.slice'
 const AutoSuggestList = (props) => {
-  const { capitalKeyword, onClickSuggest } = props
+  const capitalKeyword = useSelector(selectCapitalizeKeyword)
+  const { onClickSuggest } = props
   const { data } = useSearchAutoSuggestQuery(
     { keyword: capitalKeyword },
     {
@@ -43,8 +46,7 @@ const AutoSuggestList = (props) => {
 }
 
 AutoSuggestList.propTypes = {
-  capitalKeyword: PropTypes.string.isRequired,
   onClickSuggest: PropTypes.func
 }
 
-export default React.memo(AutoSuggestList)
+export default AutoSuggestList
