@@ -1,6 +1,7 @@
 const createHttpError = require('http-errors')
 const nanoid = require('../utils/nanoid')
 const cloudinaryModel = require('../models/cloudinary.model')
+// const { capitalizeWords } = require('../utils')
 const productDao = require('../daos/product.dao').getDB('mysql')
 const redisProductDao = require('../daos/product.dao').getDB('redis')
 
@@ -8,11 +9,25 @@ const redisProductDao = require('../daos/product.dao').getDB('redis')
 const itemPerPage = process.env.ITEM_PER_PAGE * 1
 var self = (module.exports = {
   init: async () => {
-    redisProductDao.init().then(() => ({}))
+    await redisProductDao.init()
     const data = await productDao.getProducts()
-    redisProductDao.putProducts(data).then(() => console.log('cached products ok'))
+    const listKeywords = data.map((item) => item.title)
+    const putProductsPromise = redisProductDao.putProducts(data).then(() => console.log('cached products ok'))
+    const addSuggestionsPromise = redisProductDao
+      .addSuggestions(listKeywords)
+      .then(() => console.log('Add suggestion  ok'))
+    await Promise.all([putProductsPromise, addSuggestionsPromise]).then(() => {})
   },
 
+  /**
+   * @param {Object} param
+   * @param {string} param.pId - Id của sản phẩm.
+   * @param {string} param.title - Tiêu đề của sản phẩm.
+   * @param {string} param.slug - Slug của sản phẩm.
+   * @param {string} param.description - Mô tả của sản phẩm.
+   * @param {number} param.price - Giá của sản phẩm.
+   * @param {string} param.category_id - Id của danh mục sản phẩm.
+   */
   insertProduct: async ({ pId, title, slug, description, price, category_id }) => {
     const model = { pId, title, slug, description, price, category_id }
     const affectedRows = await productDao.create(model)
@@ -23,27 +38,22 @@ var self = (module.exports = {
     return affectedRows
   },
 
-  getProductsByCategoryIDs: async (params) => {
-    const { page, ...rest } = params
-    const _offset = ((page ?? 1) - 1) * itemPerPage
-    const { total, products } = await redisProductDao.getProductsByCategoryIDs({
-      ...rest,
-      offset: _offset,
-      limit: itemPerPage,
-    })
-
-    return {
-      total,
-      products,
-      itemPerPage,
-      meta: {
-        page,
-      },
+  getSearchProducts: async ({ keyword, page }) => {
+    if (page >= 0) {
+      return redisProductDao.getSearchProducts({
+        keyword: keyword,
+        limit: itemPerPage,
+        offset: itemPerPage * (page - 1),
+      })
     }
+    return redisProductDao.getSearchProducts({ keyword: keyword })
   },
 
-  getProducts: async (page) => {
+  getProducts: async (params) => {
+    const { page, strListId, keyword } = params
     const { total, products } = await redisProductDao.getProducts({
+      strListId,
+      keyword,
       limit: itemPerPage,
       offset: itemPerPage * ((page ?? 1) - 1),
     })
@@ -104,5 +114,16 @@ var self = (module.exports = {
   },
   getRelatedProducts: async (slug) => {
     return await redisProductDao.getRelatedProducts(slug)
+  },
+
+  /**
+   *
+   * @param {string} keyword: Từ khóa  tìm kiếm sản phẩm
+   * @example keyword === "qun" ==>  auto-suggest = [Quần ..., ]
+   */
+  getAutoSuggest: async ({ keyword }) => {
+    keyword = keyword.replace(/\s+/, ' ')
+    console.log('keyword', keyword)
+    return redisProductDao.getAutoSuggest({ keyword })
   },
 })

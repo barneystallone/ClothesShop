@@ -47,9 +47,28 @@ export const productApi = api.injectEndpoints({
           ? ['FETCH_ERROR']
           : ['UNKNOWN_ERROR'],
       keepUnusedDataFor: 30
+    }),
+    searchAutoSuggest: build.query({
+      query: (params) => ({
+        url: 'product/suggest',
+        params: params
+      })
+    }),
+    searchProducts: build.query({
+      query: (params) => ({
+        url: 'product/search',
+        params: params
+      })
     })
   })
 })
 
-export const { useGetProductsQuery, useGetProductQuery, useGetRelatedProductsQuery } =
-  productApi
+export const {
+  useGetProductsQuery,
+  useGetProductQuery,
+  useGetRelatedProductsQuery,
+  useSearchAutoSuggestQuery,
+  useLazySearchAutoSuggestQuery,
+  useLazySearchProductsQuery,
+  useSearchProductsQuery
+} = productApi

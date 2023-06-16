@@ -12,7 +12,9 @@ module.exports = {
       putProducts: async (data) => impl.putProducts(data),
       findBySlug: async (slug) => impl.findBySlug(slug),
       getRelatedProducts: async (slug) => impl.getRelatedProducts(slug),
-      getProductsByCategoryIDs: async (data) => impl.getProductsByCategoryIDs(data),
+      addSuggestions: async (data) => impl.addSuggestions(data),
+      getSearchProducts: async (data) => impl.getSearchProducts(data),
+      getAutoSuggest: async (data) => impl.getAutoSuggest(data),
     }
     return db
   },

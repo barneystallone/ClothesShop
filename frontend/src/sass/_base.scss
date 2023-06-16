@@ -31,6 +31,7 @@ a {
 ::-webkit-scrollbar {
   // tùy chỉnh scrollbar cho trình duyệt webkit (Chrome, Safari, Edge)
   width: 1rem;
+  // display: none;
 }
 
 ::-webkit-scrollbar-button {
@@ -111,6 +112,9 @@ input::-webkit-inner-spin-button {
   @include mobile {
     margin-top: calc(#{$header-mobile-height} + 10px);
   }
+}
+body::-webkit-scrollbar {
+  width: 9px;
 }
 
 .grid {
