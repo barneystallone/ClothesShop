@@ -49,7 +49,7 @@ var that = (module.exports = {
       'JSON.ARRAPPEND', PREFIX.concat(userId), '$.products' , JSON.stringify({ itemId, pId, sizeId, quantity, sizeName })
     )
 
-    return pipeline.exec()
+    return (await pipeline.exec())[1][1][0]
   },
 
   /**
@@ -73,7 +73,9 @@ var that = (module.exports = {
 
   patchItemQuantity: async ({ userId, itemId, sizeId, quantity, index }) => {
     index = index ?? `?(@.itemId=="${itemId}"&&@.sizeId=="${sizeId}")`
-    return redis.call('JSON.NUMINCRBY', PREFIX.concat(userId), `$.products[${index}].quantity`, quantity * 1)
+    return JSON.parse(
+      await redis.call('JSON.NUMINCRBY', PREFIX.concat(userId), `$.products[${index}].quantity`, quantity * 1)
+    )[0]
   },
 
   putItemQuantity: async ({ userId, index, quantity }) => {

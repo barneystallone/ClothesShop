@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const compression = require('compression')
 const swaggerUI = require('swagger-ui-express')
 const YAML = require('js-yaml')
-const redis = require('./api/databases/connect.redis.v2')
+// const redis = require('./api/databases/connect.redis.v2')
 const { init: productInit } = require('./api/services/product.service')
 const { init: cartInit } = require('./api/services/cart.service')
 
@@ -37,7 +37,13 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: [/https?:\/\/localhost:3000/, /https?:\/\/127.0.0.1:3000/, /https?:\/\/localhost:8080/],
+    origin: [
+      /https?:\/\/localhost:3000/,
+      /https?:\/\/127.0.0.1:3000/,
+      /https?:\/\/localhost:8080/,
+      process.env.CLIENT_URL,
+    ],
+    // origin: [/https?:\/\/localhost:3000/, /https?:\/\/127.0.0.1:3000/, /https?:\/\/localhost:8080/],
   })
 )
 

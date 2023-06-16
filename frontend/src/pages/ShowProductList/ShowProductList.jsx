@@ -23,6 +23,7 @@ import {
   selectAllCategoryFilters
 } from '../../features/product/product.slice'
 import { useGetCategoriesQuery } from '../../features/category/category.service'
+import { capitalizeWords } from '../../utils'
 
 let count = 1
 //Nên dùng React-window để render list
@@ -31,25 +32,36 @@ const ShowProductList = () => {
   // const dispatch = useDispatch()
 
   const allCateFilters = useSelector(selectAllCategoryFilters)
-  const [searchParams, setSeachParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [isSyncParamToStore, setSyncParamToStore] = useState(false)
   const [isSyncPageParam, setSyncPageParam] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const activePage = useSelector(selectActivePage) // Theo dõi cái biến này, nếu có dispatch mà thay đổi dữ liệu thì nó cũng cập nhật
+  const dispatch = useDispatch()
+
+  const { page, c, keyword } = useMemo(
+    () => qs.parse(searchParams.toString()),
+    [searchParams]
+  )
+  //----- useGetCategoriesQuery() => Gửi request lên server lấy ra danh sách danh mục
   const {
     data: categories,
     isLoading: isCateLoading,
     isSuccess
   } = useGetCategoriesQuery()
-  const [loading, setLoading] = useState(false)
-  const activePage = useSelector(selectActivePage)
-  const dispatch = useDispatch()
+
+  //----- useGetProductsQuery() => Gửi request(yêu cầu) lên server lấy ra danh sách danh mục
   const { data, isFetching, isLoading } = useGetProductsQuery(
-    { page: activePage, c: allCateFilters },
+    {
+      page: activePage,
+      c: allCateFilters,
+      keyword: keyword ? capitalizeWords(keyword.trim()) : null
+    },
     {
       skip: !activePage,
       pollingInterval: 1000 * 2 * 60
     }
   )
-  const { page, c } = useMemo(() => qs.parse(searchParams.toString()), [])
 
   //============- Map filter params vào store khi load xong category
   useEffect(() => {
@@ -83,7 +95,7 @@ const ShowProductList = () => {
   useEffect(() => {
     if (page && !Number(page)) {
       searchParams.delete('page')
-      setSeachParams(searchParams)
+      setSearchParams(searchParams)
     }
     dispatch(setActivePage(page * 1 || 1))
     setSyncPageParam(true)
@@ -103,7 +115,10 @@ const ShowProductList = () => {
         searchParams.set('page', 1)
         dispatch(setActivePage(1))
       }
-      setSeachParams(searchParams)
+      setSearchParams(searchParams)
+    } else {
+      searchParams.delete('c')
+      setSearchParams(searchParams)
     }
   }, [allCateFilters, dispatch])
 
@@ -121,10 +136,10 @@ const ShowProductList = () => {
     if (data && activePage > pages) {
       dispatch(setActivePage(1))
       searchParams.set('page', 1)
-      setSeachParams(searchParams)
+      setSearchParams(searchParams)
     }
     dispatch(setTotalPage(pages))
-  }, [data, dispatch, activePage, setSeachParams, searchParams])
+  }, [data, dispatch, activePage, setSearchParams, searchParams])
 
   //============== Animation loading
   useEffect(() => {

@@ -13,7 +13,7 @@ let count = 1
  *
  */
 const usePagination = () => {
-  const [searchParams, setSeachParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const totalPage = useSelector(selecTotalPage)
   const [start, setStart] = useState(1)
   const [end, setEnd] = useState(totalPage)
@@ -54,7 +54,8 @@ const usePagination = () => {
       page = Math.min(page, totalPage)
       if (Number(searchParams.get('page')) !== page) {
         searchParams.set('page', page)
-        setSeachParams(searchParams)
+        setSearchParams(searchParams)
+
         dispatch(setActivePage(page))
 
         setRangeOnChangePage(page)

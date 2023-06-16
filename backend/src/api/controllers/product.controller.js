@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
 const { asyncHandler } = require('../middleware')
 const slugify = require('slugify')
-const { productValidate } = require('../utils')
+const { productValidate, searchKeywordValidate, getAllProductRequestValidate } = require('../utils')
 const productService = require('../services/product.service')
 const nanoid = require('../utils/nanoid')
 
@@ -32,16 +32,15 @@ var self = (module.exports = {
   }),
 
   getAllProduct: asyncHandler(async (req, res, next) => {
-    const { c: strListId, page } = req.query
-    if (strListId) {
-      const results = await productService.getProductsByCategoryIDs({
-        strListId,
-        page: page ?? 1,
-      })
-      return res.status(200).json(results)
+    const { c: strListId, page, keyword } = req.query
+    if (keyword) {
+      const { error } = searchKeywordValidate({ page, keyword })
+      if (error) {
+        return next(createHttpError.BadRequest(error.details[0].message))
+      }
     }
 
-    const results = await productService.getProducts(page)
+    const results = await productService.getProducts({ page, strListId, keyword })
     res.status(200).json(results)
     // res.status(200).json(results)
     // const s_results = JSON.stringify(results)
@@ -88,5 +87,30 @@ var self = (module.exports = {
     const payload = { pId, colorName, colorCode, img, thumbImg }
     const data = await productService.upload(payload)
     res.json(data)
+  }),
+  /**
+   * page === undefind || null => Lấy ra auto-suggest và các sản phẩm tìm thấy theo keyword
+   * page === 1 => Lấy ra danh sách product tìm kiếm theo keyword
+   */
+  searchProduct: asyncHandler(async (req, res, next) => {
+    const { error } = searchKeywordValidate(req.query)
+    if (error) {
+      return next(createHttpError.BadRequest(error.details[0].message))
+    }
+    const { keyword, page } = req.query
+    if (page >= 0) {
+      const result = await productService.getSearchProducts({ keyword: keyword.trim(), page })
+      return res.status(200).json({ ...result, meta: { keyword, page } })
+    }
+    const result = await productService.getSearchProducts({ keyword: keyword.trim() })
+    res.status(200).json({ ...result, meta: { keyword } })
+  }),
+  getAutoSuggest: asyncHandler(async (req, res, next) => {
+    const { keyword } = req.query
+    if (!keyword) {
+      return next(createHttpError.BadRequest('Keyword is required'))
+    }
+    const result = await productService.getAutoSuggest({ keyword: keyword.trim() })
+    res.status(200).json({ listSuggest: result, meta: { keyword } })
   }),
 })

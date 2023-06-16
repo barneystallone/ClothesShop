@@ -7,6 +7,7 @@ import UserItem from './components/UserItem'
 import { SubCart } from '../../features/cart'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectTotalItemQuantity, setShowCart } from '../../features/cart/cart.slice'
+import { setShowSearchModalStatus } from '../../features/product/product.slice'
 const leftNav = [
   {
     content: 'Trang chủ',
@@ -90,7 +91,10 @@ const Header = () => {
             <BiMenu />
           </div>
           <div className='header__menu__right '>
-            <div className='header__menu__item header__menu__right__item'>
+            <div
+              className='header__menu__item header__menu__right__item'
+              onClick={() => dispatch(setShowSearchModalStatus(true))}
+            >
               <BiSearch />
             </div>
             <div

@@ -1,5 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
-import { typeOf } from '../../utils'
+import { capitalizeWords, typeOf } from '../../utils'
 import qs from 'qs'
 const alphabetSort = (a, b) => a.localeCompare(b)
 
@@ -12,6 +12,10 @@ const initialState = {
   },
   filter: {
     categories: [] //  ~~ [[1,2,3],[4,5,6]]
+  },
+  search: {
+    showModal: false,
+    keyword: ''
   }
 }
 
@@ -66,6 +70,12 @@ export const productSlice = createSlice({
         }
         state.filter.categories[index].push(subId)
       }
+    },
+    setShowSearchModalStatus: (state, action) => {
+      state.search.showModal = action.payload
+    },
+    setKeyword: (state, action) => {
+      state.search.keyword = action.payload
     }
   }
 })
@@ -74,6 +84,8 @@ export default productSlice.reducer
 export const {
   setProductModalSlug,
   closeProductModal,
+  setShowSearchModalStatus,
+  setKeyword,
   setInitItem,
   initCategoryFilters,
   setAllSubCategoryFilter,
@@ -97,3 +109,8 @@ export const selectAllCategoryFilters = createSelector(
 // )
 export const selectFilterByParentIdx = (index) => (state) =>
   state.product.filter.categories[index]
+export const selectCapitalizeKeyword = (state) =>
+  capitalizeWords(state.product.search.keyword.trim())
+
+export const selectKeyword = (state) => state.product.search.keyword
+export const selectSearchModalStatus = (state) => state.product.search.showModal

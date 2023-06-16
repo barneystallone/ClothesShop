@@ -1,6 +1,8 @@
 const redis = require('../../../databases/connect.redis.v2')
 const { getRelatedProductsScript } = require('./scripts/getRelatedProducts')
 const SEARCH_INDEX = 'products'
+const SUGGEST_DICTIONARY_NAME = 'autocomplete'
+const limitSuggest = process.env.LIMIT_SUGGEST
 const PREFIX = 'product:'
 var self = (module.exports = {
   create: async ({ pId, title, slug, description, price, category_id }) => {
@@ -24,13 +26,22 @@ var self = (module.exports = {
   //       'JSON.ARRAPPEND', `${PREFIX}${pId}`, '$.img',
   //       JSON.stringify({ url, thumbUrl }))
   // },
-  getProducts: async ({ limit = 20, offset = 0 }) => {
+
+  /**
+   * @example ft.search products '@category_id:{c10\\|c30\\|c15\\|c14}' DIALECT 3 RETURN 11
+   * pId title price slug sold $.collections[*].url as url $.collections[*].thumbUrl as thumbUrl LIMIT 0 10
+   */
+  getProducts: async ({ keyword, strListId, limit = 20, offset = 0 }) => {
+    let queryString = ''
+    if (keyword) queryString += `@title:(${keyword}|${keyword.concat('*')}) `
+    if (strListId) queryString += `@category_id:{${strListId}}`
+    if (!queryString) queryString = '*'
+    // let queryString = strListId ? `@category_id:{${strListId}}` : '*'
     //prettier-ignore
     return self.getProductsHandler(redis
       .call(
-        'FT.SEARCH', SEARCH_INDEX, '*', 'DIALECT', 3, 'RETURN', 11, 
-        'pId', 'title', 'price', 'slug', 'sold', '$.collections[*].url', 'as', 'url',
-        '$.collections[*].thumbUrl', 'as', 'thumbUrl',
+        'FT.SEARCH', SEARCH_INDEX, queryString , 'DIALECT', 3, 'RETURN', 7, 
+        'pId', 'title', 'price', 'slug', 'sold', 'url', 'thumbUrl',
         'LIMIT', offset, limit
       ))
   },
@@ -47,22 +58,13 @@ var self = (module.exports = {
     return await pipeline.exec()
   },
 
-  /**
-   * @example ft.search products '@category_id:{c10\\|c30\\|c15\\|c14}' DIALECT 3 RETURN 11
-   * pId title price slug sold $.collections[*].url as url $.collections[*].thumbUrl as thumbUrl LIMIT 0 10
-   */
-  getProductsByCategoryIDs: async ({ strListId, limit = 20, offset = 0 }) => {
-    // prettier-ignore
-    return self.getProductsHandler(
-      redis.call(
-      'FT.SEARCH', SEARCH_INDEX, `@category_id:{${strListId}}`, 'DIALECT', 3, 'RETURN', 11, 
-      'pId', 'title', 'price', 'slug', 'sold', '$.collections[*].url', 'as', 'url',
-      '$.collections[*].thumbUrl', 'as', 'thumbUrl',
-      'LIMIT', offset, limit)
-    )
+  addSuggestions: async (listKeywords) => {
+    const pipeline = redis.pipeline()
+    listKeywords.forEach((keyword) => pipeline.call('FT.SUGADD', SUGGEST_DICTIONARY_NAME, keyword, 1))
+    return pipeline.exec()
   },
 
-  getProductsHandler: (promise) => {
+  getProductsHandler: (promise, isDialect3 = true) => {
     return promise.then(([total, ...rest]) => {
       //prettier-ignore
       return {
@@ -70,11 +72,13 @@ var self = (module.exports = {
         products: rest.filter((_, index) => index % 2 !== 0).map((arr) => {
           return arr?.reduce((product, key, index) => {
             if (index % 2 === 0) {
-              if(key === 'url' || key === 'thumbUrl') {
-                product[key] = JSON.parse(arr[index + 1])
-                return product
-              }
-              product[key] = JSON.parse(arr[index + 1])[0]
+              if(isDialect3){
+                if(key === 'url' || key === 'thumbUrl') {
+                  product[key] = JSON.parse(arr[index + 1])
+                  return product
+                }
+                product[key] = JSON.parse(arr[index + 1])[0]
+              } else product[key] = arr[index + 1]
             }
             return product
           }, {})
@@ -95,6 +99,28 @@ var self = (module.exports = {
     })
   },
 
+  getSearchProducts: async ({ keyword, limit = 10, offset = 0 }) => {
+    // prettier-ignore
+    return self.getProductsHandler(redis.call(
+      'FT.SEARCH', SEARCH_INDEX, `@title:${keyword}|${keyword.concat('*')}`,
+      'RETURN', 5,
+      'pId', 'title', 'price', 'slug', 'url',
+      'HIGHLIGHT', 'FIELDS','1' ,'title',
+      'DIALECT', 2,
+      'LIMIT', offset, limit
+    ),  false)
+  },
+
+  /**
+   * @returns Danh sách các title đề xuất
+   */
+  getAutoSuggest: async ({ keyword }) => {
+    // prettier-ignore
+    return redis.call(
+      'FT.SUGGET', SUGGEST_DICTIONARY_NAME, keyword,'FUZZY' ,'MAX' ,limitSuggest
+    )
+  },
+
   getRelatedProducts: async (slug) => {
     const _slug = slug.replace(/-/g, '\\-')
     const limit = 5
@@ -103,6 +129,7 @@ var self = (module.exports = {
   },
   init: async () => {
     let indices = await redis.call('FT._list')
+    let pipeline = redis.pipeline()
     if (indices.includes(SEARCH_INDEX)) {
       await redis.call('FT.DROPINDEX', SEARCH_INDEX)
     }
@@ -110,7 +137,7 @@ var self = (module.exports = {
       lua: getRelatedProductsScript(),
     })
     // prettier-ignore
-    await redis.call(
+    await pipeline.call(
       'FT.CREATE', SEARCH_INDEX,
       'ON', 'JSON',
       'PREFIX', 1, PREFIX,
@@ -119,10 +146,13 @@ var self = (module.exports = {
         '$.price','as','price', 'NUMERIC', 'SORTABLE',
         '$.description','as','description', 'TEXT',
         '$.category_id','as','category_id', 'TAG',
-        '$.title','as', 'title', 'TEXT', 'SORTABLE',
+        '$.title','as', 'title', 'TEXT','WEIGHT','2.0','SORTABLE',
         '$.pId','as','pId', 'TAG', 'SORTABLE',
         '$.sold','as','sold','NUMERIC', 'SORTABLE',
         '$.collections[*].itemId','as','itemId','TAG', 'SORTABLE',
-    )
+        '$.collections[*].url','as','url','TAG', 'SORTABLE',
+        '$.collections[*].thumbUrl','as','thumbUrl','TAG', 'SORTABLE',
+    ).call('DEL', SUGGEST_DICTIONARY_NAME).exec()
+    // ).exec()
   },
 })
