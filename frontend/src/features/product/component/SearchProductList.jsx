@@ -25,7 +25,10 @@ const SearchProductList = (props) => {
   return (
     <div className='search__result__product'>
       <h2 className='search__result__product__title'>
-        Sản phẩm<span className='result__count'>({data?.total ?? 0})</span>
+        Sản phẩm
+        <span className='result__count'>
+          ({capitalKeyword !== '' && data ? data?.total ?? 0 : 0})
+        </span>
       </h2>
       <div className='search__result__product__section'>
         <Grid col={2} mdCol={1} gap={10}>

@@ -36,6 +36,20 @@ module.exports = {
 
     return searchSchema.validate(data)
   },
+  // getAllProductRequestValidate: (data) => {
+  //   const searchSchema = Joi.object({
+  //     keyword: Joi.string()
+  //       .trim()
+  //       .min(2)
+  //       .pattern(new RegExp(/^[\p{L}\d\s]+$/u)),
+  //     c: Joi.string(),
+  //     page: Joi.number().min(1),
+  //     // resetToken: ,
+  //   })
+
+  //   return searchSchema.validate(data)
+  // },
+
   productValidate: (data) => {
     const productSchema = Joi.object({
       title: Joi.string().max(50).required(),

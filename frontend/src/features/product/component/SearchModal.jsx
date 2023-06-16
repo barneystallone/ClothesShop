@@ -10,9 +10,19 @@ import AutoSuggestList from './AutoSuggestList'
 import SearchProductList from './SearchProductList'
 import { BiSearch, BiX } from 'react-icons/bi'
 import SearchInput from './SearchInput'
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useSearchParams
+} from 'react-router-dom'
+import { capitalizeWords } from '../../../utils'
 
 const SearchModal = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { pathname, search } = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { show, closeModal } = useModal(
     setShowSearchModalStatus,
     selectSearchModalStatus,
@@ -48,7 +58,24 @@ const SearchModal = () => {
           onSubmit={(e) => {
             e.preventDefault()
             let formData = new FormData(e.target)
-            console.log(Object.fromEntries(formData))
+            let keyword = Object.fromEntries(formData)['keyword'].trim()
+            // console.log(Object.fromEntries(formData))
+            if (pathname === '/product') {
+              keyword
+                ? searchParams.set('keyword', keyword)
+                : searchParams.delete('keyword')
+              setSearchParams(searchParams)
+            } else {
+              navigate({
+                pathname: '/product',
+                search: keyword
+                  ? `?${createSearchParams({
+                      keyword
+                    })}`
+                  : null
+              })
+            }
+            closeModal()
           }}
         >
           <div className='search__top__icon search__top__icon--search'>

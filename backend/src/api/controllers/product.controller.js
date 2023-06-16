@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
 const { asyncHandler } = require('../middleware')
 const slugify = require('slugify')
-const { productValidate, searchKeywordValidate } = require('../utils')
+const { productValidate, searchKeywordValidate, getAllProductRequestValidate } = require('../utils')
 const productService = require('../services/product.service')
 const nanoid = require('../utils/nanoid')
 
@@ -32,16 +32,15 @@ var self = (module.exports = {
   }),
 
   getAllProduct: asyncHandler(async (req, res, next) => {
-    const { c: strListId, page } = req.query
-    if (strListId) {
-      const results = await productService.getProductsByCategoryIDs({
-        strListId,
-        page: page ?? 1,
-      })
-      return res.status(200).json(results)
+    const { c: strListId, page, keyword } = req.query
+    if (keyword) {
+      const { error } = searchKeywordValidate({ page, keyword })
+      if (error) {
+        return next(createHttpError.BadRequest(error.details[0].message))
+      }
     }
 
-    const results = await productService.getProducts(page)
+    const results = await productService.getProducts({ page, strListId, keyword })
     res.status(200).json(results)
     // res.status(200).json(results)
     // const s_results = JSON.stringify(results)

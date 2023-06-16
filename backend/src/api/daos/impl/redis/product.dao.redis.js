@@ -26,11 +26,21 @@ var self = (module.exports = {
   //       'JSON.ARRAPPEND', `${PREFIX}${pId}`, '$.img',
   //       JSON.stringify({ url, thumbUrl }))
   // },
-  getProducts: async ({ limit = 20, offset = 0 }) => {
+
+  /**
+   * @example ft.search products '@category_id:{c10\\|c30\\|c15\\|c14}' DIALECT 3 RETURN 11
+   * pId title price slug sold $.collections[*].url as url $.collections[*].thumbUrl as thumbUrl LIMIT 0 10
+   */
+  getProducts: async ({ keyword, strListId, limit = 20, offset = 0 }) => {
+    let queryString = ''
+    if (keyword) queryString += `@title:(${keyword}|${keyword.concat('*')}) `
+    if (strListId) queryString += `@category_id:{${strListId}}`
+    if (!queryString) queryString = '*'
+    // let queryString = strListId ? `@category_id:{${strListId}}` : '*'
     //prettier-ignore
     return self.getProductsHandler(redis
       .call(
-        'FT.SEARCH', SEARCH_INDEX, '*', 'DIALECT', 3, 'RETURN', 7, 
+        'FT.SEARCH', SEARCH_INDEX, queryString , 'DIALECT', 3, 'RETURN', 7, 
         'pId', 'title', 'price', 'slug', 'sold', 'url', 'thumbUrl',
         'LIMIT', offset, limit
       ))
@@ -52,20 +62,6 @@ var self = (module.exports = {
     const pipeline = redis.pipeline()
     listKeywords.forEach((keyword) => pipeline.call('FT.SUGADD', SUGGEST_DICTIONARY_NAME, keyword, 1))
     return pipeline.exec()
-  },
-
-  /**
-   * @example ft.search products '@category_id:{c10\\|c30\\|c15\\|c14}' DIALECT 3 RETURN 11
-   * pId title price slug sold $.collections[*].url as url $.collections[*].thumbUrl as thumbUrl LIMIT 0 10
-   */
-  getProductsByCategoryIDs: async ({ strListId, limit = 20, offset = 0 }) => {
-    // prettier-ignore
-    return self.getProductsHandler(
-      redis.call(
-      'FT.SEARCH', SEARCH_INDEX, `@category_id:{${strListId}}`, 'DIALECT', 3, 'RETURN', 7, 
-      'pId', 'title', 'price', 'slug', 'sold', 'url','thumbUrl',
-      'LIMIT', offset, limit)
-    )
   },
 
   getProductsHandler: (promise, isDialect3 = true) => {

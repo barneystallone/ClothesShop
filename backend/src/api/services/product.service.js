@@ -38,25 +38,6 @@ var self = (module.exports = {
     return affectedRows
   },
 
-  getProductsByCategoryIDs: async (params) => {
-    const { page, ...rest } = params
-    const _offset = ((page ?? 1) - 1) * itemPerPage
-    const { total, products } = await redisProductDao.getProductsByCategoryIDs({
-      ...rest,
-      offset: _offset,
-      limit: itemPerPage,
-    })
-
-    return {
-      total,
-      products,
-      itemPerPage,
-      meta: {
-        page,
-      },
-    }
-  },
-
   getSearchProducts: async ({ keyword, page }) => {
     if (page >= 0) {
       return redisProductDao.getSearchProducts({
@@ -68,8 +49,11 @@ var self = (module.exports = {
     return redisProductDao.getSearchProducts({ keyword: keyword })
   },
 
-  getProducts: async (page) => {
+  getProducts: async (params) => {
+    const { page, strListId, keyword } = params
     const { total, products } = await redisProductDao.getProducts({
+      strListId,
+      keyword,
       limit: itemPerPage,
       offset: itemPerPage * ((page ?? 1) - 1),
     })
